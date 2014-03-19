@@ -4,7 +4,9 @@
     "require": {
         "symfony/console": "dev-master",
         "symfony/process": "dev-master",
-        "symfony/event-dispatcher": "dev-master"
+        "symfony/event-dispatcher": "dev-master",
+        "symfony/dependency-injection": "dev-master",
+        "symfony/yaml": "dev-master"
     },
     "license": "MIT",
     "authors": [

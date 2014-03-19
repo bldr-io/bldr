@@ -40,14 +40,12 @@ EOF
         );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $dir = getcwd();
-        if (!file_exists($dir.'/.bldr.yml')) {
-            throw new \Exception("Could not find a .bldr.yml file in the current directory.");
-        }
-
-        echo getcwd();die();
+        $output->writeln("Building Project");
     }
 }
 
