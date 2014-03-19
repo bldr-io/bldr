@@ -1,0 +1,25 @@
+{
+    "name": "aequasi/bldr-io",
+    "description": "Yaml Build System",
+    "require": {
+        "symfony/console": "dev-master",
+        "symfony/process": "dev-master",
+        "symfony/event-dispatcher": "dev-master"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Aaron Scherer",
+            "email": "aequasi@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+      "psr-4": {
+        "Bldr\\": "src/"
+      }
+    },
+    "bin": [
+        "bin/bldr"
+    ]
+}
