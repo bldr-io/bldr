@@ -11,6 +11,11 @@
 
 namespace Bldr\Call;
 
+use Symfony\Component\Console\Helper\HelperSet;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
+
 /**
  * @author Aaron Scherer <aaron@undergroundelephant.com>
  */
@@ -24,4 +29,34 @@ interface CallInterface
      * @return mixed
      */
     public function run(array $arguments);
+
+    /**
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     * @param HelperSet       $helperSet
+     * @param ParameterBag    $config
+     *
+     * @return CallInterface
+     */
+    public function initialize(
+        InputInterface $input,
+        OutputInterface $output,
+        HelperSet $helperSet,
+        ParameterBag $config
+    );
+
+    /**
+     * @param $name
+     * @param $arguments
+     *
+     * @return CallInterface
+     */
+    public function setTask($name, array $arguments);
+
+    /**
+     * @param Boolean $fail
+     *
+     * @return CallInterface
+     */
+    public function setFailOnError($fail);
 }

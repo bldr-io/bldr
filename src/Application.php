@@ -17,6 +17,7 @@ use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
@@ -115,16 +116,26 @@ EOF;
         }
 
         $this->buildContainer();
+        if ($command instanceof ContainerAwareInterface) {
+            $command->setContainer($this->container);
+        }
 
         parent::doRunCommand($command, $input, $output);
     }
 
+    /**
+     * Builds the container with extensions
+     *
+     * @throws InvalidArgumentException
+     */
     private function buildContainer()
     {
         $container  = new ContainerBuilder();
 
         /** @var ExtensionInterface[] $extensions */
-        $extensions = [];
+        $extensions = [
+            new Extension\Execute\DependencyInjection\ExecuteExtension()
+        ];
 
         if (null !== $this->config && $this->config->has('extensions')) {
             foreach ($this->config->get('extensions') as $extensionClass) {

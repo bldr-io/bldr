@@ -11,6 +11,10 @@
         "herrera-io/phar-update":       "1.*",
         "bldr-io/bldr-execute":         "dev-master"
     },
+    "require-dev":       {
+        "phpunit/phpunit":           "4.0.*",
+        "squizlabs/php_codesniffer": "~1.0"
+    },
     "repositories":      [
         {
             "type": "vcs",
@@ -29,6 +33,14 @@
         "psr-4": {
             "Bldr\\": "src/"
         }
+    },
+    "autoload-dev":      {
+        "psr-4": {
+            "Bldr\\Test\\": "tests/"
+        }
+    },
+    "config":            {
+        "bin-dir": "bin"
     },
     "bin":               [
         "bin/bldr"

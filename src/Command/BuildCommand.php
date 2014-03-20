@@ -12,19 +12,40 @@
 namespace Bldr\Command;
 
 use Bldr\Application;
+use Bldr\Call\CallInterface;
+use Bldr\Helper\DialogHelper;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\FormatterHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
-use Bldr\Helper\DialogHelper;
-use Symfony\Component\Console\Helper\FormatterHelper;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
  */
-class BuildCommand extends Command
+class BuildCommand extends Command implements ContainerAwareInterface
 {
+    /**
+     * @var ContainerInterface|ContainerBuilder $container
+     */
+    private $container;
+
+    /**
+     * Sets the Container.
+     *
+     * @param ContainerInterface|null $container A ContainerInterface instance or null
+     *
+     * @api
+     */
+    public function setContainer(ContainerInterface $container = null)
+    {
+        $this->container = $container;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -54,9 +75,8 @@ EOF
         $output->writeln(["\n", Application::$logo, "\n"]);
 
         /** @var ParameterBag $config */
-        $config      =
-            $this->getApplication()
-                ->getConfig();
+        $config      = $this->getApplication()
+            ->getConfig();
         $profileName = $input->getOption('profile');
         $profile     = $config->get('profiles')[$profileName];
 
@@ -89,7 +109,13 @@ EOF
             ]
         );
 
-        $this->runTasks($input, $output, $profile['tasks']);
+        try {
+            $this->runTasks($input, $output, $profile['tasks']);
+        } catch (\Exception $e) {
+            return $this->failBuild($input, $output, $e);
+        }
+
+        return $this->succeedBuild($input, $output);
     }
 
     /**
@@ -108,11 +134,15 @@ EOF
      * @param InputInterface  $input
      * @param OutputInterface $output
      * @param string          $taskName
+     *
+     * @throws \Exception
      */
     private function runTask(InputInterface $input, OutputInterface $output, $taskName)
     {
         /** @var ParameterBag $config */
-        $config = $this->getApplication()->getConfig();
+        $config =
+            $this->getApplication()
+                ->getConfig();
         $task   = $config->get('tasks')[$taskName];
 
         /** @var DialogHelper $dialog */
@@ -129,8 +159,78 @@ EOF
         );
 
         foreach ($task['calls'] as $call) {
-            var_dump($call);
+            $services = array_keys($this->container->findTaggedServiceIds('exec'));
+            if (sizeof($services) > 1) {
+                throw new \Exception("Multiple calls exist with the 'exec' tag.");
+            }
+            /** @var CallInterface $service */
+            $service = $this->container->get($services[0]);
+            $service->initialize($input, $output, $this->getHelperSet(), $config);
+            $service->setTask($taskName, $task);
+            $service->setFailOnError(isset($call['failOnError']) ? $call['failOnError'] : false);
+
+            $service->run($call['arguments']);
+            $output->writeln("");
         }
+        $output->writeln("");
+    }
+
+    /**
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     * @param \Exception      $exception
+     *
+     * @return Boolean
+     */
+    private function failBuild(InputInterface $input, OutputInterface $output, \Exception $exception)
+    {
+        /** @var FormatterHelper $formatter */
+        $formatter = $this->getHelper('formatter');
+
+        $output->writeln(
+            [
+                "",
+                $formatter->formatBlock(
+                    [
+                        "",
+                        sprintf(
+                            "Build failed in file %s on line %d",
+                            $exception->getFile(),
+                            $exception->getLine()
+                        ),
+                        $exception->getMessage(),
+                        ""
+                    ],
+                    'bg=red;fg=white'
+                ),
+                ""
+            ]
+        );
+
+        return false;
+    }
+
+    public function succeedBuild(InputInterface $input, OutputInterface $output)
+    {
+        /** @var FormatterHelper $formatter */
+        $formatter = $this->getHelper('formatter');
+
+        $output->writeln(
+            [
+                "",
+                $formatter->formatBlock(
+                    [
+                        "",
+                        "Build Success!",
+                        ""
+                    ],
+                    'bg=green;fg=white'
+                ),
+                ""
+            ]
+        );
+
+        return true;
     }
 }
 
