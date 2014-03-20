@@ -59,6 +59,11 @@ abstract class AbstractCall implements CallInterface
     protected $failOnError;
 
     /**
+     * @var integer[] $successStatusCodes
+     */
+    protected $successStatusCodes;
+
+    /**
      * {@inheritDoc}
      */
     public function initialize(
@@ -94,6 +99,18 @@ abstract class AbstractCall implements CallInterface
     public function setFailOnError($fail)
     {
         $this->failOnError = $fail;
+
+        return $this;
+    }
+
+    /**
+     * @param integer[] $codes
+     *
+     * @return CallInterface
+     */
+    public function setSuccessStatusCodes(array $codes)
+    {
+        $this->successStatusCodes = $codes;
 
         return $this;
     }

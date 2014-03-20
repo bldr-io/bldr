@@ -2,12 +2,12 @@
     "name":              "bldr-io/bldr",
     "description":       "Yaml Build System",
     "require":           {
-        "symfony/console":              "dev-master",
-        "symfony/config":               "dev-master",
-        "symfony/dependency-injection": "dev-master",
-        "symfony/event-dispatcher":     "dev-master",
-        "symfony/process":              "dev-master",
-        "symfony/yaml":                 "dev-master",
+        "symfony/console":              "~2.4",
+        "symfony/config":               "~2.4",
+        "symfony/dependency-injection": "~2.4",
+        "symfony/event-dispatcher":     "~2.4",
+        "symfony/process":              "~2.4",
+        "symfony/yaml":                 "~2.4",
         "herrera-io/phar-update":       "1.*",
         "bldr-io/bldr-execute":         "dev-master",
         "bldr-io/bldr-filesystem":      "dev-master"

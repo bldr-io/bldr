@@ -171,6 +171,7 @@ EOF
             $service->initialize($input, $output, $this->getHelperSet(), $config);
             $service->setTask($taskName, $task);
             $service->setFailOnError(isset($call['failOnError']) ? $call['failOnError'] : false);
+            $service->setSuccessStatusCodes(isset($call['successCodes']) ? $call['successCodes'] : [0]);
 
             if (method_exists($service, 'setFileset') && isset($call['fileset'])) {
                 $service->setFileset($call['fileset']);

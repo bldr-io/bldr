@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "363474a33a71680f7ce502cc7362e321",
+    "hash": "92d5db021e061ace9ae8d91464a43391",
     "packages": [
         {
             "name": "bldr-io/bldr-execute",
@@ -11,20 +11,20 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/bldr-io/bldr-execute.git",
-                "reference": "6f100bb748cbf8e1fe658aaa6f6646e0b2bc156f"
+                "reference": "f656d6d2362838d72ef88d79fc3f123be15ba6d5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bldr-io/bldr-execute/zipball/6f100bb748cbf8e1fe658aaa6f6646e0b2bc156f",
-                "reference": "6f100bb748cbf8e1fe658aaa6f6646e0b2bc156f",
+                "url": "https://api.github.com/repos/bldr-io/bldr-execute/zipball/f656d6d2362838d72ef88d79fc3f123be15ba6d5",
+                "reference": "f656d6d2362838d72ef88d79fc3f123be15ba6d5",
                 "shasum": ""
             },
             "require": {
                 "bldr-io/bldr": "dev-master"
             },
             "require-dev": {
-                "symfony/config": "dev-master",
-                "symfony/dependency-injection": "dev-master"
+                "symfony/config": "~2.5.0@dev",
+                "symfony/dependency-injection": "~2.5.0@dev"
             },
             "type": "library",
             "autoload": {
@@ -32,21 +32,20 @@
                     "Bldr\\Extension\\Execute\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
             "authors": [
                 {
                     "name": "Aaron Scherer",
-                    "email": "aequasi@gmail.com"
+                    "email": "aequasi@gmail.com",
+                    "homepage": "https://github.com/aequasi",
+                    "role": "developer"
                 }
             ],
             "description": "Bldr.io Execute Extension",
-            "support": {
-                "source": "https://github.com/bldr-io/bldr-execute/tree/master",
-                "issues": "https://github.com/bldr-io/bldr-execute/issues"
-            },
-            "time": "2014-03-20 17:50:23"
+            "time": "2014-03-20 22:38:53"
         },
         {
             "name": "bldr-io/bldr-filesystem",
@@ -54,12 +53,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/bldr-io/bldr-filesystem.git",
-                "reference": "0b78c3095ff419d66eac7b8febf7b7113be0524d"
+                "reference": "b618305d47aff3ca2970e0470945c405c2dd3cff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bldr-io/bldr-filesystem/zipball/0b78c3095ff419d66eac7b8febf7b7113be0524d",
-                "reference": "0b78c3095ff419d66eac7b8febf7b7113be0524d",
+                "url": "https://api.github.com/repos/bldr-io/bldr-filesystem/zipball/b618305d47aff3ca2970e0470945c405c2dd3cff",
+                "reference": "b618305d47aff3ca2970e0470945c405c2dd3cff",
                 "shasum": ""
             },
             "require": {
@@ -76,21 +75,20 @@
                     "Bldr\\Extension\\Filesystem\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
             "authors": [
                 {
                     "name": "Aaron Scherer",
-                    "email": "aequasi@gmail.com"
+                    "email": "aequasi@gmail.com",
+                    "homepage": "https://github.com/aequasi",
+                    "role": "developer"
                 }
             ],
             "description": "Bldr.io Filesystem Extension",
-            "support": {
-                "source": "https://github.com/bldr-io/bldr-filesystem/tree/master",
-                "issues": "https://github.com/bldr-io/bldr-filesystem/issues"
-            },
-            "time": "2014-03-20 20:51:36"
+            "time": "2014-03-20 22:32:29"
         },
         {
             "name": "herrera-io/json",
