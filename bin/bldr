@@ -12,6 +12,7 @@
 
 $paths[] = __DIR__.'/../vendor';
 $paths[] = __DIR__.'/../../..';
+$paths[] = getcwd().'/../vendor';
 
 $filename = null;
 

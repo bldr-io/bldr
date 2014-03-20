@@ -12,7 +12,7 @@ module.exports = function ( grunt ) {
         },
         watch: {
             tests: {
-                files: ['**/*.php', '**/*.yml'],
+                files: ['**/*.php', '**/*.yml', 'bin/bldr'],
                 tasks: ['shell:tests']
             }
         }
