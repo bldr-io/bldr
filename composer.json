@@ -6,7 +6,8 @@
         "symfony/process": "dev-master",
         "symfony/event-dispatcher": "dev-master",
         "symfony/dependency-injection": "dev-master",
-        "symfony/yaml": "dev-master"
+        "symfony/yaml": "dev-master",
+        "herrera-io/phar-update": "1.*"
     },
     "license": "MIT",
     "authors": [

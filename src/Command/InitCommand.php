@@ -32,6 +32,11 @@ class InitCommand extends Command
     private $gitConfig;
 
     /**
+     * @var array $tasks
+     */
+    private $tasks = [];
+
+    /**
      * {@inheritDoc}
      */
     protected function configure()
@@ -65,19 +70,29 @@ EOF
         $whitelist = ['name', 'description'];
         $options   = array_filter(array_intersect_key($input->getOptions(), array_flip($whitelist)));
 
-        if ($dialog->askConfirmation($output, $dialog->getQuestion('Would you like to define your profiles?', 'yes', '?'), true)) {
+        if ($dialog->askConfirmation(
+            $output,
+            $dialog->getQuestion('Would you like to define your profiles?', 'yes', '?'),
+            true
+        )
+        ) {
             $options['profiles'] = $this->determineProfiles($input, $output);
-            foreach ($options['profiles'] as $key => $profile) {
-                if (isset($profile['tasks'])) {
-                    foreach ($profile['tasks'] as $task) {
-                        $options['tasks'][$task] = [];
-                    }
-                }
+            foreach ($this->tasks as $taskName => $task) {
+                $options['tasks'][$taskName] = array_merge_recursive($task, ['calls' => []]);
             }
         }
 
+        $yaml = Yaml::dump($options, 12);
+        file_put_contents(getcwd() . '/.bldr.yml', $yaml);
 
-        file_put_contents(getcwd() . '/.bldr.yml', Yaml::dump($options, 12));
+        $output->writeln(
+            [
+                "",
+                ".bldr.yml file generated.",
+                "",
+                $yaml
+            ]
+        );
     }
 
     /**
@@ -184,7 +199,7 @@ EOF
         /** @var DialogHelper $dialog */
         $dialog = $this->getHelper('dialog');
 
-        $output->writeln(["","Defining Profiles", ""]);
+        $output->writeln(["", "Defining Profiles", ""]);
 
         $profiles = [];
         do {
@@ -195,26 +210,33 @@ EOF
                 break;
             }
             $description = $dialog->ask($output, $dialog->getQuestion('Description', false), false);
-            if ($description === false) {
+            if ($description !== false) {
                 $profile['description'] = $description;
             }
 
             $output->writeln(["", "Task Ordering"]);
             $tasks = [];
             do {
-                $task = $dialog->ask($output, $dialog->getQuestion('Task name', false), false);
-                if ($task === false) {
+                $task = [];
+
+                $taskName = $dialog->ask($output, $dialog->getQuestion('Task name', false), false);
+                if ($taskName === false) {
                     break;
                 }
-                $tasks[] = $task;
+                $desc = $dialog->ask($output, $dialog->getQuestion('Task Description', false), false);
+                if ($desc !== false) {
+                    $task['description'] = $desc;
+                }
 
-            } while(true);
+                $this->tasks[$taskName] = $task;
+                $tasks[]                = $taskName;
+            } while (true);
             if (!empty($tasks)) {
                 $profile['tasks'] = $tasks;
             }
 
             $profiles[$name] = $profile;
-        } while(true);
+        } while (true);
 
         return $profiles;
     }

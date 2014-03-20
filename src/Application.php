@@ -11,21 +11,25 @@
 
 namespace Bldr;
 
+use Bldr\Command as Commands;
+use Bldr\Helper\DialogHelper;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag as Config;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Yaml\Yaml;
-use Symfony\Component\Console\Helper\FormatterHelper;
-use Bldr\Helper\DialogHelper;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class Application extends BaseApplication
 {
     const MANIFEST_URL = 'http://bldr.io/manifest.json';
 
-    private static $logo = <<<EOF
+    public static $logo = <<<EOF
   ______    __       _______   ______            __    ______
  |   _  \  |  |     |       \ |   _  \          |  |  /  __  \
  |  |_)  | |  |     |  .--.  ||  |_)  |  ______ |  | |  |  |  |
@@ -44,6 +48,15 @@ EOF;
      */
     private $dispatcher;
 
+    /**
+     * @var ContainerInterface $container
+     */
+    private $container;
+
+    /**
+     * @param string $name
+     * @param string $version
+     */
     public function __construct($name = 'Bldr', $version = '@package_version@')
     {
         $this->dispatcher = new EventDispatcher();
@@ -82,16 +95,9 @@ EOF;
      */
     public function getCommands()
     {
-        $names    = glob(__DIR__ . '/Command/*Command.php');
-        $commands = [];
-        foreach ($names as $name) {
-            $name    = str_replace('.php', '', basename($name));
-            $class   = 'Bldr\Command\\' . $name;
-            $command = new $class();
-            if ($command instanceof \Symfony\Component\Console\Command\Command) {
-                $commands[] = $command;
-            }
-        }
+        $commands   = [];
+        $commands[] = new Commands\InitCommand();
+        $commands[] = new Commands\BuildCommand();
 
         return $commands;
     }
@@ -108,7 +114,51 @@ EOF;
             $this->config = new Config(Yaml::parse($dir . '/.bldr.yml'));
         }
 
+        $this->buildContainer();
+
         parent::doRunCommand($command, $input, $output);
+    }
+
+    private function buildContainer()
+    {
+        $container  = new ContainerBuilder();
+
+        /** @var ExtensionInterface[] $extensions */
+        $extensions = [];
+
+        if (null !== $this->config && $this->config->has('extensions')) {
+            foreach ($this->config->get('extensions') as $extensionClass) {
+                if (!class_exists($extensionClass)) {
+                    throw new InvalidArgumentException(
+                        sprintf(
+                            "Attempted to load the %s extension. Couldn't find it.",
+                            $extensionClass
+                        )
+                    );
+                }
+                $extension = new $extensionClass();
+                if (!($extension instanceof ExtensionInterface)) {
+                    throw new InvalidArgumentException(
+                        sprintf(
+                            "Attempted to load the %s extension. Wasn't an instance of %s",
+                            $extensionClass,
+                            'Symfony\Component\DependencyInjection\Extension\ExtensionInterface'
+                        )
+                    );
+                }
+
+                $extensions[] = new $extension();
+            }
+        }
+
+        foreach ($extensions as $extension) {
+            $container->registerExtension($extension);
+            $container->loadFromExtension($extension->getAlias());
+        }
+
+        $container->compile();
+
+        $this->container = $container;
     }
 
     /**
@@ -116,7 +166,7 @@ EOF;
      */
     public function getHelp()
     {
-        return "\n".self::$logo."\n\n".parent::getHelp();
+        return "\n" . self::$logo . "\n\n" . parent::getHelp();
     }
 
     /**
