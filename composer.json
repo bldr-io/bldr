@@ -1,28 +1,36 @@
 {
-    "name": "aequasi/bldr-io",
-    "description": "Yaml Build System",
-    "require": {
-        "symfony/console": "dev-master",
-        "symfony/process": "dev-master",
-        "symfony/event-dispatcher": "dev-master",
+    "name":              "bldr-io/bldr",
+    "description":       "Yaml Build System",
+    "require":           {
+        "symfony/console":              "dev-master",
+        "symfony/config":               "dev-master",
         "symfony/dependency-injection": "dev-master",
-        "symfony/yaml": "dev-master",
-        "herrera-io/phar-update": "1.*"
+        "symfony/event-dispatcher":     "dev-master",
+        "symfony/process":              "dev-master",
+        "symfony/yaml":                 "dev-master",
+        "herrera-io/phar-update":       "1.*",
+        "bldr-io/bldr-execute":         "dev-master"
     },
-    "license": "MIT",
-    "authors": [
+    "repositories":      [
         {
-            "name": "Aaron Scherer",
+            "type": "vcs",
+            "url":  "https://github.com/bldr-io/bldr-execute.git"
+        }
+    ],
+    "license":           "MIT",
+    "authors":           [
+        {
+            "name":  "Aaron Scherer",
             "email": "aequasi@gmail.com"
         }
     ],
     "minimum-stability": "dev",
-    "autoload": {
-      "psr-4": {
-        "Bldr\\": "src/"
-      }
+    "autoload":          {
+        "psr-4": {
+            "Bldr\\": "src/"
+        }
     },
-    "bin": [
+    "bin":               [
         "bin/bldr"
     ]
 }
