@@ -166,6 +166,10 @@ EOF
             if (sizeof($services) > 1) {
                 throw new \Exception("Multiple calls exist with the 'exec' tag.");
             }
+            if (sizeof($services) === 0) {
+                throw new \Exception("No task type found for {$call['type']}.");
+            }
+
             /** @var CallInterface $service */
             $service = $this->container->get($services[0]);
             $service->initialize($input, $output, $this->getHelperSet(), $config);

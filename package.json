@@ -1,0 +1,14 @@
+{
+  "name": "analytics-api",
+  "main": "Gruntfile.js",
+  "repository": {
+    "type": "git",
+    "url": "git@elephanthub.net:UE-Software/analytics-api.git"
+  },
+  "dependencies": {
+    "grunt-shell": "~0.6.4",
+    "grunt-contrib-watch": "~0.6.0",
+    "grunt-cli": "~0.1.13",
+    "grunt": "~0.4.4"
+  }
+}
