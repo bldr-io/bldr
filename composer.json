@@ -9,7 +9,8 @@
         "symfony/process":              "dev-master",
         "symfony/yaml":                 "dev-master",
         "herrera-io/phar-update":       "1.*",
-        "bldr-io/bldr-execute":         "dev-master"
+        "bldr-io/bldr-execute":         "dev-master",
+        "bldr-io/bldr-filesystem":      "dev-master"
     },
     "require-dev":       {
         "phpunit/phpunit":           "4.0.*",
@@ -19,6 +20,10 @@
         {
             "type": "vcs",
             "url":  "https://github.com/bldr-io/bldr-execute.git"
+        },
+        {
+            "type": "vcs",
+            "url":  "https://github.com/bldr-io/bldr-filesystem.git"
         }
     ],
     "license":           "MIT",

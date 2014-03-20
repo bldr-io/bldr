@@ -134,7 +134,8 @@ EOF;
 
         /** @var ExtensionInterface[] $extensions */
         $extensions = [
-            new Extension\Execute\DependencyInjection\ExecuteExtension()
+            new Extension\Execute\DependencyInjection\ExecuteExtension(),
+            new Extension\Filesystem\DependencyInjection\FilesystemExtension(),
         ];
 
         if (null !== $this->config && $this->config->has('extensions')) {

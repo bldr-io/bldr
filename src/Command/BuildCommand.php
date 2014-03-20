@@ -140,9 +140,8 @@ EOF
     private function runTask(InputInterface $input, OutputInterface $output, $taskName)
     {
         /** @var ParameterBag $config */
-        $config =
-            $this->getApplication()
-                ->getConfig();
+        $config = $this->getApplication()
+            ->getConfig();
         $task   = $config->get('tasks')[$taskName];
 
         /** @var DialogHelper $dialog */
@@ -153,13 +152,17 @@ EOF
         $output->writeln(
             [
                 "",
-                sprintf("<info>Running the %s task</info>\n<comment>> %s</comment>", $taskName, $task['description']),
+                sprintf(
+                    "<info>Running the %s task</info>\n<comment>%s</comment>",
+                    $taskName,
+                    isset($task['description']) ? '> ' . $task['description'] : ''
+                ),
                 ""
             ]
         );
 
         foreach ($task['calls'] as $call) {
-            $services = array_keys($this->container->findTaggedServiceIds('exec'));
+            $services = array_keys($this->container->findTaggedServiceIds($call['type']));
             if (sizeof($services) > 1) {
                 throw new \Exception("Multiple calls exist with the 'exec' tag.");
             }
@@ -168,6 +171,10 @@ EOF
             $service->initialize($input, $output, $this->getHelperSet(), $config);
             $service->setTask($taskName, $task);
             $service->setFailOnError(isset($call['failOnError']) ? $call['failOnError'] : false);
+
+            if (method_exists($service, 'setFileset') && isset($call['fileset'])) {
+                $service->setFileset($call['fileset']);
+            }
 
             $service->run($call['arguments']);
             $output->writeln("");
