@@ -237,7 +237,7 @@ EOF
             ]
         );
 
-        return false;
+        return 1;
     }
 
     public function succeedBuild(InputInterface $input, OutputInterface $output)
@@ -260,7 +260,7 @@ EOF
             ]
         );
 
-        return true;
+        return 0;
     }
 }
 
