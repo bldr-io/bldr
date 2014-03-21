@@ -83,7 +83,7 @@ And heres the output:
 For now (while im still working on the documentation), this will hopefully serve as ample documentation.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 4
 
     installation
     configuration
