@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "92d5db021e061ace9ae8d91464a43391",
+    "hash": "945389da6a7f2bbcb153c04c97bae86f",
     "packages": [
         {
             "name": "bldr-io/bldr-execute",
@@ -11,20 +11,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/bldr-io/bldr-execute.git",
-                "reference": "f656d6d2362838d72ef88d79fc3f123be15ba6d5"
+                "reference": "57f23863ad630e3a293d3506cf4f2ebb358a4d36"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bldr-io/bldr-execute/zipball/f656d6d2362838d72ef88d79fc3f123be15ba6d5",
-                "reference": "f656d6d2362838d72ef88d79fc3f123be15ba6d5",
+                "url": "https://api.github.com/repos/bldr-io/bldr-execute/zipball/57f23863ad630e3a293d3506cf4f2ebb358a4d36",
+                "reference": "57f23863ad630e3a293d3506cf4f2ebb358a4d36",
                 "shasum": ""
             },
-            "require": {
-                "bldr-io/bldr": "dev-master"
-            },
             "require-dev": {
-                "symfony/config": "~2.5.0@dev",
-                "symfony/dependency-injection": "~2.5.0@dev"
+                "bldr-io/bldr": "dev-master"
             },
             "type": "library",
             "autoload": {
@@ -45,7 +41,7 @@
                 }
             ],
             "description": "Bldr.io Execute Extension",
-            "time": "2014-03-20 22:38:53"
+            "time": "2014-03-21 02:10:44"
         },
         {
             "name": "bldr-io/bldr-filesystem",
@@ -53,21 +49,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/bldr-io/bldr-filesystem.git",
-                "reference": "b618305d47aff3ca2970e0470945c405c2dd3cff"
+                "reference": "2ac867689763df424bc4cc6452c41b8f7cf448fc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bldr-io/bldr-filesystem/zipball/b618305d47aff3ca2970e0470945c405c2dd3cff",
-                "reference": "b618305d47aff3ca2970e0470945c405c2dd3cff",
+                "url": "https://api.github.com/repos/bldr-io/bldr-filesystem/zipball/2ac867689763df424bc4cc6452c41b8f7cf448fc",
+                "reference": "2ac867689763df424bc4cc6452c41b8f7cf448fc",
                 "shasum": ""
             },
-            "require": {
+            "require-dev": {
                 "bldr-io/bldr": "dev-master",
                 "symfony/filesystem": "dev-master"
-            },
-            "require-dev": {
-                "symfony/config": "dev-master",
-                "symfony/dependency-injection": "dev-master"
             },
             "type": "library",
             "autoload": {
@@ -88,7 +80,7 @@
                 }
             ],
             "description": "Bldr.io Filesystem Extension",
-            "time": "2014-03-20 22:32:29"
+            "time": "2014-03-21 02:10:58"
         },
         {
             "name": "herrera-io/json",
@@ -153,21 +145,21 @@
         },
         {
             "name": "herrera-io/phar-update",
-            "version": "1.0.3",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/herrera-io/php-phar-update.git",
-                "reference": "00a79e1d5b8cf3c080a2e3becf1ddf7a7fea025b"
+                "reference": "15643c90d3d43620a4f45c910e6afb7a0ad4b488"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/herrera-io/php-phar-update/zipball/00a79e1d5b8cf3c080a2e3becf1ddf7a7fea025b",
-                "reference": "00a79e1d5b8cf3c080a2e3becf1ddf7a7fea025b",
+                "url": "https://api.github.com/repos/herrera-io/php-phar-update/zipball/15643c90d3d43620a4f45c910e6afb7a0ad4b488",
+                "reference": "15643c90d3d43620a4f45c910e6afb7a0ad4b488",
                 "shasum": ""
             },
             "require": {
                 "herrera-io/json": "1.*",
-                "kherge/version": "1.*",
+                "herrera-io/version": "1.*",
                 "php": ">=5.3.3"
             },
             "require-dev": {
@@ -178,7 +170,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0-dev"
+                    "dev-master": "2.0-dev"
                 }
             },
             "autoload": {
@@ -207,7 +199,59 @@
                 "phar",
                 "update"
             ],
-            "time": "2013-10-30 17:23:01"
+            "time": "2013-11-09 17:13:13"
+        },
+        {
+            "name": "herrera-io/version",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/herrera-io/php-version.git",
+                "reference": "924ed853f7e3c373d844b87519073a30a6b65ad4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/herrera-io/php-version/zipball/924ed853f7e3c373d844b87519073a30a6b65ad4",
+                "reference": "924ed853f7e3c373d844b87519073a30a6b65ad4",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "herrera-io/phpunit-test-case": "1.*",
+                "phpunit/phpunit": "3.7.*"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Herrera\\Version": "src/lib"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kevin Herrera",
+                    "email": "kevin@herrera.io",
+                    "homepage": "http://kevin.herrera.io",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A library for creating, editing, and comparing semantic versioning numbers.",
+            "homepage": "http://github.com/herrera-io/php-version",
+            "keywords": [
+                "semantic",
+                "version"
+            ],
+            "time": "2014-01-27 18:15:52"
         },
         {
             "name": "justinrainbow/json-schema",
@@ -276,49 +320,6 @@
                 "schema"
             ],
             "time": "2014-03-05 15:03:52"
-        },
-        {
-            "name": "kherge/version",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/kherge-unmaintained/Version.git",
-                "reference": "046ec90aeb307ef57b8fb30905067f802b3f83d5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/kherge-unmaintained/Version/zipball/046ec90aeb307ef57b8fb30905067f802b3f83d5",
-                "reference": "046ec90aeb307ef57b8fb30905067f802b3f83d5",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.3"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "KevinGH\\Version": "src/lib/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Kevin Herrera",
-                    "email": "me@kevingh.com",
-                    "homepage": "http://www.kevingh.com/"
-                }
-            ],
-            "description": "A parsing and comparison library for semantic versioning.",
-            "homepage": "http://github.com/kherge/Version",
-            "time": "2013-05-17 14:37:21"
         },
         {
             "name": "seld/jsonlint",
@@ -1397,12 +1398,6 @@
     ],
     "minimum-stability": "dev",
     "stability-flags": {
-        "symfony/console": 20,
-        "symfony/config": 20,
-        "symfony/dependency-injection": 20,
-        "symfony/event-dispatcher": 20,
-        "symfony/process": 20,
-        "symfony/yaml": 20,
         "bldr-io/bldr-execute": 20,
         "bldr-io/bldr-filesystem": 20
     },
