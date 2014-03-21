@@ -74,6 +74,12 @@ Well, here's one written for Bldr:
                         - --testdox
                         - --coverage-text
 
+And heres the output:
+
+.. image:: demo1.png
+
+.. image:: demo2.png
+
 For now (while im still working on the documentation), this will hopefully serve as ample documentation.
 
 Contents:

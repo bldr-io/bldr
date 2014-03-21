@@ -12,7 +12,9 @@
 
 $paths[] = __DIR__.'/../vendor';
 $paths[] = __DIR__.'/../../..';
-$paths[] = getcwd().'/vendor';
+if (__DIR__ !== getcwd()) {
+    $paths[] = getcwd() . '/vendor';
+}
 
 $autoloader = false;
 
@@ -20,7 +22,7 @@ foreach ($paths as $path) {
     $filePath = $path.'/autoload.php';
     if (file_exists($filePath)) {
         $autoloader = true;
-        require_once $filePath;
+        require $filePath;
     }
 }
 

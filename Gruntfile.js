@@ -4,7 +4,7 @@ module.exports = function ( grunt ) {
             tests: {
                 command: [
                      'php bin/phpunit',
-                     'box build'
+                     'box build -v'
                  ].join( '&&' ),
                 options: {
                     stdout: true
