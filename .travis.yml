@@ -12,7 +12,6 @@ matrix:
 
 before_script:
   - composer self-update
-  - composer require bldr-io/bldr="~0.1.0@beta"
 
 script:
   - bin/bldr build default
