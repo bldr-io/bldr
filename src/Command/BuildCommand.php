@@ -107,7 +107,7 @@ EOF
                             sprintf("Building the '%s' project", $config->get('name')),
                             sprintf(" - %s - ", $config->get('description'))
                         ],
-                        'bg=blue;fg=white'
+                        'bg=blue;fg=black'
                     ),
                     "",
                     $formatter->formatBlock(
