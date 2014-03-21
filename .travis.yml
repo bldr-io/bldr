@@ -1,0 +1,18 @@
+language: php
+
+php:
+  - 5.4
+  - 5.5
+  - 5.6
+  - hhvm
+  
+matrix:
+  allow_failures:
+    - php: hhvm, 5.6, 5.5
+
+before_script:
+  - composer global require bldr-io/bldr=dev-master
+  - composer self-update
+
+script:
+  - bldr build default

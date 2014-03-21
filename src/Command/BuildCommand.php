@@ -54,6 +54,7 @@ class BuildCommand extends Command implements ContainerAwareInterface
         $this->setName('build')
             ->setDescription("Builds the project for the directory you are in. Must contain a .bldr.yml file.")
             ->addOption('profile', 'p', InputOption::VALUE_REQUIRED, 'Profile to run', 'default')
+            ->addOption('tasks', 't', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Tasks to run')
             ->setHelp(
                 <<<EOF
 
@@ -62,6 +63,16 @@ The <info>%command.name%</info> builds the current project, using the .bldr.yml 
 To use:
 
     <info>$ bldr %command.full_name% </info>
+
+To specify a profile:
+
+    <info>$ bldr %command.full_name% profile_name</info>
+
+To specify tasks to run:
+
+    <info>$ bldr %command.full_name% --tasks=task_name</info>
+    <info>$ bldr %command.full_name% --tasks=task_name -t second_task</info>
+    <info>$ bldr %command.full_name% --tasks=task_name,second_task</info>
 
 EOF
             );
@@ -75,42 +86,49 @@ EOF
         $output->writeln(["\n", Application::$logo, "\n"]);
 
         /** @var ParameterBag $config */
-        $config      = $this->getApplication()
-            ->getConfig();
-        $profileName = $input->getOption('profile');
-        $profile     = $config->get('profiles')[$profileName];
+        $config      = $this->getApplication()->getConfig();
+        if ([] === $tasks = $input->getOption('tasks')) {
 
-        /** @var DialogHelper $dialog */
-        $dialog = $this->getHelper('dialog');
-        /** @var FormatterHelper $formatter */
-        $formatter = $this->getHelper('formatter');
+            $profileName = $input->getOption('profile');
+            $profile     = $config->get('profiles')[$profileName];
+            $tasks       = $profile['tasks'];
 
-        $output->writeln(
-            [
-                "",
-                $formatter->formatBlock(
-                    [
-                        sprintf("Building the '%s' project", $config->get('name')),
-                        sprintf(" - %s - ", $config->get('description'))
-                    ],
-                    'bg=blue;fg=white',
-                    true
-                ),
-                "",
-                $formatter->formatBlock(
-                    [
-                        sprintf("Using the '%s' profile", $profileName),
-                        sprintf(" - %s - ", $profile['description'])
-                    ],
-                    'bg=green;fg=white',
-                    true
-                ),
-                ""
-            ]
-        );
+            /** @var DialogHelper $dialog */
+            $dialog = $this->getHelper('dialog');
+            /** @var FormatterHelper $formatter */
+            $formatter = $this->getHelper('formatter');
+
+            $output->writeln(
+                [
+                    "",
+                    $formatter->formatBlock(
+                        [
+                            sprintf("Building the '%s' project", $config->get('name')),
+                            sprintf(" - %s - ", $config->get('description'))
+                        ],
+                        'bg=blue;fg=white',
+                        true
+                    ),
+                    "",
+                    $formatter->formatBlock(
+                        [
+                            sprintf("Using the '%s' profile", $profileName),
+                            sprintf(" - %s - ", $profile['description'])
+                        ],
+                        'bg=green;fg=white',
+                        true
+                    ),
+                    ""
+                ]
+            );
+        } else {
+            if (sizeof($tasks) === 1 && strpos($tasks[0], ',') !== false) {
+                $tasks = explode(',', $tasks[0]);
+            }
+        }
 
         try {
-            $this->runTasks($input, $output, $profile['tasks']);
+            $this->runTasks($input, $output, $tasks);
         } catch (\Exception $e) {
             return $this->failBuild($input, $output, $e);
         }
