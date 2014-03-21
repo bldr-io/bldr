@@ -210,34 +210,11 @@ EOF
      * @param OutputInterface $output
      * @param \Exception      $exception
      *
-     * @return Boolean
+     * @throws \Exception
      */
     private function failBuild(InputInterface $input, OutputInterface $output, \Exception $exception)
     {
-        /** @var FormatterHelper $formatter */
-        $formatter = $this->getHelper('formatter');
-
-        $output->writeln(
-            [
-                "",
-                $formatter->formatBlock(
-                    [
-                        "",
-                        sprintf(
-                            "Build failed in file %s on line %d",
-                            $exception->getFile(),
-                            $exception->getLine()
-                        ),
-                        $exception->getMessage(),
-                        ""
-                    ],
-                    'bg=red;fg=white'
-                ),
-                ""
-            ]
-        );
-
-        return 1;
+        throw $exception;
     }
 
     public function succeedBuild(InputInterface $input, OutputInterface $output)

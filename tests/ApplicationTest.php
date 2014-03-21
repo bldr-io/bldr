@@ -49,6 +49,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetDispatcher(Application $application)
     {
+        $this->assertTrue(false);
         $this->assertInstanceOf(
             'Symfony\Component\EventDispatcher\EventDispatcher',
             $application->getDispatcher()
