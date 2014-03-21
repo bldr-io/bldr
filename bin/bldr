@@ -12,25 +12,23 @@
 
 $paths[] = __DIR__.'/../vendor';
 $paths[] = __DIR__.'/../../..';
-$paths[] = getcwd().'/../vendor';
+$paths[] = getcwd().'/vendor';
 
-$filename = null;
+$autoloader = false;
 
 foreach ($paths as $path) {
     $filePath = $path.'/autoload.php';
     if (file_exists($filePath)) {
-        $filename = $filePath;
-        break;
+        $autoloader = true;
+        require_once $filePath;
     }
 }
 
-if (null === $filename) {
+if (false === $autoloader) {
         echo "Cannot find an autoupload.php file, have you executed composer install command?\n";
         exit(1);
 }
     
-require_once $filename;
-
 error_reporting(-1);
 ini_set('display_errors', 1);
 
