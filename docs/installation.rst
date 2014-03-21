@@ -3,7 +3,7 @@ Installation
 
 This should be installed via composer, for now. You can either install it globally, or in your own project.
 If it is the first time you globally install a dependency then make sure you include ~/.composer/vendor/bin
-in $PATH as shown <a href="http://getcomposer.org/doc/03-cli.md#global">here</a>.
+in $PATH as shown [here](http://getcomposer.org/doc/03-cli.md#global).
 
 **Global Setup**
 
