@@ -36,7 +36,7 @@ tasks:
                 type: apply
                 fileset: src/**/*.php
                 arguments:
-                    - /usr/bin/php
+                    - php
                     - -l
 
     phpcs:
@@ -45,8 +45,7 @@ tasks:
             -
                 type: exec
                 arguments:
-                    - /usr/bin/php
-                    - bin/phpcs
+                    - php bin/phpcs
                     - -p
                     - --standard=build/phpcs.xml
                     - --report=checkstyle
@@ -59,6 +58,5 @@ tasks:
                 type: exec
                 failOnError: true
                 arguments:
-                    - /usr/bin/php
-                    - bin/phpunit
+                    - php bin/phpunit
                     - --coverage-text=php://stdout
