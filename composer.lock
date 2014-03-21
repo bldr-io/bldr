@@ -3,11 +3,11 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "945389da6a7f2bbcb153c04c97bae86f",
+    "hash": "cff780e872d7d0a75c39bdc8e848a7de",
     "packages": [
         {
             "name": "bldr-io/bldr-execute",
-            "version": "dev-master",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bldr-io/bldr-execute.git",
@@ -45,7 +45,7 @@
         },
         {
             "name": "bldr-io/bldr-filesystem",
-            "version": "dev-master",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bldr-io/bldr-filesystem.git",
@@ -1397,10 +1397,9 @@
 
     ],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "bldr-io/bldr-execute": 20,
-        "bldr-io/bldr-filesystem": 20
-    },
+    "stability-flags": [
+
+    ],
     "platform": [
 
     ],
