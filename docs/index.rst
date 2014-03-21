@@ -82,10 +82,14 @@ And heres the output:
 
 For now (while im still working on the documentation), this will hopefully serve as ample documentation.
 
+Content
+========
+
 .. toctree::
-   :maxdepth: 4
+    :maxdepth: 4
 
     installation
     configuration
     usage
     commands
+
