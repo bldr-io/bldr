@@ -61,5 +61,4 @@ tasks:
                 arguments:
                     - /usr/bin/php
                     - bin/phpunit
-                    - --testdox
                     - --coverage-text=php://stdout

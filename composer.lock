@@ -7,16 +7,16 @@
     "packages": [
         {
             "name": "bldr-io/bldr-execute",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bldr-io/bldr-execute.git",
-                "reference": "57f23863ad630e3a293d3506cf4f2ebb358a4d36"
+                "reference": "2ea66be634d2223883e7041bfb43bcb62abc6a65"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bldr-io/bldr-execute/zipball/57f23863ad630e3a293d3506cf4f2ebb358a4d36",
-                "reference": "57f23863ad630e3a293d3506cf4f2ebb358a4d36",
+                "url": "https://api.github.com/repos/bldr-io/bldr-execute/zipball/2ea66be634d2223883e7041bfb43bcb62abc6a65",
+                "reference": "2ea66be634d2223883e7041bfb43bcb62abc6a65",
                 "shasum": ""
             },
             "require-dev": {
@@ -41,7 +41,7 @@
                 }
             ],
             "description": "Bldr.io Execute Extension",
-            "time": "2014-03-21 02:10:44"
+            "time": "2014-03-21 18:02:14"
         },
         {
             "name": "bldr-io/bldr-filesystem",
