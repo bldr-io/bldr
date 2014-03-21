@@ -12,6 +12,7 @@ matrix:
 
 before_script:
   - composer self-update
+  - composer install
 
 script:
-  - ./bldr.phar build -p default
+  - ./bin/bldr build -p default
