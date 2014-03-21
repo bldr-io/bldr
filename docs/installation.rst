@@ -6,11 +6,13 @@ If it is the first time you globally install a dependency then make sure you inc
 in $PATH as shown <a href="http://getcomposer.org/doc/03-cli.md#global">here</a>.
 
 **Global Setup**
+
 .. code-block:: shell
 
     composer global require bldr-io/bldr dev-master
 
 **Project Setup**
+
 .. code-block:: shell
 
     composer require bldr-io/bldr dev-master
