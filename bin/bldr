@@ -27,7 +27,7 @@ foreach ($paths as $path) {
 }
 
 if (false === $autoloader) {
-        echo "Cannot find an autoupload.php file, have you executed composer install command?\n";
+        echo "Cannot find an autoload.php file, have you executed composer install command?\n";
         exit(1);
 }
     
