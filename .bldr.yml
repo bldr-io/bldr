@@ -25,19 +25,14 @@ tasks:
                 arguments: [build/coverage/index.html]
             -
                 type: exec
-                arguments:
-                    - composer
-                    - --prefer-dist
-                    - install
+                arguments: [composer install --prefer-dist]
     lint:
         describe: 'Lints the files of the project'
         calls:
             -
                 type: apply
                 fileset: src/**/*.php
-                arguments:
-                    - php
-                    - -l
+                arguments: [php -l]
 
     phpcs:
         description: 'Runs the PHP Code Sniffer'
