@@ -72,7 +72,7 @@ Well, here's one written for Bldr:
                         - /usr/bin/php
                         - bin/phpunit
                         - --testdox
-                        - --coverage-text
+                        - --coverage-text=php://stdout
 
 And heres the output:
 
@@ -82,7 +82,10 @@ And heres the output:
 
 For now (while im still working on the documentation), this will hopefully serve as ample documentation.
 
-Contents:
-
 .. toctree::
    :maxdepth: 2
+
+    installation
+    configuration
+    usage
+    commands
