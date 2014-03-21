@@ -12,7 +12,7 @@ matrix:
 
 before_script:
   - composer self-update
-  - composer global require bldr-io/bldr=0.1.*
+  - composer global require bldr-io/bldr="0.1.*@dev"
 
 script:
   - bldr build default
