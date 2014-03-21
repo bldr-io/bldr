@@ -98,6 +98,7 @@ EOF
             /** @var FormatterHelper $formatter */
             $formatter = $this->getHelper('formatter');
 
+
             $output->writeln(
                 [
                     "",
@@ -106,8 +107,7 @@ EOF
                             sprintf("Building the '%s' project", $config->get('name')),
                             sprintf(" - %s - ", $config->get('description'))
                         ],
-                        'bg=blue;fg=white',
-                        true
+                        'bg=blue;fg=white'
                     ),
                     "",
                     $formatter->formatBlock(
@@ -115,8 +115,7 @@ EOF
                             sprintf("Using the '%s' profile", $profileName),
                             sprintf(" - %s - ", $profile['description'])
                         ],
-                        'bg=green;fg=white',
-                        true
+                        'bg=green;fg=white'
                     ),
                     ""
                 ]
@@ -227,9 +226,7 @@ EOF
                 "",
                 $formatter->formatBlock(
                     [
-                        "",
                         "Build Success!",
-                        ""
                     ],
                     'bg=green;fg=white'
                 ),

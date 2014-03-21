@@ -31,12 +31,12 @@ class Application extends BaseApplication
     const MANIFEST_URL = 'http://bldr.io/manifest.json';
 
     public static $logo = <<<EOF
-  ______    __       _______   ______            __    ______
- |   _  \  |  |     |       \ |   _  \          |  |  /  __  \
- |  |_)  | |  |     |  .--.  ||  |_)  |  ______ |  | |  |  |  |
- |   _  <  |  |     |  |  |  ||      /  |______||  | |  |  |  |
- |  |_)  | |  `----.|  `--`  ||  |\  \          |  | |  `--`  |
- |______/  |_______||_______/ | _| `._|         |__|  \______/
+  ______    __       _______   ______
+ |   _  \  |  |     |       \ |   _  \
+ |  |_)  | |  |     |  .--.  ||  |_)  |
+ |   _  <  |  |     |  |  |  ||      /
+ |  |_)  | |  `----.|  `--`  ||  |\  \ 
+ |______/  |_______||_______/ | _| `._|
 EOF;
 
     /**
@@ -103,16 +103,20 @@ EOF;
         return $commands;
     }
 
+    /**
+     * Loads the config for the necessary commands, and sets the container for classes that need it.
+     *
+     * @param Command         $command
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     *
+     * @return int|void
+     */
     protected function doRunCommand(Command $command, InputInterface $input, OutputInterface $output)
     {
         $skipYaml = ['Bldr\Command\InitCommand', 'Symfony\Component\Console\Command\ListCommand'];
         if (!in_array(get_class($command), $skipYaml)) {
-            $dir = getcwd();
-            if (!file_exists($dir . '/.bldr.yml')) {
-                throw new \Exception("Could not find a .bldr.yml file in the current directory.");
-            }
-
-            $this->config = new Config(Yaml::parse($dir . '/.bldr.yml'));
+            $this->config = $this->readConfig();
         }
 
         $this->buildContainer();
@@ -121,6 +125,26 @@ EOF;
         }
 
         parent::doRunCommand($command, $input, $output);
+    }
+
+    /**
+     * Cehcks for .bldr.yml and then .bldr.yml.dist
+     *
+     * @return Config
+     * @throws \Exception
+     */
+    private function readConfig()
+    {
+        $dir = getcwd();
+        $file = $dir . '/.bldr.yml';
+        if (!file_exists($file)) {
+            $file .= '.dist';
+            if (!file_exists($file)) {
+                throw new \Exception("Could not find a .bldr.yml or a .bldr.yml.dist file in the current directory.");
+            }
+        }
+
+        return new Config(Yaml::parse($file));
     }
 
     /**
