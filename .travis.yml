@@ -19,4 +19,4 @@ script:
   - ./bin/bldr build -p default
 
 after_script:
-   - php vendor/bin/coveralls -v
+   - php bin/coveralls -v
