@@ -203,6 +203,8 @@ EOF;
         $container->compile();
 
         $this->container = $container;
+
+        return $container;
     }
 
     /**
