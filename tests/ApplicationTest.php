@@ -12,7 +12,9 @@
 namespace Bldr\Tests;
 
 use Bldr\Application;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Console\Helper\HelperSet;
 
 /**
  * @author Aaron Scherer <aaron@undergroundelephant.com>
@@ -71,6 +73,9 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $method->invoke($app);
     }
 
+    /**
+     * @return array|mixed
+     */
     public function testReadConfig()
     {
         $app = new Application();
@@ -92,13 +97,14 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
 
         unlink(getcwd() . '/.test.yml.dist');
 
+
         return $config;
     }
 
     /**
      * @depends testReadConfig
      */
-    public function testSetConfig(array $config)
+    public function testSetConfig(ParameterBag $config)
     {
         $app = new Application();
         $app->setConfig($config);
@@ -111,7 +117,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetConfig(Application $app)
     {
-        $this->assertEquals(['name' => 'test-config'], $app->getConfig());
+        $this->assertEquals(['name' => 'test-config'], $app->getConfig()->all());
     }
 
     /**
@@ -124,6 +130,38 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $configName = $class->getProperty('configName');
         $configName->setAccessible(true);
         $configName->setValue($application, '.test.yml');
+    }
+
+    /**
+     *
+     */
+    public function testGetCommands()
+    {
+        $app = new Application();
+        $commands = $app->getCommands();
+        $this->assertNotEmpty($commands);
+        foreach ($commands as $command) {
+            $this->assertInstanceOf(
+                'Symfony\Component\Console\Command\Command',
+                $command
+            );
+        }
+    }
+
+    public function testGetDefaultHelperSet()
+    {
+        $app = new Application();
+        $class  = new \ReflectionClass($app);
+        $method = $class->getMethod('getDefaultHelperSet');
+        $method->setAccessible(true);
+
+        /** @var HelperSet $helperSet */
+        $helperSet = $method->invoke($app);
+
+        $this->assertInstanceOf(
+            'Bldr\Helper\DialogHelper',
+            $helperSet->get('dialog')
+        );
     }
 
     /**

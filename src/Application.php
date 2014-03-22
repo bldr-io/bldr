@@ -207,6 +207,8 @@ EOF;
 
     /**
      * {@inheritDoc}
+     *
+     * @codeCoverageIgnore
      */
     public function getHelp()
     {
