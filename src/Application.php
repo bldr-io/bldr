@@ -169,29 +169,7 @@ EOF;
 
         if (null !== $this->config && $this->config->has('extensions')) {
             foreach ($this->config->get('extensions') as $extensionClass) {
-
-                if (!class_exists($extensionClass)) {
-                    throw new InvalidArgumentException(
-                        sprintf(
-                            "Attempted to load the %s extension. Couldn't find it.",
-                            $extensionClass
-                        )
-                    );
-                }
-
-                $extension = new $extensionClass();
-
-                if (!($extension instanceof ExtensionInterface)) {
-                    throw new InvalidArgumentException(
-                        sprintf(
-                            "Attempted to load the %s extension. Wasn't an instance of %s",
-                            $extensionClass,
-                            'Symfony\Component\DependencyInjection\Extension\ExtensionInterface'
-                        )
-                    );
-                }
-
-                $extensions[] = new $extension();
+                $extensions[] = new $extensionClass();
             }
         }
 

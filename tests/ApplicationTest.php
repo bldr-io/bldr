@@ -68,8 +68,8 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $app = new Application();
         $this->changeConfig($app);
 
-        $app    = new \ReflectionClass($app);
-        $method = $app->getMethod('readConfig');
+        $class    = new \ReflectionClass($app);
+        $method = $class->getMethod('readConfig');
         $method->setAccessible(true);
 
         $method->invoke($app);
@@ -172,6 +172,9 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     *
+     */
     public function testDoRunCommand()
     {
         $app = new Application();
