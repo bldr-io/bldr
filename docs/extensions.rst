@@ -9,6 +9,7 @@ you want to use a third party extension, its as simple as adding it to your ``.b
 .. code-block:: yaml
 
     extensions:
+        - Bldr\Extension\Symfony\DependencyInjection\SymfonyExtension
         - Acme\Extension\DependencyInjection\DemoExtension
 
 
