@@ -30,6 +30,11 @@ class Application extends BaseApplication
 {
     const MANIFEST_URL = 'http://bldr.io/manifest.json';
 
+    /**
+     * @var string $configName
+     */
+    private $configName = '.bldr.yml';
+
     public static $logo = <<<EOF
   ______    __       _______   ______
  |   _  \  |  |     |       \ |   _  \
@@ -136,7 +141,7 @@ EOF;
     private function readConfig()
     {
         $dir = getcwd();
-        $file = $dir . '/.bldr.yml';
+        $file = $dir . '/' . $this->configName;
         if (!file_exists($file)) {
             $file .= '.dist';
             if (!file_exists($file)) {
