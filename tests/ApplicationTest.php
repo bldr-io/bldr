@@ -9,12 +9,14 @@
  * with this source code in the file LICENSE
  */
 
-namespace Bldr\Tests;
+namespace Bldr\Test;
 
 use Bldr\Application;
+use Bldr\Test\Mock\Command\MockCommand;
+use Symfony\Component\Console\Helper\HelperSet;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\Yaml\Yaml;
-use Symfony\Component\Console\Helper\HelperSet;
 
 /**
  * @author Aaron Scherer <aaron@undergroundelephant.com>
@@ -66,11 +68,23 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $app = new Application();
         $this->changeConfig($app);
 
-        $app = new \ReflectionClass($app);
+        $app    = new \ReflectionClass($app);
         $method = $app->getMethod('readConfig');
         $method->setAccessible(true);
 
         $method->invoke($app);
+    }
+
+    /**
+     * Changes the config name
+     */
+    private function changeConfig(Application $application)
+    {
+        // Need to change the config name so we don't conflict with the projects config
+        $class      = new \ReflectionClass('Bldr\Application');
+        $configName = $class->getProperty('configName');
+        $configName->setAccessible(true);
+        $configName->setValue($application, '.test.yml');
     }
 
     /**
@@ -83,7 +97,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
 
         $config = ['name' => 'test-config'];
 
-        file_put_contents(getcwd().'/.test.yml', Yaml::dump($config));
+        file_put_contents(getcwd() . '/.test.yml', Yaml::dump($config));
 
         $class  = new \ReflectionClass($app);
         $method = $class->getMethod('readConfig');
@@ -96,7 +110,6 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $config = $method->invoke($app);
 
         unlink(getcwd() . '/.test.yml.dist');
-
 
         return $config;
     }
@@ -117,19 +130,11 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetConfig(Application $app)
     {
-        $this->assertEquals(['name' => 'test-config'], $app->getConfig()->all());
-    }
-
-    /**
-     * Changes the config name
-     */
-    private function changeConfig(Application $application)
-    {
-        // Need to change the config name so we don't conflict with the projects config
-        $class      = new \ReflectionClass('Bldr\Application');
-        $configName = $class->getProperty('configName');
-        $configName->setAccessible(true);
-        $configName->setValue($application, '.test.yml');
+        $this->assertEquals(
+            ['name' => 'test-config'],
+            $app->getConfig()
+                ->all()
+        );
     }
 
     /**
@@ -137,7 +142,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCommands()
     {
-        $app = new Application();
+        $app      = new Application();
         $commands = $app->getCommands();
         $this->assertNotEmpty($commands);
         foreach ($commands as $command) {
@@ -148,9 +153,12 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     *
+     */
     public function testGetDefaultHelperSet()
     {
-        $app = new Application();
+        $app    = new Application();
         $class  = new \ReflectionClass($app);
         $method = $class->getMethod('getDefaultHelperSet');
         $method->setAccessible(true);
@@ -161,6 +169,54 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(
             'Bldr\Helper\DialogHelper',
             $helperSet->get('dialog')
+        );
+    }
+
+    public function testDoRunCommand()
+    {
+        $app = new Application();
+
+
+        $command = new MockCommand();
+        $command->setApplication($app);
+        $command->setHelperSet($app->getHelperSet());
+
+        $input   = \Mockery::mock('Symfony\Component\Console\Input\InputInterface');
+        $input->shouldReceive('bind')->andReturn(true);
+        $input->shouldReceive('isInteractive')->andReturn(false);
+        $input->shouldReceive('validate')->andReturn(true);
+        $output   = \Mockery::mock('Symfony\Component\Console\Output\OutputInterface');
+
+        $class  = new \ReflectionClass($app);
+        $method = $class->getMethod('doRunCommand');
+        $method->setAccessible(true);
+
+        $this->assertTrue($method->invokeArgs($app, [$command, $input, $output]));
+    }
+
+    /**
+     *
+     */
+    public function testGetBuildContainer()
+    {
+        $app    = new Application();
+        $config = [
+            'extensions' => [
+                'Bldr\Test\Mock\DependencyInjection\MockExtension'
+            ]
+        ];
+        $app->setConfig(new ParameterBag($config));
+
+        $class  = new \ReflectionClass($app);
+        $method = $class->getMethod('buildContainer');
+        $method->setAccessible(true);
+
+        /** @var ContainerBuilder $container */
+        $container = $method->invoke($app);
+
+        $this->assertInstanceOf(
+            'Symfony\Component\DependencyInjection\ContainerBuilder',
+            $container
         );
     }
 

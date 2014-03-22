@@ -90,7 +90,6 @@ Content
 
     installation
     configuration
-    extensions
     usage
     commands
-
+    extensions
