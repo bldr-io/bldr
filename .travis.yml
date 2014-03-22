@@ -13,6 +13,7 @@ matrix:
 before_script:
   - composer self-update
   - composer install
+  - composer require satooshi/php-coveralls:dev-master --dev --no-progress --prefer-source
 
 script:
   - ./bin/bldr build -p default
