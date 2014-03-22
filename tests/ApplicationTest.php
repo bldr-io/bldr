@@ -191,7 +191,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $method = $class->getMethod('doRunCommand');
         $method->setAccessible(true);
 
-        $this->assertTrue($method->invokeArgs($app, [$command, $input, $output]));
+        $this->assertNull($method->invokeArgs($app, [$command, $input, $output]));
     }
 
     /**
