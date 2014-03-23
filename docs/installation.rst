@@ -9,13 +9,13 @@ in ``$PATH`` as shown here_.
 
 .. code-block:: shell
 
-    composer global require bldr-io/bldr dev-master
+composer global require bldr-io/bldr "~1.0.0"
 
 **Project Setup**
 
 .. code-block:: shell
 
-    composer require bldr-io/bldr dev-master
+    composer require bldr-io/bldr "~1.0.0"
 
 
 And that's it! From here, you should be able to run ``bldr`` if you set it up globally, or ``./bin/bldr`` if you set
