@@ -6,3 +6,8 @@ bldr.io
 
 
 Bldr.io Yaml Build System
+
+
+### Documentation
+
+Documentation is over at [http://docs.bldr.io/en/latest/](http://docs.bldr.io/en/latest/)
