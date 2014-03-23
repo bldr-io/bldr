@@ -19,7 +19,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\Yaml\Yaml;
 
 /**
- * @author Aaron Scherer <aaron@undergroundelephant.com>
+ * @author Aaron Scherer <aequasi@gmail.com>
  */
 class ApplicationTest extends \PHPUnit_Framework_TestCase
 {
@@ -206,7 +206,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $app    = new Application();
         $config = [
             'extensions' => [
-                'Bldr\Test\Mock\DependencyInjection\MockExtension'
+                'Bldr\Test\Mock\DependencyInjection\MockExtension' => null
             ]
         ];
         $app->setConfig(new ParameterBag($config));

@@ -3,24 +3,24 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "86fe0d2aac77b411a74c6574ae2c2312",
+    "hash": "6189be6a7808a7a9ba2043f01d251092",
     "packages": [
         {
             "name": "bldr-io/bldr-execute",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bldr-io/bldr-execute.git",
-                "reference": "2ea66be634d2223883e7041bfb43bcb62abc6a65"
+                "reference": "8cc1a1e1fe2da40db9312a1a1aff65f020044627"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bldr-io/bldr-execute/zipball/2ea66be634d2223883e7041bfb43bcb62abc6a65",
-                "reference": "2ea66be634d2223883e7041bfb43bcb62abc6a65",
+                "url": "https://api.github.com/repos/bldr-io/bldr-execute/zipball/8cc1a1e1fe2da40db9312a1a1aff65f020044627",
+                "reference": "8cc1a1e1fe2da40db9312a1a1aff65f020044627",
                 "shasum": ""
             },
             "require-dev": {
-                "bldr-io/bldr": "dev-master"
+                "bldr-io/bldr": "~1.0.0"
             },
             "type": "library",
             "autoload": {
@@ -41,25 +41,25 @@
                 }
             ],
             "description": "Bldr.io Execute Extension",
-            "time": "2014-03-21 18:02:14"
+            "time": "2014-03-23 02:52:56"
         },
         {
             "name": "bldr-io/bldr-filesystem",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bldr-io/bldr-filesystem.git",
-                "reference": "2ac867689763df424bc4cc6452c41b8f7cf448fc"
+                "reference": "b7ded664b77e13aeda77e68c91081e5ccaee4afa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bldr-io/bldr-filesystem/zipball/2ac867689763df424bc4cc6452c41b8f7cf448fc",
-                "reference": "2ac867689763df424bc4cc6452c41b8f7cf448fc",
+                "url": "https://api.github.com/repos/bldr-io/bldr-filesystem/zipball/b7ded664b77e13aeda77e68c91081e5ccaee4afa",
+                "reference": "b7ded664b77e13aeda77e68c91081e5ccaee4afa",
                 "shasum": ""
             },
             "require-dev": {
-                "bldr-io/bldr": "dev-master",
-                "symfony/filesystem": "dev-master"
+                "bldr-io/bldr": "~1.0.0",
+                "symfony/filesystem": "~2.4.0"
             },
             "type": "library",
             "autoload": {
@@ -80,7 +80,45 @@
                 }
             ],
             "description": "Bldr.io Filesystem Extension",
-            "time": "2014-03-21 02:10:58"
+            "time": "2014-03-23 02:53:37"
+        },
+        {
+            "name": "bldr-io/bldr-git",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bldr-io/bldr-git.git",
+                "reference": "733e500159382a0e7ec162d492c927e87d6a1bb0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bldr-io/bldr-git/zipball/733e500159382a0e7ec162d492c927e87d6a1bb0",
+                "reference": "733e500159382a0e7ec162d492c927e87d6a1bb0",
+                "shasum": ""
+            },
+            "require": {
+                "bldr-io/bldr": "dev-master"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Bldr\\Extension\\Git\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache2"
+            ],
+            "authors": [
+                {
+                    "name": "Aaron Scherer",
+                    "email": "aequasi@gmail.com",
+                    "homepage": "https://github.com/aequasi",
+                    "role": "developer"
+                }
+            ],
+            "description": "Git Extension for Bldr",
+            "time": "2014-03-23 15:55:41"
         },
         {
             "name": "herrera-io/json",
@@ -320,72 +358,6 @@
                 "schema"
             ],
             "time": "2014-03-05 15:03:52"
-        },
-        {
-            "name": "mockery/mockery",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/padraic/mockery.git",
-                "reference": "a32c6ad986c061b40636b7da4fe30adc2a7451b5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/padraic/mockery/zipball/a32c6ad986c061b40636b7da4fe30adc2a7451b5",
-                "reference": "a32c6ad986c061b40636b7da4fe30adc2a7451b5",
-                "shasum": ""
-            },
-            "require": {
-                "lib-pcre": ">=7.0",
-                "php": ">=5.3.2"
-            },
-            "require-dev": {
-                "hamcrest/hamcrest-php": "~1.1",
-                "phpunit/phpunit": "4.0.*",
-                "satooshi/php-coveralls": "dev-master"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "0.9.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Mockery": "library/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Pádraic Brady",
-                    "email": "padraic.brady@gmail.com",
-                    "homepage": "http://blog.astrumfutura.com"
-                },
-                {
-                    "name": "Dave Marshall",
-                    "email": "dave.marshall@atstsolutions.co.uk",
-                    "homepage": "http://davedevelopment.co.uk"
-                }
-            ],
-            "description": "Mockery is a simple yet flexible PHP mock object framework for use in unit testing with PHPUnit, PHPSpec or any other testing framework. Its core goal is to offer a test double framework with a succint API capable of clearly defining all possible object operations and interactions using a human readable Domain Specific Language (DSL). Designed as a drop in alternative to PHPUnit's phpunit-mock-objects library, Mockery is easy to integrate with PHPUnit and can operate alongside phpunit-mock-objects without the World ending.",
-            "homepage": "http://github.com/padraic/mockery",
-            "keywords": [
-                "BDD",
-                "TDD",
-                "library",
-                "mock",
-                "mock objects",
-                "mockery",
-                "stub",
-                "test",
-                "test double",
-                "testing"
-            ],
-            "time": "2014-03-05 22:17:02"
         },
         {
             "name": "seld/jsonlint",
@@ -807,6 +779,72 @@
         }
     ],
     "packages-dev": [
+        {
+            "name": "mockery/mockery",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/padraic/mockery.git",
+                "reference": "a32c6ad986c061b40636b7da4fe30adc2a7451b5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/padraic/mockery/zipball/a32c6ad986c061b40636b7da4fe30adc2a7451b5",
+                "reference": "a32c6ad986c061b40636b7da4fe30adc2a7451b5",
+                "shasum": ""
+            },
+            "require": {
+                "lib-pcre": ">=7.0",
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "hamcrest/hamcrest-php": "~1.1",
+                "phpunit/phpunit": "4.0.*",
+                "satooshi/php-coveralls": "dev-master"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.9.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Mockery": "library/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Pádraic Brady",
+                    "email": "padraic.brady@gmail.com",
+                    "homepage": "http://blog.astrumfutura.com"
+                },
+                {
+                    "name": "Dave Marshall",
+                    "email": "dave.marshall@atstsolutions.co.uk",
+                    "homepage": "http://davedevelopment.co.uk"
+                }
+            ],
+            "description": "Mockery is a simple yet flexible PHP mock object framework for use in unit testing with PHPUnit, PHPSpec or any other testing framework. Its core goal is to offer a test double framework with a succint API capable of clearly defining all possible object operations and interactions using a human readable Domain Specific Language (DSL). Designed as a drop in alternative to PHPUnit's phpunit-mock-objects library, Mockery is easy to integrate with PHPUnit and can operate alongside phpunit-mock-objects without the World ending.",
+            "homepage": "http://github.com/padraic/mockery",
+            "keywords": [
+                "BDD",
+                "TDD",
+                "library",
+                "mock",
+                "mock objects",
+                "mockery",
+                "stub",
+                "test",
+                "test double",
+                "testing"
+            ],
+            "time": "2014-03-05 22:17:02"
+        },
         {
             "name": "phpunit/php-code-coverage",
             "version": "2.0.x-dev",
@@ -1464,6 +1502,7 @@
     ],
     "minimum-stability": "dev",
     "stability-flags": {
+        "bldr-io/bldr-git": 20,
         "mockery/mockery": 20
     },
     "platform": [

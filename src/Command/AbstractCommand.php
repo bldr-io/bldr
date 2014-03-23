@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * @author Aaron Scherer <aaron@undergroundelephant.com>
+ * @author Aaron Scherer <aequasi@gmail.com>
  */
 class AbstractCommand extends Command implements ContainerAwareInterface
 {

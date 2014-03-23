@@ -14,7 +14,7 @@ namespace Bldr\Test\Mock\Call;
 use Bldr\Call\AbstractCall;
 
 /**
- * @author Aaron Scherer <aaron@undergroundelephant.com>
+ * @author Aaron Scherer <aequasi@gmail.com>
  */
 class MockCall extends AbstractCall
 {

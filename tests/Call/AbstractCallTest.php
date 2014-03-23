@@ -11,10 +11,12 @@
 
 namespace Bldr\Test\Call;
 
+use Bldr\Model\Call;
+use Bldr\Model\Task;
 use Bldr\Test\Mock\Call\MockCall;
 
 /**
- * @author Aaron Scherer <aaron@undergroundelephant.com>
+ * @author Aaron Scherer <aequasi@gmail.com>
  */
 class AbstractCallTest extends \PHPUnit_Framework_TestCase
 {
@@ -68,22 +70,20 @@ class AbstractCallTest extends \PHPUnit_Framework_TestCase
     {
         $call     = new MockCall();
         $ref      = new \ReflectionClass($call);
-        $taskName = $ref->getProperty('taskName');
-        $taskName->setAccessible(true);
-        $taskArguments = $ref->getProperty('taskArguments');
-        $taskArguments->setAccessible(true);
+        $task = $ref->getProperty('task');
+        $task->setAccessible(true);
 
-        $call->setTask('mock-task', ['a', 'b', 'c']);
+        $callObj = new Call('mock', ['arg1', 'arg2']);
+        $taskObj = new Task('mock-task', 'mock-description', [$callObj]);
 
-        $this->assertEquals(
-            'mock-task',
-            $taskName->getValue($call)
-        );
+        $call->setTask($taskObj);
+        $task = $task->getValue($call);
 
-        $this->assertEquals(
-            ['a', 'b', 'c'],
-            $taskArguments->getValue($call)
-        );
+        $this->assertEquals('mock-task', $task->getName());
+
+        $this->assertEquals('mock-description', $task->getDescription());
+
+        $this->assertEquals([$callObj], $task->getCalls());
     }
 
     /**

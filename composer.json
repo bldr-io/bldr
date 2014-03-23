@@ -11,14 +11,15 @@
         "herrera-io/phar-update":       "2.*",
         "bldr-io/bldr-execute":         "~1.0.0",
         "bldr-io/bldr-filesystem":      "~1.0.0",
-        "mockery/mockery": "dev-master"
+        "bldr-io/bldr-git":             "dev-master"
     },
     "suggest":           {
         "bldr-io/bldr-symfony": "Allows for shorter syntax with symfony commands"
     },
     "require-dev":       {
         "phpunit/phpunit":           "4.0.*",
-        "squizlabs/php_codesniffer": "~1.0"
+        "squizlabs/php_codesniffer": "~1.0",
+        "mockery/mockery":           "dev-master"
     },
     "license":           "MIT",
     "authors":           [

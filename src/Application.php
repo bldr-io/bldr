@@ -174,8 +174,8 @@ EOF;
         ];
 
         if (null !== $this->config && $this->config->has('extensions')) {
-            foreach ($this->config->get('extensions') as $extensionClass) {
-                $extensions[] = new $extensionClass();
+            foreach ($this->config->get('extensions') as $extensionClass => $arguments) {
+                $extensions[] = new $extensionClass($arguments);
             }
         }
 

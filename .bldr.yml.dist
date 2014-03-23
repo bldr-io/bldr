@@ -25,23 +25,25 @@ tasks:
                 arguments: [build/coverage/index.html]
             -
                 type: exec
-                arguments: [composer install --prefer-dist]
+                arguments: [composer, install, --prefer-dist]
     lint:
         describe: 'Lints the files of the project'
         calls:
             -
                 type: apply
                 fileset: src/**/*.php
-                arguments: [php -l]
+                arguments: [php, -l]
 
     phpcs:
         description: 'Runs the PHP Code Sniffer'
         calls:
             -
                 type: exec
+                output: /dev/null
+                append: false
                 arguments:
-                    - php bin/phpcs
-                    - -p
+                    - php
+                    - bin/phpcs
                     - --standard=build/phpcs.xml
                     - --report=checkstyle
                     - --report-file=build/logs/checkstyle.xml
@@ -53,5 +55,6 @@ tasks:
                 type: exec
                 failOnError: true
                 arguments:
-                    - php bin/phpunit
+                    - php
+                    - bin/phpunit
                     - --coverage-text=php://stdout

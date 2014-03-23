@@ -14,7 +14,7 @@ namespace Bldr\Test\Helper;
 use Bldr\Helper\DialogHelper;
 
 /**
- * @author Aaron Scherer <aaron@undergroundelephant.com>
+ * @author Aaron Scherer <aequasi@gmail.com>
  */
 class DialogHelperTest extends \PHPUnit_Framework_TestCase
 {

@@ -13,6 +13,8 @@ namespace Bldr\Command;
 
 use Bldr\Application;
 use Bldr\Call\CallInterface;
+use Bldr\Model\Call;
+use Bldr\Model\Task;
 use Symfony\Component\Console\Helper\FormatterHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -65,9 +67,8 @@ EOF
     {
         $output->writeln(["\n", Application::$logo, "\n"]);
 
-        $config =
-            $this->getApplication()
-                ->getConfig();
+        $config = $this->getApplication()
+            ->getConfig();
         if ([] === $tasks = $input->getOption('tasks')) {
             $tasks = $this->getTasks($output, $input->getOption('profile'), $config);
         } else {
@@ -155,9 +156,12 @@ EOF
      */
     private function runTask(InputInterface $input, OutputInterface $output, $taskName)
     {
-        $config = $this->getApplication()
-            ->getConfig();
-        $task   = $config->get('tasks')[$taskName];
+        $config      =
+            $this->getApplication()
+                ->getConfig();
+        $taskInfo    = $config->get('tasks')[$taskName];
+        $description = isset($taskInfo['description']) ? $taskInfo['description'] : "";
+        $task        = new Task($taskName, $description, $taskInfo['calls']);
 
         $output->writeln(
             [
@@ -165,14 +169,14 @@ EOF
                 sprintf(
                     "<info>Running the %s task</info>\n<comment>%s</comment>",
                     $taskName,
-                    isset($task['description']) ? '> ' . $task['description'] : ''
+                    $task->getDescription() !== '' ? '> ' . $task->getDescription() : ''
                 ),
                 ""
             ]
         );
 
-        foreach ($task['calls'] as $call) {
-            $this->runCall($input, $output, $call, $taskName, $task);
+        foreach ($task->getCalls() as $call) {
+            $this->runCall($input, $output, $task, $call);
         }
         $output->writeln("");
     }
@@ -180,28 +184,28 @@ EOF
     /**
      * @param InputInterface  $input
      * @param OutputInterface $output
-     * @param array           $call
-     * @param string          $taskName
-     * @param array           $task
+     * @param Task            $task
+     * @param Call            $call
      */
-    private function runCall(InputInterface $input, OutputInterface $output, array $call, $taskName, array $task)
+    private function runCall(InputInterface $input, OutputInterface $output, Task $task, Call $call)
     {
         $config =
             $this->getApplication()
                 ->getConfig();
 
-        $service = $this->fetchServiceForCall($call['type']);
+        $service = $this->fetchServiceForCall($call->getType());
 
         $service->initialize($input, $output, $this->getHelperSet(), $config);
-        $service->setTask($taskName, $task);
-        $service->setFailOnError(isset($call['failOnError']) ? $call['failOnError'] : false);
-        $service->setSuccessStatusCodes(isset($call['successCodes']) ? $call['successCodes'] : [0]);
+        $service->setTask($task);
+        $service->setCall($call);
+        $service->setFailOnError($call->has('failOnError') ? $call->failOnError : false);
+        $service->setSuccessStatusCodes($call->has('successCodes') ? $call->successCodes : [0]);
 
-        if (method_exists($service, 'setFileset') && isset($call['fileset'])) {
-            $service->setFileset($call['fileset']);
+        if (method_exists($service, 'setFileset') && $call->has('fileset')) {
+            $service->setFileset($call->fileset);
         }
 
-        $service->run($call['arguments']);
+        $service->run($call->getArguments());
         $output->writeln("");
     }
 

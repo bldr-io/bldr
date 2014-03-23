@@ -18,7 +18,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Yaml\Yaml;
 
 /**
- * @author Aaron Scherer <aaron@undergroundelephant.com>
+ * @author Aaron Scherer <aequasi@gmail.com>
  */
 class BuildCommandTest extends \PHPUnit_Framework_TestCase
 {

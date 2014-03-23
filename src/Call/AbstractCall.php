@@ -11,6 +11,8 @@
 
 namespace Bldr\Call;
 
+use Bldr\Model\Call;
+use Bldr\Model\Task;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -19,7 +21,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 /**
  * Class AbstractCall
  *
- * @author Aaron Scherer <aaron@undergroundelephant.com>
+ * @author Aaron Scherer <aequasi@gmail.com>
  */
 abstract class AbstractCall implements CallInterface
 {
@@ -44,14 +46,14 @@ abstract class AbstractCall implements CallInterface
     protected $config;
 
     /**
-     * @var string $taskName
+     * @var Task $task
      */
-    protected $taskName;
+    protected $task;
 
     /**
-     * @var array $taskArguments
+     * @var Call $call
      */
-    protected $taskArguments;
+    protected $call;
 
     /**
      * @var Boolean $failOnError
@@ -83,10 +85,19 @@ abstract class AbstractCall implements CallInterface
     /**
      * {@inheritDoc}
      */
-    public function setTask($name, array $arguments)
+    public function setTask(Task $task)
     {
-        $this->taskName      = $name;
-        $this->taskArguments = $arguments;
+        $this->task = $task;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setCall(Call $call)
+    {
+        $this->call = $call;
 
         return $this;
     }

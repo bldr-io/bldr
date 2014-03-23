@@ -14,7 +14,7 @@ namespace Bldr\Helper;
 use Symfony\Component\Console\Helper\DialogHelper as BaseDialogHelper;
 
 /**
- * @author Aaron Scherer <aaron@undergroundelephant.com>
+ * @author Aaron Scherer <aequasi@gmail.com>
  */
 class DialogHelper extends BaseDialogHelper
 {

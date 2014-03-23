@@ -1,13 +1,12 @@
 <?php
 
 /**
- * Copyright 2014 Underground Elephant
+ * This file is part of Bldr.io
  *
- * Distribution and reproduction are prohibited.
+ * (c) Aaron Scherer <aequasi@gmail.com>
  *
- * @package     bldr.io
- * @copyright   Underground Elephant 2014
- * @license     No License (Proprietary)
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE
  */
 
 namespace Bldr\Test\Mock\Command;
@@ -20,7 +19,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * @author Aaron Scherer <aaron@undergroundelephant.com>
+ * @author Aaron Scherer <aequasi@gmail.com>
  */
 class MockCommand extends Command implements ContainerAwareInterface
 {
