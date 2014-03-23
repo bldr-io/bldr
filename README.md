@@ -1,4 +1,4 @@
-bldr.io
+Bldr
 =======
 
 [![Build Status](https://travis-ci.org/bldr-io/bldr.svg?branch=master)](https://travis-ci.org/bldr-io/bldr)
