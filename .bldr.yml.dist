@@ -44,7 +44,7 @@ tasks:
                 arguments:
                     - php
                     - bin/phpcs
-                    - --standard=build/phpcs.xml
+                    - --standard=phpcs.xml
                     - --report=checkstyle
                     - --report-file=build/logs/checkstyle.xml
                     - src/
