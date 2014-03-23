@@ -46,8 +46,8 @@ interface CallInterface
     );
 
     /**
-     * @param $name
-     * @param $arguments
+     * @param string $name
+     * @param array $arguments
      *
      * @return CallInterface
      */
