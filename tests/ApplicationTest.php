@@ -68,11 +68,19 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $app = new Application();
         $this->changeConfig();
 
-        $class    = new \ReflectionClass($app);
+        $class  = new \ReflectionClass($app);
         $method = $class->getMethod('readConfig');
         $method->setAccessible(true);
 
         $method->invoke($app);
+    }
+
+    /**
+     * Changes the config name
+     */
+    private function changeConfig()
+    {
+        Application::$CONFIG = '.test.yml';
     }
 
     /**
@@ -167,16 +175,18 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     {
         $app = new Application();
 
-
         $command = new MockCommand();
         $command->setApplication($app);
         $command->setHelperSet($app->getHelperSet());
 
-        $input   = \Mockery::mock('Symfony\Component\Console\Input\InputInterface');
-        $input->shouldReceive('bind')->andReturn(true);
-        $input->shouldReceive('isInteractive')->andReturn(false);
-        $input->shouldReceive('validate')->andReturn(true);
-        $output   = \Mockery::mock('Symfony\Component\Console\Output\OutputInterface');
+        $input = \Mockery::mock('Symfony\Component\Console\Input\InputInterface');
+        $input->shouldReceive('bind')
+            ->andReturn(true);
+        $input->shouldReceive('isInteractive')
+            ->andReturn(false);
+        $input->shouldReceive('validate')
+            ->andReturn(true);
+        $output = \Mockery::mock('Symfony\Component\Console\Output\OutputInterface');
 
         $class  = new \ReflectionClass($app);
         $method = $class->getMethod('doRunCommand');
@@ -225,13 +235,5 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         if (file_exists(getcwd() . '/.test.yml.dist')) {
             unlink(getcwd() . '/.test.yml.dist');
         }
-    }
-
-    /**
-     * Changes the config name
-     */
-    private function changeConfig()
-    {
-        Application::$CONFIG = '.test.yml';
     }
 }

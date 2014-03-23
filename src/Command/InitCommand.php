@@ -109,6 +109,11 @@ EOF
         );
     }
 
+    /**
+     * @param OutputInterface $output
+     *
+     * @return array
+     */
     private function determineProfiles(OutputInterface $output)
     {
         /** @var DialogHelper $dialog */
@@ -199,15 +204,14 @@ EOF
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      */
     private function getNameOption(InputInterface $input, OutputInterface $output)
     {
         /** @var DialogHelper $dialog */
-        $dialog =
-            $this->getHelperSet()
-                ->get('dialog');
+        $dialog = $this->getHelperSet()
+            ->get('dialog');
 
         if (!$name = $input->getOption('name')) {
             $name = $this->getPackageName();
@@ -268,4 +272,3 @@ EOF
         return array();
     }
 }
-

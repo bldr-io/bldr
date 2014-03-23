@@ -11,7 +11,6 @@
 
 namespace Bldr\Test\Helper;
 
-
 use Bldr\Helper\DialogHelper;
 
 /**
@@ -43,6 +42,5 @@ class DialogHelperTest extends \PHPUnit_Framework_TestCase
             '<info>sample-question</info> [<comment>sample-default</comment>]> ',
             $helper->getQuestion('sample-question', 'sample-default', '>')
         );
-
     }
 }

@@ -17,7 +17,6 @@ use Symfony\Component\Console\Helper\FormatterHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
@@ -65,7 +64,6 @@ EOF
     {
         $output->writeln(["\n", Application::$logo, "\n"]);
 
-        /** @var ParameterBag $config */
         $config =
             $this->getApplication()
                 ->getConfig();
@@ -110,10 +108,10 @@ EOF
         try {
             $this->runTasks($input, $output, $tasks);
         } catch (\Exception $e) {
-            return $this->failBuild($input, $output, $e);
+            throw $e;
         }
 
-        return $this->succeedBuild($input, $output);
+        return $this->succeedBuild($output);
     }
 
     /**
@@ -137,7 +135,6 @@ EOF
      */
     private function runTask(InputInterface $input, OutputInterface $output, $taskName)
     {
-        /** @var ParameterBag $config */
         $config =
             $this->getApplication()
                 ->getConfig();
@@ -182,18 +179,11 @@ EOF
     }
 
     /**
-     * @param InputInterface  $input
      * @param OutputInterface $output
-     * @param \Exception      $exception
      *
-     * @throws \Exception
+     * @return int
      */
-    private function failBuild(InputInterface $input, OutputInterface $output, \Exception $exception)
-    {
-        throw $exception;
-    }
-
-    public function succeedBuild(InputInterface $input, OutputInterface $output)
+    public function succeedBuild(OutputInterface $output)
     {
         /** @var FormatterHelper $formatter */
         $formatter = $this->getHelper('formatter');
@@ -214,4 +204,3 @@ EOF
         return 0;
     }
 }
-
