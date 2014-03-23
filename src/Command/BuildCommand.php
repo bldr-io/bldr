@@ -135,9 +135,7 @@ EOF
      */
     private function runTask(InputInterface $input, OutputInterface $output, $taskName)
     {
-        $config =
-            $this->getApplication()
-                ->getConfig();
+        $config = $this->getApplication()->getConfig();
         $task   = $config->get('tasks')[$taskName];
 
         $output->writeln(
@@ -153,29 +151,56 @@ EOF
         );
 
         foreach ($task['calls'] as $call) {
-            $services = array_keys($this->container->findTaggedServiceIds($call['type']));
-            if (sizeof($services) > 1) {
-                throw new \Exception("Multiple calls exist with the 'exec' tag.");
-            }
-            if (sizeof($services) === 0) {
-                throw new \Exception("No task type found for {$call['type']}.");
-            }
-
-            /** @var CallInterface $service */
-            $service = $this->container->get($services[0]);
-            $service->initialize($input, $output, $this->getHelperSet(), $config);
-            $service->setTask($taskName, $task);
-            $service->setFailOnError(isset($call['failOnError']) ? $call['failOnError'] : false);
-            $service->setSuccessStatusCodes(isset($call['successCodes']) ? $call['successCodes'] : [0]);
-
-            if (method_exists($service, 'setFileset') && isset($call['fileset'])) {
-                $service->setFileset($call['fileset']);
-            }
-
-            $service->run($call['arguments']);
-            $output->writeln("");
+            $this->runCall($input, $output, $call, $taskName, $task);
         }
         $output->writeln("");
+    }
+
+    /**
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     * @param array           $call
+     * @param string          $taskName
+     * @param array           $task
+     */
+    private function runCall(InputInterface $input, OutputInterface $output, array $call, $taskName, array $task)
+    {
+
+        $config = $this->getApplication()->getConfig();
+
+        $service = $this->fetchServiceForCall($call['type']);
+
+        $service->initialize($input, $output, $this->getHelperSet(), $config);
+        $service->setTask($taskName, $task);
+        $service->setFailOnError(isset($call['failOnError']) ? $call['failOnError'] : false);
+        $service->setSuccessStatusCodes(isset($call['successCodes']) ? $call['successCodes'] : [0]);
+
+        if (method_exists($service, 'setFileset') && isset($call['fileset'])) {
+            $service->setFileset($call['fileset']);
+        }
+
+        $service->run($call['arguments']);
+        $output->writeln("");
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return CallInterface
+     * @throws \Exception
+     */
+    private function fetchServiceForCall($type)
+    {
+        $services = array_keys($this->container->findTaggedServiceIds($type));
+
+        if (sizeof($services) > 1) {
+            throw new \Exception("Multiple calls exist with the 'exec' tag.");
+        }
+        if (sizeof($services) === 0) {
+            throw new \Exception("No task type found for {$type}.");
+        }
+
+        return $this->container->get($services[0]);
     }
 
     /**

@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  * Copyright 2014 Underground Elephant
  *

@@ -116,49 +116,83 @@ EOF
      */
     private function determineProfiles(OutputInterface $output)
     {
-        /** @var DialogHelper $dialog */
-        $dialog = $this->getHelper('dialog');
 
         $output->writeln(["", "Defining Profiles", ""]);
 
         $profiles = [];
         do {
-            $profile = [];
-
-            $name = $dialog->ask($output, $dialog->getQuestion('Profile Name <default>', 'default'), 'default');
-            if ($name === 'default' && array_key_exists('default', $profiles)) {
+            $result = $this->buildProfile($output);
+            if ($result === false) {
                 break;
             }
-            $description = $dialog->ask($output, $dialog->getQuestion('Description', null), null);
-            if ($description !== null) {
-                $profile['description'] = $description;
-            }
-
-            $output->writeln(["", "Task Ordering"]);
-            $tasks = [];
-            do {
-                $task = [];
-
-                $taskName = $dialog->ask($output, $dialog->getQuestion('Task name', null), null);
-                if ($taskName === null) {
-                    break;
-                }
-                $desc = $dialog->ask($output, $dialog->getQuestion('Task Description', null), null);
-                if ($desc !== null) {
-                    $task['description'] = $desc;
-                }
-
-                $this->tasks[$taskName] = $task;
-                $tasks[]                = $taskName;
-            } while (true);
-            if (!empty($tasks)) {
-                $profile['tasks'] = $tasks;
-            }
-
-            $profiles[$name] = $profile;
+            $profiles[$result[0]] = $result[1];
         } while (true);
 
         return $profiles;
+    }
+
+    /**
+     * @param OutputInterface $output
+     *
+     * @return array|bool
+     */
+    private function buildProfile(OutputInterface $output)
+    {
+        /** @var DialogHelper $dialog */
+        $dialog = $this->getHelper('dialog');
+
+        $profile = [];
+
+        $name = $dialog->ask($output, $dialog->getQuestion('Profile Name'), null);
+        if ($name === null) {
+            return false;
+        }
+        $description = $dialog->ask($output, $dialog->getQuestion('Description'), null);
+        if ($description !== null) {
+            $profile['description'] = $description;
+        }
+
+        $output->writeln(["", "Task Ordering"]);
+        $tasks = [];
+        do {
+            $result = $this->buildTask($output);
+            if ($result === null) {
+                break;
+            }
+
+            $this->tasks[$result[0]] = $result[1];
+            $tasks[]                 = $result[0];
+        } while (true);
+        
+        if (!empty($tasks)) {
+            $profile['tasks'] = $tasks;
+        }
+
+        return $profile;
+    }
+
+    /**
+     * @param OutputInterface $output
+     *
+     * @return array|bool
+     */
+    private function buildTask(OutputInterface $output)
+    {
+        /** @var DialogHelper $dialog */
+        $dialog = $this->getHelper('dialog');
+
+        $task = [];
+
+        $taskName = $dialog->ask($output, $dialog->getQuestion('Task name', null), null);
+        if ($taskName === null) {
+            return false;
+        }
+        $desc = $dialog->ask($output, $dialog->getQuestion('Task Description', null), null);
+        if ($desc !== null) {
+            $task['description'] = $desc;
+        }
+
+        return $task;
     }
 
     /**
