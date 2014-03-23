@@ -9,8 +9,8 @@
         "symfony/process":              "~2.4",
         "symfony/yaml":                 "~2.4",
         "herrera-io/phar-update":       "2.*",
-        "bldr-io/bldr-execute":         "~1.0.0",
-        "bldr-io/bldr-filesystem":      "~1.0.0",
+        "bldr-io/bldr-execute":         "~1.1.0",
+        "bldr-io/bldr-filesystem":      "~1.1.0",
         "bldr-io/bldr-git":             "dev-master"
     },
     "suggest":           {
