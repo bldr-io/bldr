@@ -3,7 +3,7 @@ Bldr [![Build Status](https://travis-ci.org/bldr-io/bldr.svg?branch=master)](htt
 
 
 
-Bldr.io Yaml Build System
+Bldr Yaml Build System
 
 
 ### Documentation
