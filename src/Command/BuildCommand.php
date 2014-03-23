@@ -162,7 +162,6 @@ EOF
         $description = isset($taskInfo['description']) ? $taskInfo['description'] : "";
         $task        = new Task($taskName, $description, $taskInfo['calls']);
 
-
         $output->writeln(
             [
                 "",
@@ -174,7 +173,6 @@ EOF
                 ""
             ]
         );
-
 
         foreach ($task->getCalls() as $call) {
             $this->runCall($input, $output, $task, $call);

@@ -69,11 +69,13 @@ tasks:
         calls:
             -
                 type: git:config
+                cwd: build
                 arguments:
                     - user.name
                     - "Travis CI"
             -
                 type: git:config
+                cwd: build
                 arguments:
                     - user.email
                     - "travis@travis-ci.org"
