@@ -159,8 +159,7 @@ EOF
     private function runTask(InputInterface $input, OutputInterface $output, $taskName)
     {
         /** @var ParameterBag $config */
-        $config = $this->getApplication()
-            ->getConfig();
+        $config = $this->getApplication()->getConfig();
         $task   = $config->get('tasks')[$taskName];
 
         /** @var DialogHelper $dialog */

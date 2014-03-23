@@ -13,6 +13,7 @@ namespace Bldr\Test\Command;
 
 use Bldr\Application;
 use Bldr\Command\BuildCommand;
+use Bldr\Test\Mock\Call\MockCall;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Yaml\Yaml;
 
@@ -23,21 +24,35 @@ class BuildCommandTest extends \PHPUnit_Framework_TestCase
 {
     public function testExecute()
     {
-        $application   = new Application();
+        $container = \Mockery::mock('Symfony\Component\DependencyInjection\ContainerBuilder');
+        $container->shouldReceive('findTaggedServiceIds')
+            ->andReturn(['exec']);
+        $container->shouldReceive('get')
+            ->withArgs(['exec'])
+            ->andReturn(new MockCall());
+
+        $application         = new Application();
         Application::$CONFIG = '.test.yml';
 
         $config = [
-            'name'     => 'test',
-            'profiles' => [
+            'name'        => 'test',
+            'description' => 'test app',
+            'profiles'    => [
                 'default' => [
-                    'tasks' => [
+                    'description' => 'test profile',
+                    'tasks'       => [
                         'test'
                     ]
                 ]
             ],
-            'tasks'    => [
+            'tasks'       => [
                 'test' => [
-                    'calls' => []
+                    'calls' => [
+                        [
+                            'type'      => 'exec',
+                            'arguments' => ['ls -l']
+                        ]
+                    ]
                 ]
             ]
         ];
@@ -52,7 +67,8 @@ class BuildCommandTest extends \PHPUnit_Framework_TestCase
 
         $application->add(new BuildCommand());
 
-        $command       = $application->find('build');
+        $command = $application->find('build');
+        $command->setContainer($container);
         $commandTester = new CommandTester($command);
 
         $commandTester->execute(['command' => $command->getName()]);
