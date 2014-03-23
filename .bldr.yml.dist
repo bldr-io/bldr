@@ -68,18 +68,6 @@ tasks:
         description: 'Deploy artifacts to git repository'
         calls:
             -
-                type: git:config
-                cwd: build
-                arguments:
-                    - user.name
-                    - "Travis CI"
-            -
-                type: git:config
-                cwd: build
-                arguments:
-                    - user.email
-                    - "travis@travis-ci.org"
-            -
                 type: git:init
                 cwd: build
             -
@@ -101,6 +89,18 @@ tasks:
                 cwd: build
                 arguments:
                     - "."
+            -
+                type: git:config
+                cwd: build
+                arguments:
+                    - user.name
+                    - Travis CI
+            -
+                type: git:config
+                cwd: build
+                arguments:
+                    - user.email
+                    - travis@travis-ci.org
             -
                 type: git:config
                 cwd: build
