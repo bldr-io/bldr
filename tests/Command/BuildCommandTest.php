@@ -11,24 +11,62 @@
 
 namespace Bldr\Test\Command;
 
+use Bldr\Application;
+use Bldr\Command\BuildCommand;
+use Symfony\Component\Console\Tester\CommandTester;
+use Symfony\Component\Yaml\Yaml;
 
-use Bldr\Command\InitCommand;
-use Symfony\Component\Console\Application;
-
+/**
+ * @author Aaron Scherer <aaron@undergroundelephant.com>
+ */
 class BuildCommandTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testExecute()
     {
-        return $this->markTestIncomplete();
+        $application   = new Application();
+        Application::$CONFIG = '.test.yml';
 
-        $application = new Application();
-        // Need to change the config name so we don't conflict with the projects config
-        $class      = new \ReflectionClass($application);
-        $configName = $class->getProperty('configName');
-        $configName->setAccessible(true);
-        $configName->setValue($application, '.test.yml');
+        $config = [
+            'name'     => 'test',
+            'profiles' => [
+                'default' => [
+                    'tasks' => [
+                        'test'
+                    ]
+                ]
+            ],
+            'tasks'    => [
+                'test' => [
+                    'calls' => []
+                ]
+            ]
+        ];
 
-        $application->add(new InitCommand());
+        file_put_contents(getcwd() . '/' . Application::$CONFIG, Yaml::dump($config));
+
+        $ref    = new \ReflectionClass($application);
+        $method = $ref->getMethod('readConfig');
+        $method->setAccessible(true);
+
+        $application->setConfig($method->invoke($application));
+
+        $application->add(new BuildCommand());
+
+        $command       = $application->find('build');
+        $commandTester = new CommandTester($command);
+
+        $commandTester->execute(['command' => $command->getName()]);
+    }
+
+    protected function tearDown()
+    {
+        \Mockery::close();
+
+        if (file_exists(getcwd() . '/.test.yml')) {
+            unlink(getcwd() . '/.test.yml');
+        }
+        if (file_exists(getcwd() . '/.test.yml.dist')) {
+            unlink(getcwd() . '/.test.yml.dist');
+        }
     }
 }

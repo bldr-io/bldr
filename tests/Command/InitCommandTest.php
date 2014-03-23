@@ -38,7 +38,8 @@ class InitCommandTest extends \PHPUnit_Framework_TestCase
             ->twice()
             ->andReturn('vendor/name');
         $helper->shouldReceive('askConfirmation')
-            ->andReturn();
+            ->once()
+            ->andReturn(false);
 
         $this->application->getHelperSet()->set($helper);
         $this->application->add(new InitCommand());

@@ -165,19 +165,7 @@ EOF
             ->get('dialog');
 
         if (!$name = $input->getOption('name')) {
-            $name = basename(getcwd());
-            $name = preg_replace('{(?:([a-z])([A-Z])|([A-Z])([A-Z][a-z]))}', '\\1\\3-\\2\\4', $name);
-            $name = strtolower($name);
-            if (isset($git['github.user'])) {
-                $name = $git['github.user'] . '/' . $name;
-            } elseif (!empty($_SERVER['USERNAME'])) {
-                $name = $_SERVER['USERNAME'] . '/' . $name;
-            } elseif (get_current_user()) {
-                $name = get_current_user() . '/' . $name;
-            } else {
-                // package names must be in the format foo/bar
-                $name = $name . '/' . $name;
-            }
+            $name = $this->getPackageName();
         }
 
         $name = $dialog->ask($output, $dialog->getQuestion('Project Name (<vendor>/<name>)', $name), $name);
@@ -185,14 +173,30 @@ EOF
     }
 
     /**
+     * @return string
+     */
+    private function getPackageName()
+    {
+        $name = basename(getcwd());
+        $name = preg_replace('{(?:([a-z])([A-Z])|([A-Z])([A-Z][a-z]))}', '\\1\\3-\\2\\4', $name);
+        $name = strtolower($name);
+        if (isset($git['github.user'])) {
+            return $git['github.user'] . '/' . $name;
+        } elseif (!empty($_SERVER['USERNAME'])) {
+            return $_SERVER['USERNAME'] . '/' . $name;
+        } elseif (get_current_user()) {
+            return get_current_user() . '/' . $name;
+        } else {
+            return $name . '/' . $name;
+        }
+    }
+
+    /**
      * @return array
+     * @codeCoverageIgnore
      */
     private function getGitConfig()
     {
-        if (null !== $this->gitConfig) {
-            return $this->gitConfig;
-        }
-
         $finder = new ExecutableFinder();
         $gitBin = $finder->find('git');
 
@@ -206,10 +210,10 @@ EOF
                 $this->gitConfig[$match[1]] = $match[2];
             }
 
-            return $this->gitConfig;
+            $this->gitConfig;
         }
 
-        return $this->gitConfig = array();
+        return array();
     }
 
     private function determineProfiles(InputInterface $input, OutputInterface $output)

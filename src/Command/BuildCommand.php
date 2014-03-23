@@ -99,24 +99,26 @@ EOF
             $formatter = $this->getHelper('formatter');
 
 
+            $projectFormat = [
+                sprintf("Building the '%s' project", $config->get('name'))
+            ];
+            if ($config->has('description')) {
+                $projectFormat[] = sprintf(" - %s - ", $config->get('description'));
+            }
+
+            $profileFormat = [
+                sprintf("Using the '%s' profile", $profileName)
+            ];
+            if (isset($profile['description'])) {
+                $profileFormat[] = sprintf(" - %s - ", $profile['description']);
+            }
+
             $output->writeln(
                 [
                     "",
-                    $formatter->formatBlock(
-                        [
-                            sprintf("Building the '%s' project", $config->get('name')),
-                            sprintf(" - %s - ", $config->get('description'))
-                        ],
-                        'bg=blue;fg=black'
-                    ),
+                    $formatter->formatBlock($projectFormat, 'bg=blue;fg=black'),
                     "",
-                    $formatter->formatBlock(
-                        [
-                            sprintf("Using the '%s' profile", $profileName),
-                            sprintf(" - %s - ", $profile['description'])
-                        ],
-                        'bg=green;fg=white'
-                    ),
+                    $formatter->formatBlock($profileFormat,'bg=green;fg=white'),
                     ""
                 ]
             );
