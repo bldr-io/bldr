@@ -13,52 +13,32 @@ namespace Bldr\Command;
 
 use Bldr\Application;
 use Bldr\Call\CallInterface;
-use Bldr\Helper\DialogHelper;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\FormatterHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
  */
-class BuildCommand extends Command implements ContainerAwareInterface
+class BuildCommand extends AbstractCommand
 {
-    /**
-     * @var ContainerInterface|ContainerBuilder $container
-     */
-    private $container;
-
-    /**
-     * Sets the Container.
-     *
-     * @param ContainerInterface|null $container A ContainerInterface instance or null
-     *
-     * @api
-     */
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
-    }
-
     /**
      * {@inheritDoc}
      */
     protected function configure()
     {
+        $config = Application::$CONFIG;
+
         $this->setName('build')
-            ->setDescription("Builds the project for the directory you are in. Must contain a .bldr.yml file.")
+            ->setDescription("Builds the project for the directory you are in. Must contain a {$config} file.")
             ->addOption('profile', 'p', InputOption::VALUE_REQUIRED, 'Profile to run', 'default')
             ->addOption('tasks', 't', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Tasks to run')
             ->setHelp(
                 <<<EOF
 
-The <info>%command.name%</info> builds the current project, using the .bldr.yml file in the root directory.
+The <info>%command.name%</info> builds the current project, using the {$config} file in the root directory.
 
 To use:
 
@@ -86,18 +66,17 @@ EOF
         $output->writeln(["\n", Application::$logo, "\n"]);
 
         /** @var ParameterBag $config */
-        $config      = $this->getApplication()->getConfig();
+        $config =
+            $this->getApplication()
+                ->getConfig();
         if ([] === $tasks = $input->getOption('tasks')) {
 
             $profileName = $input->getOption('profile');
             $profile     = $config->get('profiles')[$profileName];
             $tasks       = $profile['tasks'];
 
-            /** @var DialogHelper $dialog */
-            $dialog = $this->getHelper('dialog');
             /** @var FormatterHelper $formatter */
             $formatter = $this->getHelper('formatter');
-
 
             $projectFormat = [
                 sprintf("Building the '%s' project", $config->get('name'))
@@ -118,7 +97,7 @@ EOF
                     "",
                     $formatter->formatBlock($projectFormat, 'bg=blue;fg=black'),
                     "",
-                    $formatter->formatBlock($profileFormat,'bg=green;fg=white'),
+                    $formatter->formatBlock($profileFormat, 'bg=green;fg=white'),
                     ""
                 ]
             );
@@ -159,13 +138,10 @@ EOF
     private function runTask(InputInterface $input, OutputInterface $output, $taskName)
     {
         /** @var ParameterBag $config */
-        $config = $this->getApplication()->getConfig();
+        $config =
+            $this->getApplication()
+                ->getConfig();
         $task   = $config->get('tasks')[$taskName];
-
-        /** @var DialogHelper $dialog */
-        $dialog = $this->getHelper('dialog');
-        /** @var FormatterHelper $formatter */
-        $formatter = $this->getHelper('formatter');
 
         $output->writeln(
             [
