@@ -163,7 +163,6 @@ EOF
             $this->tasks[$result[0]] = $result[1];
             $tasks[]                 = $result[0];
         } while (true);
-        
         if (!empty($tasks)) {
             $profile['tasks'] = $tasks;
         }
