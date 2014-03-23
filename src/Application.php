@@ -33,7 +33,7 @@ class Application extends BaseApplication
     /**
      * @var string $configName
      */
-    private $configName = '.bldr.yml';
+    public static $CONFIG = '.bldr.yml';
 
     public static $logo = <<<EOF
   ______    __       _______   ______
@@ -141,11 +141,17 @@ EOF;
     private function readConfig()
     {
         $dir = getcwd();
-        $file = $dir . '/' . $this->configName;
+        $file = $dir . '/' . static::$CONFIG;
         if (!file_exists($file)) {
             $file .= '.dist';
             if (!file_exists($file)) {
-                throw new \Exception("Could not find a .bldr.yml or a .bldr.yml.dist file in the current directory.");
+                throw new \Exception(
+                    sprintf(
+                        "Could not find a %s or a %s file in the current directory.",
+                        static::$CONFIG,
+                        static::$CONFIG . '.dist'
+                    )
+                );
             }
         }
 

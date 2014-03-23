@@ -66,7 +66,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     public function testReadConfigException()
     {
         $app = new Application();
-        $this->changeConfig($app);
+        $this->changeConfig();
 
         $class    = new \ReflectionClass($app);
         $method = $class->getMethod('readConfig');
@@ -76,24 +76,12 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Changes the config name
-     */
-    private function changeConfig(Application $application)
-    {
-        // Need to change the config name so we don't conflict with the projects config
-        $class      = new \ReflectionClass('Bldr\Application');
-        $configName = $class->getProperty('configName');
-        $configName->setAccessible(true);
-        $configName->setValue($application, '.test.yml');
-    }
-
-    /**
      * @return array|mixed
      */
     public function testReadConfig()
     {
         $app = new Application();
-        $this->changeConfig($app);
+        $this->changeConfig();
 
         $config = ['name' => 'test-config'];
 
@@ -194,6 +182,9 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $method = $class->getMethod('doRunCommand');
         $method->setAccessible(true);
 
+        $config = ['name' => 'test-config'];
+        file_put_contents(getcwd() . '/.test.yml', Yaml::dump($config));
+
         $this->assertNull($method->invokeArgs($app, [$command, $input, $output]));
     }
 
@@ -234,5 +225,13 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         if (file_exists(getcwd() . '/.test.yml.dist')) {
             unlink(getcwd() . '/.test.yml.dist');
         }
+    }
+
+    /**
+     * Changes the config name
+     */
+    private function changeConfig()
+    {
+        Application::$CONFIG = '.test.yml';
     }
 }

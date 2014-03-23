@@ -11,6 +11,7 @@
 
 namespace Bldr\Command;
 
+use Bldr\Application;
 use Bldr\Helper\DialogHelper;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -41,19 +42,31 @@ class InitCommand extends Command
      */
     protected function configure()
     {
+        $config = Application::$CONFIG;
+
         $this->setName('init')
-            ->setDescription("Builds the project .bldr.yml file for a project.")
+            ->setDescription("Builds the project {$config} file for a project.")
             ->addOption('name', null, InputOption::VALUE_REQUIRED, 'Name of the package')
             ->addOption('description', null, InputOption::VALUE_REQUIRED, 'Description of the package')
-            ->addOption('delete', 'd', InputOption::VALUE_NONE, 'Delete existing .bldr.yml')
+            ->addOption('delete', 'd', InputOption::VALUE_NONE, "Delete existing {$config}")
+            ->addOption('dist', null, InputOption::VALUE_NONE, "Create {$config}.dist file")
             ->setHelp(
                 <<<EOF
 
-The <info>%command.name%</info> builds the .bldr.yml file in the root directory.
+The <info>%command.name%</info> builds the {$config} file in the root directory.
 
 To use:
 
-    <info>$ bldr %command.full_name% </info>
+    <info>$ bldr %command.full_name%</info>
+
+To delete the existing file:
+
+    <info>$ bldr %command.full_name% -d</info>
+    <info>$ bldr %command.full_name% --delete</info>
+
+To create a dist file:
+
+    <info>$ bldr %command.full_name% --dist</info>
 
 EOF
             );
@@ -64,6 +77,8 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $config = Application::$CONFIG . ($input->getOption('dist') ? '.dist' : '');
+
         /** @var DialogHelper $dialog */
         $dialog = $this->getHelper('dialog');
 
@@ -83,12 +98,12 @@ EOF
         }
 
         $yaml = Yaml::dump($options, 12);
-        file_put_contents(getcwd() . '/.bldr.yml', $yaml);
+        file_put_contents(getcwd() . '/' . $config, $yaml);
 
         $output->writeln(
             [
                 "",
-                ".bldr.yml file generated.",
+                $config . " file generated.",
                 "",
                 $yaml
             ]
@@ -100,15 +115,18 @@ EOF
      */
     protected function interact(InputInterface $input, OutputInterface $output)
     {
+        $config = Application::$CONFIG . ($input->getOption('dist') ? '.dist' : '');
+
+
         $dir = getcwd();
-        if (file_exists($dir . '/.bldr.yml')) {
+        if (file_exists($dir . '/' . $config)) {
             if (!$input->getOption('delete')) {
                 throw new \Exception(
-                    "You already have a .bldr.yml file. Delete it first or run with the -d flag."
+                    "You already have a {$config} file. Delete it first or run with the -d flag."
                 );
             }
 
-            unlink($dir . '/.bldr.yml');
+            unlink($dir . '/' . $config);
         }
 
         /** @var DialogHelper $dialog */
@@ -124,7 +142,7 @@ EOF
             ]
         );
 
-        $output->writeln("Attempting to create a .bldr.yml file for you. Follow along!");
+        $output->writeln("Attempting to create a {$config} file for you. Follow along!");
 
         $this->getNameOption($output, $input);
 
