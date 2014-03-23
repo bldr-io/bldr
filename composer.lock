@@ -84,16 +84,16 @@
         },
         {
             "name": "bldr-io/bldr-git",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bldr-io/bldr-git.git",
-                "reference": "5beacbead3a6abccfdd475a7f4692abc4643b30d"
+                "reference": "c3869acc6cc00dcda482e36392ea5e3b86c5c54c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bldr-io/bldr-git/zipball/5beacbead3a6abccfdd475a7f4692abc4643b30d",
-                "reference": "5beacbead3a6abccfdd475a7f4692abc4643b30d",
+                "url": "https://api.github.com/repos/bldr-io/bldr-git/zipball/c3869acc6cc00dcda482e36392ea5e3b86c5c54c",
+                "reference": "c3869acc6cc00dcda482e36392ea5e3b86c5c54c",
                 "shasum": ""
             },
             "require": {
@@ -118,7 +118,7 @@
                 }
             ],
             "description": "Git Extension for Bldr",
-            "time": "2014-03-23 21:04:30"
+            "time": "2014-03-23 21:21:15"
         },
         {
             "name": "herrera-io/json",
