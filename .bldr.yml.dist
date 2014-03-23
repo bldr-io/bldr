@@ -85,6 +85,12 @@ tasks:
                 cwd: build
                 branch: $BUILD_NAME$
             -
+                type: exec
+                output: build/README.md
+                arguments:
+                    - echo
+                    - "[Coverage History](https://rawgithub.com/bldr-io/artifacts/$BUILD_NAME$/coverage/index.html)"
+            -
                 type: git:add
                 cwd: build
                 arguments:
@@ -101,11 +107,6 @@ tasks:
                 arguments:
                     - user.email
                     - travis@travis-ci.org
-            -
-                type: git:config
-                cwd: build
-                arguments:
-                    - -l
             -
                 type: git:commit
                 cwd: build
