@@ -102,6 +102,11 @@ tasks:
                 arguments:
                     - "."
             -
+                type: git:config
+                cwd: build
+                arguments:
+                    - -l
+            -
                 type: git:commit
                 cwd: build
                 message: 'Build Artifacts'
