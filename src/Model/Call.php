@@ -36,7 +36,7 @@ class Call
      * @param string   $type
      * @param string[] $arguments
      */
-    function __construct($type, array $arguments = [])
+    public function __construct($type, array $arguments = [])
     {
         $this->type      = $type;
         $this->arguments = $arguments;

@@ -60,18 +60,4 @@ interface CallInterface
      * @return CallInterface
      */
     public function setCall(Call $call);
-
-    /**
-     * @param Boolean $fail
-     *
-     * @return CallInterface
-     */
-    public function setFailOnError($fail);
-
-    /**
-     * @param integer[] $codes
-     *
-     * @return CallInterface
-     */
-    public function setSuccessStatusCodes(array $codes);
 }

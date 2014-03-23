@@ -74,10 +74,14 @@ abstract class AbstractCall implements CallInterface
         HelperSet $helperSet,
         ParameterBag $config
     ) {
-        $this->input     = $input;
-        $this->output    = $output;
-        $this->helperSet = $helperSet;
-        $this->config    = $config;
+        $this->input              = $input;
+        $this->output             = $output;
+        $this->helperSet          = $helperSet;
+        $this->config             = $config;
+        $this->task               = null;
+        $this->call               = null;
+        $this->failOnError        = false;
+        $this->successStatusCodes = [0];
 
         return $this;
     }
@@ -98,30 +102,6 @@ abstract class AbstractCall implements CallInterface
     public function setCall(Call $call)
     {
         $this->call = $call;
-
-        return $this;
-    }
-
-    /**
-     * @param Boolean $fail
-     *
-     * @return CallInterface
-     */
-    public function setFailOnError($fail)
-    {
-        $this->failOnError = $fail;
-
-        return $this;
-    }
-
-    /**
-     * @param integer[] $codes
-     *
-     * @return CallInterface
-     */
-    public function setSuccessStatusCodes(array $codes)
-    {
-        $this->successStatusCodes = $codes;
 
         return $this;
     }

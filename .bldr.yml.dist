@@ -9,6 +9,7 @@ profiles:
             - lint
             - phpcs
             - test
+            - artifacts
 
 tasks:
     prepare:
@@ -16,21 +17,26 @@ tasks:
         calls:
             -
                 type: filesystem:remove
+                failOnError: true
                 arguments: [build/coverage, build/logs]
             -
                 type: filesystem:mkdir
+                failOnError: true
                 arguments: [build/coverage, build/logs]
             -
                 type: filesystem:touch
+                failOnError: true
                 arguments: [build/coverage/index.html]
             -
                 type: exec
+                failOnError: true
                 arguments: [composer, install, --prefer-dist]
     lint:
         describe: 'Lints the files of the project'
         calls:
             -
                 type: apply
+                failOnError: true
                 fileset: src/**/*.php
                 arguments: [php, -l]
 
@@ -58,3 +64,41 @@ tasks:
                     - php
                     - bin/phpunit
                     - --coverage-text=php://stdout
+    artifacts:
+        description: 'Deploy artifacts to git repository'
+        calls:
+            -
+                type: git:init
+                cwd: build
+            -
+                type: git:remote:remove
+                cwd: build
+                arguments: [artifacts]
+            -
+                type: git:remote:add
+                cwd: build
+                arguments:
+                    - artifacts
+                    - https://aequasi:1f88fa5ac84a017063aaf7dae415071cdd2bd2a8@github.com/bldr-io/artifacts.git
+            -
+                type: git:checkout
+                cwd: build
+                branch: $BUILD_NAME$
+            -
+                type: git:add
+                cwd: build
+                arguments:
+                    - "."
+            -
+                type: git:commit
+                cwd: build
+                message: 'Build Artifacts'
+            -
+                type: git:push
+                cwd: build
+                force: true
+                remote: artifacts
+                branch: $BUILD_NAME$
+
+extensions:
+    Bldr\Extension\Git\DependencyInjection\GitExtension: ~

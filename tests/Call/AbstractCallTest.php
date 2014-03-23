@@ -85,41 +85,4 @@ class AbstractCallTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals([$callObj], $task->getCalls());
     }
-
-    /**
-     *
-     */
-    public function testSetFailOnError()
-    {
-        $call     = new MockCall();
-        $ref      = new \ReflectionClass($call);
-        $property = $ref->getProperty('failOnError');
-        $property->setAccessible(true);
-
-        $call->setFailOnError(true);
-
-        $this->assertTrue(
-            $property->getValue($call)
-        );
-    }
-
-    /**
-     *
-     */
-    public function testSetSuccessStatusCodes()
-    {
-        $call     = new MockCall();
-        $ref      = new \ReflectionClass($call);
-        $property = $ref->getProperty('successStatusCodes');
-        $property->setAccessible(true);
-
-        $call->setSuccessStatusCodes([0, 1, 2]);
-
-        $this->assertInternalType('array', $property->getValue($call));
-
-        $this->assertEquals(
-            [0, 1, 2],
-            $property->getValue($call)
-        );
-    }
 }

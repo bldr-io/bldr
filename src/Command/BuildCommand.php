@@ -65,10 +65,11 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln(["\n", Application::$logo, "\n"]);
+        $this->getApplication()->setBuildName();
 
-        $config = $this->getApplication()
-            ->getConfig();
+        $output->writeln(["\n", Application::$logo, "\n"]);
+        $config = $this->getApplication()->getConfig();
+
         if ([] === $tasks = $input->getOption('tasks')) {
             $tasks = $this->getTasks($output, $input->getOption('profile'), $config);
         } else {
@@ -156,12 +157,11 @@ EOF
      */
     private function runTask(InputInterface $input, OutputInterface $output, $taskName)
     {
-        $config      =
-            $this->getApplication()
-                ->getConfig();
+        $config      = $this->getApplication()->getConfig();
         $taskInfo    = $config->get('tasks')[$taskName];
         $description = isset($taskInfo['description']) ? $taskInfo['description'] : "";
         $task        = new Task($taskName, $description, $taskInfo['calls']);
+
 
         $output->writeln(
             [
@@ -174,6 +174,7 @@ EOF
                 ""
             ]
         );
+
 
         foreach ($task->getCalls() as $call) {
             $this->runCall($input, $output, $task, $call);
@@ -189,21 +190,14 @@ EOF
      */
     private function runCall(InputInterface $input, OutputInterface $output, Task $task, Call $call)
     {
-        $config =
-            $this->getApplication()
-                ->getConfig();
+
+        $config = $this->getApplication()->getConfig();
 
         $service = $this->fetchServiceForCall($call->getType());
 
         $service->initialize($input, $output, $this->getHelperSet(), $config);
         $service->setTask($task);
         $service->setCall($call);
-        $service->setFailOnError($call->has('failOnError') ? $call->failOnError : false);
-        $service->setSuccessStatusCodes($call->has('successCodes') ? $call->successCodes : [0]);
-
-        if (method_exists($service, 'setFileset') && $call->has('fileset')) {
-            $service->setFileset($call->fileset);
-        }
 
         $service->run($call->getArguments());
         $output->writeln("");

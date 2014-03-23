@@ -31,6 +31,11 @@ class Application extends BaseApplication
     const MANIFEST_URL = 'http://bldr.io/manifest.json';
 
     /**
+     * @var string $BUILD_NAME
+     */
+    public static $BUILD_NAME;
+
+    /**
      * @var string $configName
      */
     public static $CONFIG = '.bldr.yml';
@@ -58,6 +63,23 @@ EOF;
      * @var ContainerInterface $container
      */
     private $container;
+
+    /**
+     *
+     */
+    public function setBuildName()
+    {
+        $config = $this->getConfig();
+        $date   = new \DateTime('now');
+
+        $name = sprintf(
+            'build_%s_%s',
+            str_replace('/', '_', $config->get('name')),
+            $date->format("Y-m-d_H-i-s")
+        );
+
+        static::$BUILD_NAME = $name;
+    }
 
     /**
      * @param string $name
