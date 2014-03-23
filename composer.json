@@ -11,7 +11,7 @@
         "herrera-io/phar-update":       "2.*",
         "bldr-io/bldr-execute":         ">=1.2.1,<2.0.0",
         "bldr-io/bldr-filesystem":      ">=1.1.0,<2.0.0",
-        "bldr-io/bldr-git":             ">=1.0.1,<2.0.0"
+        "bldr-io/bldr-git":             ">=1.0.3,<2.0.0"
     },
     "suggest":           {
         "bldr-io/bldr-symfony": "Allows for shorter syntax with symfony commands"
