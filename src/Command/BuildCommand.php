@@ -17,6 +17,7 @@ use Symfony\Component\Console\Helper\FormatterHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
@@ -68,50 +69,69 @@ EOF
             $this->getApplication()
                 ->getConfig();
         if ([] === $tasks = $input->getOption('tasks')) {
-
-            $profileName = $input->getOption('profile');
-            $profile     = $config->get('profiles')[$profileName];
-            $tasks       = $profile['tasks'];
-
-            /** @var FormatterHelper $formatter */
-            $formatter = $this->getHelper('formatter');
-
-            $projectFormat = [
-                sprintf("Building the '%s' project", $config->get('name'))
-            ];
-            if ($config->has('description')) {
-                $projectFormat[] = sprintf(" - %s - ", $config->get('description'));
-            }
-
-            $profileFormat = [
-                sprintf("Using the '%s' profile", $profileName)
-            ];
-            if (isset($profile['description'])) {
-                $profileFormat[] = sprintf(" - %s - ", $profile['description']);
-            }
-
-            $output->writeln(
-                [
-                    "",
-                    $formatter->formatBlock($projectFormat, 'bg=blue;fg=black'),
-                    "",
-                    $formatter->formatBlock($profileFormat, 'bg=green;fg=white'),
-                    ""
-                ]
-            );
+            $tasks = $this->getTasks($output, $input->getOption('profile'), $config);
         } else {
             if (sizeof($tasks) === 1 && strpos($tasks[0], ',') !== false) {
                 $tasks = explode(',', $tasks[0]);
             }
         }
-
-        try {
-            $this->runTasks($input, $output, $tasks);
-        } catch (\Exception $e) {
-            throw $e;
-        }
+        $this->runTasks($input, $output, $tasks);
 
         return $this->succeedBuild($output);
+    }
+
+    /**
+     * @param OutputInterface $output
+     * @param string          $profileName
+     * @param ParameterBag    $config
+     *
+     * @return mixed
+     */
+    private function getTasks(OutputInterface $output, $profileName, ParameterBag $config)
+    {
+        $profile = $config->get('profiles')[$profileName];
+        $tasks   = $profile['tasks'];
+
+        $projectFormat = [
+            sprintf("Building the '%s' project", $config->get('name'))
+        ];
+        if ($config->has('description')) {
+            $projectFormat[] = sprintf(" - %s - ", $config->get('description'));
+        }
+
+        $profileFormat = [
+            sprintf("Using the '%s' profile", $profileName)
+        ];
+        if (isset($profile['description'])) {
+            $profileFormat[] = sprintf(" - %s - ", $profile['description']);
+        }
+
+        $output->writeln(
+            [
+                "",
+                $this->formatBlock($projectFormat, 'blue', 'black'),
+                "",
+                $this->formatBlock($profileFormat, 'blue', 'black'),
+                ""
+            ]
+        );
+
+        return $tasks;
+    }
+
+    /**
+     * @param string|array $output
+     * @param string       $background
+     * @param string       $foreground
+     *
+     * @return string
+     */
+    private function formatBlock($output, $background, $foreground)
+    {
+        /** @var FormatterHelper $formatter */
+        $formatter = $this->getHelper('formatter');
+
+        return $formatter->formatBlock($output, "bg={$background};fg={$foreground}");
     }
 
     /**
@@ -135,7 +155,8 @@ EOF
      */
     private function runTask(InputInterface $input, OutputInterface $output, $taskName)
     {
-        $config = $this->getApplication()->getConfig();
+        $config = $this->getApplication()
+            ->getConfig();
         $task   = $config->get('tasks')[$taskName];
 
         $output->writeln(
@@ -165,8 +186,9 @@ EOF
      */
     private function runCall(InputInterface $input, OutputInterface $output, array $call, $taskName, array $task)
     {
-
-        $config = $this->getApplication()->getConfig();
+        $config =
+            $this->getApplication()
+                ->getConfig();
 
         $service = $this->fetchServiceForCall($call['type']);
 
@@ -206,25 +228,11 @@ EOF
     /**
      * @param OutputInterface $output
      *
-     * @return int
+     * @return Integer
      */
     public function succeedBuild(OutputInterface $output)
     {
-        /** @var FormatterHelper $formatter */
-        $formatter = $this->getHelper('formatter');
-
-        $output->writeln(
-            [
-                "",
-                $formatter->formatBlock(
-                    [
-                        "Build Success!",
-                    ],
-                    'bg=green;fg=white'
-                ),
-                ""
-            ]
-        );
+        $output->writeln(["", $this->formatBlock('Build Success!', 'green', 'white'), ""]);
 
         return 0;
     }
