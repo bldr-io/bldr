@@ -3,20 +3,20 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "64786aa15596eb6fadc4d2453ef648a6",
+    "hash": "c8d43dd410dece5c1557e249a3f4166e",
     "packages": [
         {
             "name": "bldr-io/bldr-execute",
-            "version": "1.1.0",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bldr-io/bldr-execute.git",
-                "reference": "ac326ed0d79c4fb774f81b9dcfb7be02775145e7"
+                "reference": "947871cc050cc21714b87266a0ee5f16acd5108f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bldr-io/bldr-execute/zipball/ac326ed0d79c4fb774f81b9dcfb7be02775145e7",
-                "reference": "ac326ed0d79c4fb774f81b9dcfb7be02775145e7",
+                "url": "https://api.github.com/repos/bldr-io/bldr-execute/zipball/947871cc050cc21714b87266a0ee5f16acd5108f",
+                "reference": "947871cc050cc21714b87266a0ee5f16acd5108f",
                 "shasum": ""
             },
             "require-dev": {
@@ -41,7 +41,7 @@
                 }
             ],
             "description": "Bldr.io Execute Extension",
-            "time": "2014-03-23 18:17:56"
+            "time": "2014-03-23 21:01:09"
         },
         {
             "name": "bldr-io/bldr-filesystem",
@@ -84,20 +84,20 @@
         },
         {
             "name": "bldr-io/bldr-git",
-            "version": "dev-master",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bldr-io/bldr-git.git",
-                "reference": "733e500159382a0e7ec162d492c927e87d6a1bb0"
+                "reference": "5beacbead3a6abccfdd475a7f4692abc4643b30d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bldr-io/bldr-git/zipball/733e500159382a0e7ec162d492c927e87d6a1bb0",
-                "reference": "733e500159382a0e7ec162d492c927e87d6a1bb0",
+                "url": "https://api.github.com/repos/bldr-io/bldr-git/zipball/5beacbead3a6abccfdd475a7f4692abc4643b30d",
+                "reference": "5beacbead3a6abccfdd475a7f4692abc4643b30d",
                 "shasum": ""
             },
             "require": {
-                "bldr-io/bldr": "dev-master"
+                "bldr-io/bldr-execute": "~1.2"
             },
             "type": "library",
             "autoload": {
@@ -118,7 +118,7 @@
                 }
             ],
             "description": "Git Extension for Bldr",
-            "time": "2014-03-23 15:55:41"
+            "time": "2014-03-23 21:04:30"
         },
         {
             "name": "herrera-io/json",
@@ -1502,7 +1502,6 @@
     ],
     "minimum-stability": "dev",
     "stability-flags": {
-        "bldr-io/bldr-git": 20,
         "mockery/mockery": 20
     },
     "platform": [
