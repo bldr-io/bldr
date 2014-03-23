@@ -13,11 +13,10 @@ namespace Bldr\Command;
 
 use Bldr\Application;
 use Bldr\Helper\DialogHelper;
-use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\FormatterHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Helper\FormatterHelper;
 use Symfony\Component\Process\ExecutableFinder;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Yaml\Yaml;
@@ -25,7 +24,7 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
  */
-class InitCommand extends Command
+class InitCommand extends AbstractCommand
 {
     /**
      * @var array $gitConfig
@@ -91,7 +90,7 @@ EOF
             true
         )
         ) {
-            $options['profiles'] = $this->determineProfiles($input, $output);
+            $options['profiles'] = $this->determineProfiles($output);
             foreach ($this->tasks as $taskName => $task) {
                 $options['tasks'][$taskName] = array_merge_recursive($task, ['calls' => []]);
             }
@@ -110,13 +109,59 @@ EOF
         );
     }
 
+    private function determineProfiles(OutputInterface $output)
+    {
+        /** @var DialogHelper $dialog */
+        $dialog = $this->getHelper('dialog');
+
+        $output->writeln(["", "Defining Profiles", ""]);
+
+        $profiles = [];
+        do {
+            $profile = [];
+
+            $name = $dialog->ask($output, $dialog->getQuestion('Profile Name <default>', 'default'), 'default');
+            if ($name === 'default' && array_key_exists('default', $profiles)) {
+                break;
+            }
+            $description = $dialog->ask($output, $dialog->getQuestion('Description', null), null);
+            if ($description !== null) {
+                $profile['description'] = $description;
+            }
+
+            $output->writeln(["", "Task Ordering"]);
+            $tasks = [];
+            do {
+                $task = [];
+
+                $taskName = $dialog->ask($output, $dialog->getQuestion('Task name', null), null);
+                if ($taskName === null) {
+                    break;
+                }
+                $desc = $dialog->ask($output, $dialog->getQuestion('Task Description', null), null);
+                if ($desc !== null) {
+                    $task['description'] = $desc;
+                }
+
+                $this->tasks[$taskName] = $task;
+                $tasks[]                = $taskName;
+            } while (true);
+            if (!empty($tasks)) {
+                $profile['tasks'] = $tasks;
+            }
+
+            $profiles[$name] = $profile;
+        } while (true);
+
+        return $profiles;
+    }
+
     /**
      * {@inheritDoc}
      */
     protected function interact(InputInterface $input, OutputInterface $output)
     {
         $config = Application::$CONFIG . ($input->getOption('dist') ? '.dist' : '');
-
 
         $dir = getcwd();
         if (file_exists($dir . '/' . $config)) {
@@ -144,9 +189,9 @@ EOF
 
         $output->writeln("Attempting to create a {$config} file for you. Follow along!");
 
-        $this->getNameOption($output, $input);
+        $this->getNameOption($input, $output);
 
-        $description = $input->getOption('description') ? : false;
+        $description = $input->getOption('description') ? : null;
         $input->setOption(
             'description',
             $dialog->ask($output, $dialog->getQuestion('Description', $description), $description)
@@ -154,15 +199,15 @@ EOF
     }
 
     /**
+     * @param InputInterface $input
      * @param OutputInterface $output
-     * @param InputInterface  $input
      */
-    private function getNameOption(OutputInterface $output, InputInterface $input)
+    private function getNameOption(InputInterface $input, OutputInterface $output)
     {
-        $git = $this->getGitConfig();
         /** @var DialogHelper $dialog */
-        $dialog = $this->getHelperSet()
-            ->get('dialog');
+        $dialog =
+            $this->getHelperSet()
+                ->get('dialog');
 
         if (!$name = $input->getOption('name')) {
             $name = $this->getPackageName();
@@ -174,9 +219,12 @@ EOF
 
     /**
      * @return string
+     * @codeCoverageIgnore
      */
     private function getPackageName()
     {
+        $git = $this->getGitConfig();
+
         $name = basename(getcwd());
         $name = preg_replace('{(?:([a-z])([A-Z])|([A-Z])([A-Z][a-z]))}', '\\1\\3-\\2\\4', $name);
         $name = strtolower($name);
@@ -206,61 +254,18 @@ EOF
         if ($cmd->isSuccessful()) {
             $this->gitConfig = array();
             preg_match_all('{^([^=]+)=(.*)$}m', $cmd->getOutput(), $matches, PREG_SET_ORDER);
+            if (empty($matches)) {
+                return [];
+            }
+
             foreach ($matches as $match) {
                 $this->gitConfig[$match[1]] = $match[2];
             }
 
-            $this->gitConfig;
+            return $this->gitConfig;
         }
 
         return array();
-    }
-
-    private function determineProfiles(InputInterface $input, OutputInterface $output)
-    {
-        /** @var DialogHelper $dialog */
-        $dialog = $this->getHelper('dialog');
-
-        $output->writeln(["", "Defining Profiles", ""]);
-
-        $profiles = [];
-        do {
-            $profile = [];
-
-            $name = $dialog->ask($output, $dialog->getQuestion('Profile Name <default>', 'default'), 'default');
-            if ($name === 'default' && array_key_exists('default', $profiles)) {
-                break;
-            }
-            $description = $dialog->ask($output, $dialog->getQuestion('Description', false), false);
-            if ($description !== false) {
-                $profile['description'] = $description;
-            }
-
-            $output->writeln(["", "Task Ordering"]);
-            $tasks = [];
-            do {
-                $task = [];
-
-                $taskName = $dialog->ask($output, $dialog->getQuestion('Task name', false), false);
-                if ($taskName === false) {
-                    break;
-                }
-                $desc = $dialog->ask($output, $dialog->getQuestion('Task Description', false), false);
-                if ($desc !== false) {
-                    $task['description'] = $desc;
-                }
-
-                $this->tasks[$taskName] = $task;
-                $tasks[]                = $taskName;
-            } while (true);
-            if (!empty($tasks)) {
-                $profile['tasks'] = $tasks;
-            }
-
-            $profiles[$name] = $profile;
-        } while (true);
-
-        return $profiles;
     }
 }
 
