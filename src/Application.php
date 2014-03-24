@@ -72,11 +72,19 @@ EOF;
         $config = $this->getConfig();
         $date   = new \DateTime('now');
 
-        $name = sprintf(
-            'build_%s_%s',
-            str_replace('/', '_', $config->get('name')),
-            $date->format("Y-m-d_H-i-s")
-        );
+        if (getenv('TRAVIS')) {
+            $name =
+                sprintf(
+                    "travis_%s",
+                    getenv('TRAVIS_JOB_NUMBER')
+                );
+        } else {
+            $name = sprintf(
+                'build_%s_%s',
+                str_replace('/', '_', $config->get('name')),
+                $date->format("Y-m-d_H-i-s")
+            );
+        }
 
         static::$BUILD_NAME = $name;
     }
