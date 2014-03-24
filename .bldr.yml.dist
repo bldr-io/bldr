@@ -45,6 +45,14 @@ tasks:
         calls:
             -
                 type: exec
+                arguments:
+                    - php
+                    - bin/phpcs
+                    - --standard=phpcs.xml
+                    - --report=summary
+                    - src/
+            -
+                type: exec
                 output: /dev/null
                 append: false
                 arguments:

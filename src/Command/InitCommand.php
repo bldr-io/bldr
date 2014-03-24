@@ -13,6 +13,8 @@ namespace Bldr\Command;
 
 use Bldr\Application;
 use Bldr\Helper\DialogHelper;
+use Composer\Json\JsonFile;
+use Seld\JsonLint\JsonParser;
 use Symfony\Component\Console\Helper\FormatterHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -41,18 +43,23 @@ class InitCommand extends AbstractCommand
      */
     protected function configure()
     {
-        $config = Application::$CONFIG;
-
         $this->setName('init')
-            ->setDescription("Builds the project {$config} file for a project.")
+            ->setDescription("Builds the project config file for a project.")
             ->addOption('name', null, InputOption::VALUE_REQUIRED, 'Name of the package')
             ->addOption('description', null, InputOption::VALUE_REQUIRED, 'Description of the package')
-            ->addOption('delete', 'd', InputOption::VALUE_NONE, "Delete existing {$config}")
-            ->addOption('dist', null, InputOption::VALUE_NONE, "Create {$config}.dist file")
+            ->addOption('delete', 'd', InputOption::VALUE_NONE, "Delete existing config")
+            ->addOption('dist', null, InputOption::VALUE_NONE, "Create config .dist file")
+            ->addOption(
+                'extension',
+                'e',
+                InputOption::VALUE_REQUIRED,
+                "Format for the config (yml and json)",
+                Application::$CONFIG_EXTENSION
+            )
             ->setHelp(
                 <<<EOF
 
-The <info>%command.name%</info> builds the {$config} file in the root directory.
+The <info>%command.name%</info> builds the config file in the root directory.
 
 To use:
 
@@ -72,11 +79,32 @@ EOF
     }
 
     /**
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     *
+     * @throws \Exception
+     */
+    protected function initialize(InputInterface $input, OutputInterface $output)
+    {
+        $allowed = ['yml' => true, 'json' => true];
+        if (!array_key_exists($input->getOption('extension'), $allowed)) {
+            throw new \Exception(
+                sprintf(
+                    "%s is not a valid extension.",
+                    $input->getOption('extension')
+                )
+            );
+        }
+    }
+
+    /**
      * {@inheritDoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $config = Application::$CONFIG . ($input->getOption('dist') ? '.dist' : '');
+        $extension = ltrim($input->getOption('extension'), '.');
+
+        $config = Application::$CONFIG . '.' . $extension . ($input->getOption('dist') ? '.dist' : '');
 
         /** @var DialogHelper $dialog */
         $dialog = $this->getHelper('dialog');
@@ -96,15 +124,22 @@ EOF
             }
         }
 
-        $yaml = Yaml::dump($options, 12);
-        file_put_contents(getcwd() . '/' . $config, $yaml);
+        if ($extension === 'yml') {
+            $data = Yaml::dump($options, 12);
+            file_put_contents(getcwd() . '/' . $config, $data);
+        } else {
+            $json = new JsonFile(getcwd() . '/' . $config);
+            $json->write($options);
+            $data = $json->read();
+        }
+
 
         $output->writeln(
             [
                 "",
                 $config . " file generated.",
                 "",
-                $yaml
+                $data
             ]
         );
     }
@@ -163,11 +198,12 @@ EOF
             $this->tasks[$result[0]] = $result[1];
             $tasks[]                 = $result[0];
         } while (true);
+
         if (!empty($tasks)) {
             $profile['tasks'] = $tasks;
         }
 
-        return $profile;
+        return [$name, $profile];
     }
 
     /**
@@ -184,14 +220,14 @@ EOF
 
         $taskName = $dialog->ask($output, $dialog->getQuestion('Task name', null), null);
         if ($taskName === null) {
-            return false;
+            return null;
         }
         $desc = $dialog->ask($output, $dialog->getQuestion('Task Description', null), null);
         if ($desc !== null) {
             $task['description'] = $desc;
         }
 
-        return $task;
+        return [$taskName, $task];
     }
 
     /**
@@ -199,7 +235,9 @@ EOF
      */
     protected function interact(InputInterface $input, OutputInterface $output)
     {
-        $config = Application::$CONFIG . ($input->getOption('dist') ? '.dist' : '');
+        $extension = ltrim($input->getOption('extension'), '.');
+
+        $config = Application::$CONFIG . $extension . ($input->getOption('dist') ? '.dist' : '');
 
         $dir = getcwd();
         if (file_exists($dir . '/' . $config)) {

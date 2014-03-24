@@ -16,7 +16,6 @@ namespace Bldr\Model;
  */
 class Call
 {
-
     /**
      * @var string $type
      */

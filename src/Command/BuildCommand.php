@@ -31,16 +31,14 @@ class BuildCommand extends AbstractCommand
      */
     protected function configure()
     {
-        $config = Application::$CONFIG;
-
         $this->setName('build')
-            ->setDescription("Builds the project for the directory you are in. Must contain a {$config} file.")
+            ->setDescription("Builds the project for the directory you are in. Must contain a config file.")
             ->addOption('profile', 'p', InputOption::VALUE_REQUIRED, 'Profile to run', 'default')
             ->addOption('tasks', 't', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Tasks to run')
             ->setHelp(
                 <<<EOF
 
-The <info>%command.name%</info> builds the current project, using the {$config} file in the root directory.
+The <info>%command.name%</info> builds the current project, using the config file in the root directory.
 
 To use:
 

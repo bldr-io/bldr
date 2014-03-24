@@ -13,6 +13,7 @@ namespace Bldr;
 
 use Bldr\Command as Commands;
 use Bldr\Helper\DialogHelper;
+use Composer\Json\JsonFile;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -38,7 +39,9 @@ class Application extends BaseApplication
     /**
      * @var string $configName
      */
-    public static $CONFIG = '.bldr.yml';
+    public static $CONFIG = '.bldr';
+
+    public static $CONFIG_EXTENSION = 'yml';
 
     public static $logo = <<<EOF
   ______    __       _______   ______
@@ -162,29 +165,45 @@ EOF;
     }
 
     /**
-     * Cehcks for .bldr.yml and then .bldr.yml.dist
+     * Checks for configs in the following order:
+     *
+     * .bldr.yml
+     * .bldr.yml.dist
+     * .bldr.json
+     * .bldr.json.dist
      *
      * @return Config
      * @throws \Exception
      */
     private function readConfig()
     {
-        $dir = getcwd();
-        $file = $dir . '/' . static::$CONFIG;
-        if (!file_exists($file)) {
-            $file .= '.dist';
-            if (!file_exists($file)) {
-                throw new \Exception(
-                    sprintf(
-                        "Could not find a %s or a %s file in the current directory.",
-                        static::$CONFIG,
-                        static::$CONFIG . '.dist'
-                    )
-                );
+        foreach (['yml', 'json'] as $extension) {
+            $dir  = getcwd();
+            $file = $dir . '/' . static::$CONFIG . '.' . $extension;
+            if (file_exists($file)) {
+                return new Config($this->parseConfig($extension, $file));
+            } else {
+                $file .= '.dist';
+                if (file_exists($file)) {
+                    return new Config($this->parseConfig($extension, $file));
+                }
             }
         }
 
-        return new Config(Yaml::parse($file));
+        throw new \Exception("Could not find a config file in the current directory.");
+    }
+
+    private function parseConfig($extension, $file)
+    {
+        if ($extension === 'yml') {
+            return Yaml::parse($file);
+        }
+        if ($extension === 'json') {
+            $json = new JsonFile($file);
+            return $json->read();
+        }
+
+        throw new \Exception("Could not parse the config file in the current directory, wasn't json or yml.");
     }
 
     /**
