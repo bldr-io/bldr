@@ -152,8 +152,6 @@ EOF
      * @param InputInterface  $input
      * @param OutputInterface $output
      * @param string          $taskName
-     *
-     * @throws \Exception
      */
     private function runTask(InputInterface $input, OutputInterface $output, $taskName)
     {

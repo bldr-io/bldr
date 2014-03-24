@@ -11,7 +11,6 @@
 
 namespace Bldr\Test\Model;
 
-
 use Bldr\Model\Call;
 
 /**
