@@ -65,31 +65,6 @@ EOF;
     private $container;
 
     /**
-     *
-     */
-    public function setBuildName()
-    {
-        $config = $this->getConfig();
-        $date   = new \DateTime('now');
-
-        if (getenv('TRAVIS')) {
-            $name =
-                sprintf(
-                    "travis_%s",
-                    getenv('TRAVIS_JOB_NUMBER')
-                );
-        } else {
-            $name = sprintf(
-                'build_%s_%s',
-                str_replace('/', '_', $config->get('name')),
-                $date->format("Y-m-d_H-i-s")
-            );
-        }
-
-        static::$BUILD_NAME = $name;
-    }
-
-    /**
      * @param string $name
      * @param string $version
      */
@@ -100,6 +75,30 @@ EOF;
         parent::__construct($name, $version);
 
         $this->addCommands($this->getCommands());
+    }
+
+    /**
+     *
+     */
+    public function setBuildName()
+    {
+        $config = $this->getConfig();
+        $date   = new \DateTime('now');
+
+        if (getenv('TRAVIS') === 'true') {
+            $name = sprintf(
+                "travis_%s",
+                getenv('TRAVIS_JOB_NUMBER')
+            );
+        } else {
+            $name = sprintf(
+                'local_%s_%s',
+                str_replace('/', '_', $config->get('name')),
+                $date->format("Y-m-d_H-i-s")
+            );
+        }
+
+        static::$BUILD_NAME = $name;
     }
 
     /**

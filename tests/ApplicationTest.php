@@ -46,6 +46,30 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     *
+     */
+    public function testSetBuildName()
+    {
+        $app = new Application();
+        $config = ['name' => 'test-app'];
+        $app->setConfig(new ParameterBag($config));
+
+        $travis = getenv('TRAVIS');
+        $travisJobNumber = getenv('TRAVIS_JOB_NUMBER');
+        putenv('TRAVIS=true');
+        putenv('TRAVIS_JOB_NUMBER=test');
+        $app->setBuildName();
+        $this->assertEquals('travis_test', $app::$BUILD_NAME);
+        putenv('TRAVIS=false');
+        $date = date('Y-m-d_h-i-s');
+        $app->setBuildName();
+        $app->setBuildName('local_test-app_'.$date);
+
+        putenv("TRAVIS={$travis}");
+        putenv("TRAVIS_JOB_NUMBER={$travisJobNumber}");
+    }
+
+    /**
      * Tests the Application::getDispatcher() method
      *
      * @param Application $application
