@@ -1,15 +1,15 @@
 Welcome to Bldr's documentation!
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Bldr, in the simplest terms, is a build system, written with yaml configs. If you are used to build systems,
+Bldr, in the simplest terms, is a build system, written with simpler configs. If you are used to build systems,
 you've probably seen some pretty complicated build files, and they were probably written in xml.
 
-Well, here's one written for Bldr:
+Well, here's one written for Bldr using yaml (json is also supported:
 
 .. code-block:: yaml
 
     name: bldr-io/bldr
-    description: 'Build System with YAML in mind'
+    description: 'Build System with simplicity in mind'
 
     profiles:
         default:
