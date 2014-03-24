@@ -1,6 +1,6 @@
 {
     "name":              "bldr-io/bldr",
-    "description":       "Yaml Build System",
+    "description":       "Simple Build System / Task Runner",
     "require":           {
         "symfony/console":              "~2.4",
         "symfony/config":               "~2.4",
