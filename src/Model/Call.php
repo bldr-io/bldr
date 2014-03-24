@@ -51,45 +51,11 @@ class Call
     }
 
     /**
-     * @param string $type
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-    }
-
-    /**
      * @return string[]
      */
     public function getArguments()
     {
         return $this->arguments;
-    }
-
-    /**
-     * @param string[] $arguments
-     */
-    public function setArguments(array $arguments)
-    {
-        $this->arguments = $arguments;
-    }
-
-    /**
-     * @param string $argument
-     */
-    public function addArgument($argument)
-    {
-        $this->arguments[] = $argument;
-    }
-
-    public function getArgument($name)
-    {
-        return $this->arguments[$name];
-    }
-
-    public function hasArgument($name)
-    {
-        return isset($this->arguments[$name]);
     }
 
     /**

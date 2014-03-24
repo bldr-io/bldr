@@ -66,14 +66,6 @@ class Task
     }
 
     /**
-     * @param string $name
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
-
-    /**
      * @return string
      */
     public function getDescription()
@@ -82,27 +74,11 @@ class Task
     }
 
     /**
-     * @param string $description
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-    }
-
-    /**
      * @return Call[]
      */
     public function getCalls()
     {
         return $this->calls;
-    }
-
-    /**
-     * @param Call[] $calls
-     */
-    public function setCalls(array $calls)
-    {
-        $this->calls = $calls;
     }
 
     /**
