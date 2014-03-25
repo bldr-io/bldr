@@ -10,11 +10,12 @@
  * with this source code in the file LICENSE.
  */
 
-$paths[] = __DIR__.'/../vendor';
-$paths[] = __DIR__.'/../../..';
 if (__DIR__ !== getcwd()) {
     $paths[] = getcwd() . '/vendor';
 }
+
+$paths[] = __DIR__.'/../vendor';
+$paths[] = __DIR__.'/../../..';
 
 $autoloader = false;
 
