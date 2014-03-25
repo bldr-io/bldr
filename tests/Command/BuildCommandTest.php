@@ -16,7 +16,6 @@ use Bldr\Command\BuildCommand;
 use Bldr\Config;
 use Bldr\Test\Mock\Call\MockCall;
 use Symfony\Component\Console\Tester\CommandTester;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
