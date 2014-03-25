@@ -12,6 +12,7 @@
 namespace Bldr;
 
 use Bldr\Command as Commands;
+use Bldr\Event\EventInterface;
 use Bldr\Helper\DialogHelper;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Command\Command;
@@ -138,6 +139,15 @@ EOF;
     public function getHelp()
     {
         return "\n" . self::$logo . "\n\n" . parent::getHelp();
+    }
+
+    /**
+     * @param string         $name
+     * @param EventInterface $event
+     */
+    public function addEvent($name, EventInterface $event)
+    {
+        $this->dispatcher->dispatch($name, $event);
     }
 
     /**
