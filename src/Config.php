@@ -11,9 +11,9 @@
 
 namespace Bldr;
 
-use Composer\Json\JsonFile;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\Yaml\Yaml;
+use Zend\Json\Json;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
@@ -45,17 +45,15 @@ class Config extends ParameterBag
         list($file, $type) = static::getFile();
         static::isTypeAllowed($type);
 
+        $data = file_get_contents($file);
+
         // Yaml
         if ($type === 'yml') {
-            $data = file_get_contents($file);
-
             return new static(Yaml::parse($data));
         }
 
         // Json
-        $json = new JsonFile($file);
-
-        return new static($json->read());
+        return new static(Json::decode($data, Json::TYPE_ARRAY));
     }
 
     /**
@@ -115,19 +113,20 @@ class Config extends ParameterBag
 
         static::checkForFile($file, $delete);
 
+        $content = '';
+
         // Yaml
         if ($type === 'yml') {
-            $yaml = Yaml::dump($data, 8);
-            file_put_contents($file, $yaml);
-
-            return new static($data);
+            $content = Yaml::dump($data, 8);
         }
 
         // Json
-        $json = new JsonFile($file);
-        $json->write($data);
+        if ($type === 'json') {
+            $content = Json::prettyPrint(Json::encode($data));
+        }
 
-        return new static($json->read());
+        file_put_contents($file, $content);
+        return new static($data);
     }
 
     /**

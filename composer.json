@@ -12,7 +12,7 @@
         "bldr-io/bldr-execute":         ">=1.2.1,<2.0.0",
         "bldr-io/bldr-filesystem":      ">=1.1.0,<2.0.0",
         "bldr-io/bldr-git":             ">=1.0.3,<2.0.0",
-        "composer/composer":            "1.0.*"
+        "zendframework/zend-json":      "2.3.*"
     },
     "suggest":           {
         "bldr-io/bldr-symfony": "Allows for shorter syntax with symfony commands"
@@ -29,7 +29,6 @@
             "email": "aequasi@gmail.com"
         }
     ],
-    "minimum-stability": "dev",
     "autoload":          {
         "psr-4": {
             "Bldr\\": "src/"
