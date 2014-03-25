@@ -3,24 +3,24 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "9824d4157f2e43d8aa7f441b4fb313a9",
+    "hash": "a40d7c7510fe0218255d6ad449735825",
     "packages": [
         {
             "name": "bldr-io/bldr-execute",
-            "version": "1.2.1",
+            "version": "1.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bldr-io/bldr-execute.git",
-                "reference": "55ab268fe1971c7d75f857dfdecf5b326f9eabd2"
+                "reference": "c6e094b599f1dda300472d5ed4cbc6ad7f48dde7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bldr-io/bldr-execute/zipball/55ab268fe1971c7d75f857dfdecf5b326f9eabd2",
-                "reference": "55ab268fe1971c7d75f857dfdecf5b326f9eabd2",
+                "url": "https://api.github.com/repos/bldr-io/bldr-execute/zipball/c6e094b599f1dda300472d5ed4cbc6ad7f48dde7",
+                "reference": "c6e094b599f1dda300472d5ed4cbc6ad7f48dde7",
                 "shasum": ""
             },
             "require-dev": {
-                "bldr-io/bldr": "~1.1.0"
+                "bldr-io/bldr": ">=1.3.0,<2.0.0"
             },
             "type": "library",
             "autoload": {
@@ -41,24 +41,24 @@
                 }
             ],
             "description": "Bldr.io Execute Extension",
-            "time": "2014-03-23 22:00:37"
+            "time": "2014-03-25 19:23:00"
         },
         {
             "name": "bldr-io/bldr-filesystem",
-            "version": "1.1.0",
+            "version": "1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bldr-io/bldr-filesystem.git",
-                "reference": "2e933eafc3275ccb02e6290b7865ac895c503ca4"
+                "reference": "41127ed2e54fcfe44b9fe50a97455b0f32c733a7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bldr-io/bldr-filesystem/zipball/2e933eafc3275ccb02e6290b7865ac895c503ca4",
-                "reference": "2e933eafc3275ccb02e6290b7865ac895c503ca4",
+                "url": "https://api.github.com/repos/bldr-io/bldr-filesystem/zipball/41127ed2e54fcfe44b9fe50a97455b0f32c733a7",
+                "reference": "41127ed2e54fcfe44b9fe50a97455b0f32c733a7",
                 "shasum": ""
             },
             "require-dev": {
-                "bldr-io/bldr": "~1.1.0",
+                "bldr-io/bldr": ">=1.3.0,<2.0.0",
                 "symfony/filesystem": "~2.4.0"
             },
             "type": "library",
@@ -80,7 +80,7 @@
                 }
             ],
             "description": "Bldr.io Filesystem Extension",
-            "time": "2014-03-23 18:20:34"
+            "time": "2014-03-25 19:27:11"
         },
         {
             "name": "bldr-io/bldr-git",
@@ -126,12 +126,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "45fe0124f2dae5ee66da389c82c70323e28f36d6"
+                "reference": "b09fb521d281fb832992b1c6bff62580eab499b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/45fe0124f2dae5ee66da389c82c70323e28f36d6",
-                "reference": "45fe0124f2dae5ee66da389c82c70323e28f36d6",
+                "url": "https://api.github.com/repos/composer/composer/zipball/b09fb521d281fb832992b1c6bff62580eab499b2",
+                "reference": "b09fb521d281fb832992b1c6bff62580eab499b2",
                 "shasum": ""
             },
             "require": {
@@ -187,7 +187,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2014-03-24 10:51:54"
+            "time": "2014-03-25 10:44:16"
         },
         {
             "name": "herrera-io/json",
@@ -1620,7 +1620,6 @@
     ],
     "minimum-stability": "dev",
     "stability-flags": {
-        "composer/composer": 20,
         "mockery/mockery": 20
     },
     "platform": [
