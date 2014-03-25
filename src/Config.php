@@ -20,6 +20,9 @@ use Symfony\Component\Yaml\Yaml;
  */
 class Config extends ParameterBag
 {
+    /**
+     * @var string $NAME
+     */
     public static $NAME = '.bldr';
 
     /**
@@ -27,6 +30,9 @@ class Config extends ParameterBag
      */
     public static $TYPES = ['yml' => true, 'json' => true];
 
+    /**
+     * @var string $DEFAULT_TYPE
+     */
     public static $DEFAULT_TYPE = 'yml';
 
     /**
@@ -37,9 +43,7 @@ class Config extends ParameterBag
     public static function factory()
     {
         list($file, $type) = static::getFile();
-        if (!array_key_exists($type, static::$TYPES)) {
-            throw new \Exception(sprintf("%s is not a valid extension. Feel free to make a PR", $type));
-        }
+        static::isTypeAllowed($type);
 
         switch ($type) {
             case 'yml':
@@ -60,27 +64,37 @@ class Config extends ParameterBag
     private static function getFile()
     {
         $tried = [];
-        foreach (static::$TYPES as $type => $allowed) {
-            if (!$allowed) {
-                continue;
-            }
+        foreach (array_keys(static::$TYPES) as $type) {
 
             $file = static::$NAME . '.' . $type;
 
             if (file_exists($file)) {
                 return [$file, $type];
-            } else {
-                $tried[] = $file;
-                $file .= ".dist";
-                if (file_exists($file)) {
-                    return [$file, $type];
-                } else {
-                    $tried[] = $file;
-                }
             }
+
+            $tried[] = $file;
+            $file .= ".dist";
+
+            if (file_exists($file)) {
+                return [$file, $type];
+            }
+
+            $tried[] = $file;
         }
 
         throw new \Exception("Couldn't find a config file. Tried: " . implode(', ', $tried));
+    }
+
+    /**
+     * @param string $type
+     *
+     * @throws \Exception
+     */
+    public static function isTypeAllowed($type)
+    {
+        if (!array_key_exists($type, static::$TYPES)) {
+            throw new \Exception(sprintf("%s is not a valid extension. Feel free to make a PR", $type));
+        }
     }
 
     /**
@@ -94,20 +108,11 @@ class Config extends ParameterBag
      */
     public static function create($type, $data = [], $dist = false, $delete = false)
     {
-        if (!array_key_exists($type, static::$TYPES)) {
-            throw new \Exception(sprintf("%s is not a valid extension. Feel free to make a PR", $type));
-        }
+        static::isTypeAllowed($type);
 
-        $file = static::$NAME . '.' . $type;
-        if ($dist) {
-            $file .= '.dist';
-        }
+        $file = static::$NAME . '.' . $type . ($dist ? '.dist' : '');
 
-        if (file_exists($file) && !$delete) {
-            throw new \Exception(sprintf("File '%s' already exists."));
-        } elseif (file_exists($file) && $delete) {
-            unlink($file);
-        }
+        static::checkForFile($file, $delete);
 
         switch ($type) {
             case 'yml':
@@ -120,6 +125,22 @@ class Config extends ParameterBag
                 $json->write($data);
 
                 return new static($json->read());
+        }
+    }
+
+    /**
+     * @param string  $file
+     * @param Boolean $delete
+     *
+     * @throws \Exception
+     */
+    public static function checkForFile($file, $delete = false)
+    {
+        if (file_exists($file)) {
+            if (!$delete) {
+                throw new \Exception(sprintf("File '%s' already exists."));
+            }
+            unlink($file);
         }
     }
 }
