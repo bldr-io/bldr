@@ -58,7 +58,149 @@ class BuildCommandTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
+        $application->setConfig(Config::create('yml', $config));
 
+        $application->add(new BuildCommand());
+
+        $command = $application->find('build');
+        $command->setContainer($container);
+        $commandTester = new CommandTester($command);
+
+        $commandTester->execute(['command' => $command->getName()]);
+    }
+
+    public function testExecuteCommaTasks()
+    {
+        $container = \Mockery::mock('Symfony\Component\DependencyInjection\ContainerBuilder');
+        $container->shouldReceive('findTaggedServiceIds')
+            ->andReturn(['exec']);
+        $container->shouldReceive('get')
+            ->withArgs(['exec'])
+            ->andReturn(new MockCall());
+
+        $application  = new Application();
+        Config::$NAME = '.test';
+
+        $config = [
+            'name'        => 'test',
+            'description' => 'test app',
+            'profiles'    => [
+                'default' => [
+                    'description' => 'test profile',
+                    'tasks'       => [
+                        'test'
+                    ]
+                ]
+            ],
+            'tasks'       => [
+                'test' => [
+                    'calls' => [
+                        [
+                            'type'      => 'exec',
+                            'arguments' => ['ls -l']
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        $application->setConfig(Config::create('yml', $config));
+
+        $application->add(new BuildCommand());
+
+        $command = $application->find('build');
+        $command->setContainer($container);
+        $commandTester = new CommandTester($command);
+
+        $commandTester->execute(['command' => $command->getName()], ['tasks' => 'test,test2']);
+    }
+
+    /**
+     * @expectedException \Exception
+     */
+    public function testExecuteMultipleServices()
+    {
+        $container = \Mockery::mock('Symfony\Component\DependencyInjection\ContainerBuilder');
+        $container->shouldReceive('findTaggedServiceIds')
+            ->andReturn(['exec', 'bad']);
+        $container->shouldReceive('get')
+            ->withArgs(['exec'])
+            ->andReturn(new MockCall());
+
+        $application  = new Application();
+        Config::$NAME = '.test';
+
+        $config = [
+            'name'        => 'test',
+            'description' => 'test app',
+            'profiles'    => [
+                'default' => [
+                    'description' => 'test profile',
+                    'tasks'       => [
+                        'test'
+                    ]
+                ]
+            ],
+            'tasks'       => [
+                'test' => [
+                    'calls' => [
+                        [
+                            'type'      => 'exec',
+                            'arguments' => ['ls -l']
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        $application->setConfig(Config::create('yml', $config));
+
+        $application->add(new BuildCommand());
+
+        $command = $application->find('build');
+        $command->setContainer($container);
+        $commandTester = new CommandTester($command);
+
+        $commandTester->execute(['command' => $command->getName()]);
+    }
+
+    /**
+     * @expectedException \Exception
+     */
+    public function testExecuteNoServices()
+    {
+        $container = \Mockery::mock('Symfony\Component\DependencyInjection\ContainerBuilder');
+        $container->shouldReceive('findTaggedServiceIds')
+            ->andReturn([]);
+        $container->shouldReceive('get')
+            ->withArgs(['exec'])
+            ->andReturn(new MockCall());
+
+        $application  = new Application();
+        Config::$NAME = '.test';
+
+        $config = [
+            'name'        => 'test',
+            'description' => 'test app',
+            'profiles'    => [
+                'default' => [
+                    'description' => 'test profile',
+                    'tasks'       => [
+                        'test'
+                    ]
+                ]
+            ],
+            'tasks'       => [
+                'test' => [
+                    'calls' => [
+                        [
+                            'type'      => 'exec',
+                            'arguments' => ['ls -l']
+                        ]
+                    ]
+                ]
+            ]
+        ];
 
         $application->setConfig(Config::create('yml', $config));
 
