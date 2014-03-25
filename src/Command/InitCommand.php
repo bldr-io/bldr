@@ -12,6 +12,7 @@
 namespace Bldr\Command;
 
 use Bldr\Application;
+use Bldr\Config;
 use Bldr\Helper\DialogHelper;
 use Composer\Json\JsonFile;
 use Seld\JsonLint\JsonParser;
@@ -53,8 +54,8 @@ class InitCommand extends AbstractCommand
                 'extension',
                 'e',
                 InputOption::VALUE_REQUIRED,
-                "Format for the config (yml and json)",
-                Application::$CONFIG_EXTENSION
+                "Format for the config (" . implode(', ', Config::$TYPES) . ")",
+                Config::$DEFAULT_TYPE
             )
             ->setHelp(
                 <<<EOF
@@ -102,10 +103,6 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $extension = ltrim($input->getOption('extension'), '.');
-
-        $config = Application::$CONFIG . '.' . $extension . ($input->getOption('dist') ? '.dist' : '');
-
         /** @var DialogHelper $dialog */
         $dialog = $this->getHelper('dialog');
 
@@ -124,22 +121,13 @@ EOF
             }
         }
 
-        if ($extension === 'yml') {
-            $data = Yaml::dump($options, 12);
-            file_put_contents(getcwd() . '/' . $config, $data);
-        } else {
-            $json = new JsonFile(getcwd() . '/' . $config);
-            $json->write($options);
-            $data = $json->read();
-        }
-
+        $config = Config::create($input->getOption('extension'), $options, $input->getOption('dist'));
 
         $output->writeln(
             [
                 "",
-                $config . " file generated.",
-                "",
-                $data
+                "Config file generated.",
+                ""
             ]
         );
     }
@@ -235,21 +223,6 @@ EOF
      */
     protected function interact(InputInterface $input, OutputInterface $output)
     {
-        $extension = ltrim($input->getOption('extension'), '.');
-
-        $config = Application::$CONFIG . $extension . ($input->getOption('dist') ? '.dist' : '');
-
-        $dir = getcwd();
-        if (file_exists($dir . '/' . $config)) {
-            if (!$input->getOption('delete')) {
-                throw new \Exception(
-                    "You already have a {$config} file. Delete it first or run with the -d flag."
-                );
-            }
-
-            unlink($dir . '/' . $config);
-        }
-
         /** @var DialogHelper $dialog */
         $dialog = $this->getHelper('dialog');
         /** @var FormatterHelper $formatter */
@@ -263,7 +236,7 @@ EOF
             ]
         );
 
-        $output->writeln("Attempting to create a {$config} file for you. Follow along!");
+        $output->writeln("Attempting to create a config file for you. Follow along!");
 
         $this->getNameOption($input, $output);
 

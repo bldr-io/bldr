@@ -13,19 +13,16 @@ namespace Bldr;
 
 use Bldr\Command as Commands;
 use Bldr\Helper\DialogHelper;
-use Composer\Json\JsonFile;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag as Config;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\Yaml\Yaml;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class Application extends BaseApplication
 {
@@ -35,13 +32,6 @@ class Application extends BaseApplication
      * @var string $BUILD_NAME
      */
     public static $BUILD_NAME;
-
-    /**
-     * @var string $configName
-     */
-    public static $CONFIG = '.bldr';
-
-    public static $CONFIG_EXTENSION = 'yml';
 
     public static $logo = <<<EOF
   ______    __       _______   ______
@@ -78,6 +68,18 @@ EOF;
         parent::__construct($name, $version);
 
         $this->addCommands($this->getCommands());
+    }
+
+    /**
+     * @return Command[]
+     */
+    public function getCommands()
+    {
+        $commands   = [];
+        $commands[] = new Commands\InitCommand();
+        $commands[] = new Commands\BuildCommand();
+
+        return $commands;
     }
 
     /**
@@ -129,15 +131,13 @@ EOF;
     }
 
     /**
-     * @return Command[]
+     * {@inheritDoc}
+     *
+     * @codeCoverageIgnore
      */
-    public function getCommands()
+    public function getHelp()
     {
-        $commands   = [];
-        $commands[] = new Commands\InitCommand();
-        $commands[] = new Commands\BuildCommand();
-
-        return $commands;
+        return "\n" . self::$logo . "\n\n" . parent::getHelp();
     }
 
     /**
@@ -153,7 +153,7 @@ EOF;
     {
         $skipYaml = ['Bldr\Command\InitCommand', 'Symfony\Component\Console\Command\ListCommand'];
         if (!in_array(get_class($command), $skipYaml)) {
-            $this->config = $this->readConfig();
+            $this->config = Config::factory();
         }
 
         $this->buildContainer();
@@ -165,55 +165,13 @@ EOF;
     }
 
     /**
-     * Checks for configs in the following order:
-     *
-     * .bldr.yml
-     * .bldr.yml.dist
-     * .bldr.json
-     * .bldr.json.dist
-     *
-     * @return Config
-     * @throws \Exception
-     */
-    private function readConfig()
-    {
-        foreach (['yml', 'json'] as $extension) {
-            $dir  = getcwd();
-            $file = $dir . '/' . static::$CONFIG . '.' . $extension;
-            if (file_exists($file)) {
-                return new Config($this->parseConfig($extension, $file));
-            } else {
-                $file .= '.dist';
-                if (file_exists($file)) {
-                    return new Config($this->parseConfig($extension, $file));
-                }
-            }
-        }
-
-        throw new \Exception("Could not find a config file in the current directory.");
-    }
-
-    private function parseConfig($extension, $file)
-    {
-        if ($extension === 'yml') {
-            return Yaml::parse($file);
-        }
-        if ($extension === 'json') {
-            $json = new JsonFile($file);
-            return $json->read();
-        }
-
-        throw new \Exception("Could not parse the config file in the current directory, wasn't json or yml.");
-    }
-
-    /**
      * Builds the container with extensions
      *
      * @throws InvalidArgumentException
      */
     private function buildContainer()
     {
-        $container  = new ContainerBuilder();
+        $container = new ContainerBuilder();
 
         /** @var ExtensionInterface[] $extensions */
         $extensions = [
@@ -237,16 +195,6 @@ EOF;
         $this->container = $container;
 
         return $container;
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @codeCoverageIgnore
-     */
-    public function getHelp()
-    {
-        return "\n" . self::$logo . "\n\n" . parent::getHelp();
     }
 
     /**

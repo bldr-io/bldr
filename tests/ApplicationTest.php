@@ -12,10 +12,10 @@
 namespace Bldr\Test;
 
 use Bldr\Application;
+use Bldr\Config;
 use Bldr\Test\Mock\Command\MockCommand;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -52,7 +52,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     {
         $app = new Application();
         $config = ['name' => 'test-app'];
-        $app->setConfig(new ParameterBag($config));
+        $app->setConfig(new Config($config));
 
         $travis = getenv('TRAVIS');
         $travisJobNumber = getenv('TRAVIS_JOB_NUMBER');
@@ -85,62 +85,19 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Exception
-     */
-    public function testReadConfigException()
-    {
-        $app = new Application();
-        $this->changeConfig();
-
-        $class  = new \ReflectionClass($app);
-        $method = $class->getMethod('readConfig');
-        $method->setAccessible(true);
-
-        $method->invoke($app);
-    }
-
-    /**
      * Changes the config name
      */
     private function changeConfig()
     {
-        Application::$CONFIG = '.test.yml';
+        Config::$NAME = '.test';
     }
 
     /**
-     * @return array|mixed
      */
-    public function testReadConfig()
+    public function testSetConfig()
     {
         $app = new Application();
-        $this->changeConfig();
-
-        $config = ['name' => 'test-config'];
-
-        file_put_contents(getcwd() . '/.test.yml', Yaml::dump($config));
-
-        $class  = new \ReflectionClass($app);
-        $method = $class->getMethod('readConfig');
-        $method->setAccessible(true);
-
-        $config = $method->invoke($app);
-
-        rename(getcwd() . '/.test.yml', getcwd() . '/.test.yml.dist');
-
-        $config = $method->invoke($app);
-
-        unlink(getcwd() . '/.test.yml.dist');
-
-        return $config;
-    }
-
-    /**
-     * @depends testReadConfig
-     */
-    public function testSetConfig(ParameterBag $config)
-    {
-        $app = new Application();
-        $app->setConfig($config);
+        $app->setConfig(new Config(['name' => 'test-config']));
 
         return $app;
     }
@@ -233,7 +190,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
                 'Bldr\Test\Mock\DependencyInjection\MockExtension' => null
             ]
         ];
-        $app->setConfig(new ParameterBag($config));
+        $app->setConfig(new Config($config));
 
         $class  = new \ReflectionClass($app);
         $method = $class->getMethod('buildContainer');

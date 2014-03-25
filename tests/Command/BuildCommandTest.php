@@ -13,6 +13,7 @@ namespace Bldr\Test\Command;
 
 use Bldr\Application;
 use Bldr\Command\BuildCommand;
+use Bldr\Config;
 use Bldr\Test\Mock\Call\MockCall;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Yaml\Yaml;
@@ -31,8 +32,8 @@ class BuildCommandTest extends \PHPUnit_Framework_TestCase
             ->withArgs(['exec'])
             ->andReturn(new MockCall());
 
-        $application         = new Application();
-        Application::$CONFIG = '.test.yml';
+        $application  = new Application();
+        Config::$NAME = '.test';
 
         $config = [
             'name'        => 'test',
@@ -57,13 +58,9 @@ class BuildCommandTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        file_put_contents(getcwd() . '/' . Application::$CONFIG, Yaml::dump($config));
 
-        $ref    = new \ReflectionClass($application);
-        $method = $ref->getMethod('readConfig');
-        $method->setAccessible(true);
 
-        $application->setConfig($method->invoke($application));
+        $application->setConfig(Config::create('yml', $config));
 
         $application->add(new BuildCommand());
 

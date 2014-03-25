@@ -13,6 +13,7 @@ namespace Bldr\Test\Command;
 
 use Bldr\Application;
 use Bldr\Command\InitCommand;
+use Bldr\Config;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class InitCommandTest extends \PHPUnit_Framework_TestCase
@@ -25,7 +26,7 @@ class InitCommandTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->application = new Application();
-        Application::$CONFIG = '.test.yml';
+        Config::$NAME = '.test';
     }
 
     public function testExecute()
