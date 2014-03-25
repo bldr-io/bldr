@@ -13,6 +13,9 @@ namespace Bldr\Command;
 
 use Bldr\Application;
 use Bldr\Call\CallInterface;
+use Bldr\Config;
+use Bldr\Event;
+use Bldr\Event as Events;
 use Bldr\Model\Call;
 use Bldr\Model\Task;
 use Symfony\Component\Console\Helper\FormatterHelper;
@@ -63,17 +66,27 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->getApplication()->setBuildName();
+        $this->getApplication()
+            ->setBuildName();
 
         $output->writeln(["\n", Application::$logo, "\n"]);
-        $config = $this->getApplication()->getConfig();
+        $config = $this->getApplication()
+            ->getConfig();
+        $this->addEvent(Event::START, new Events\BuildEvent($this->getApplication(), $input, true));
 
         if ([] === $tasks = $input->getOption('tasks')) {
             $tasks = $this->getTasks($output, $input->getOption('profile'), $config);
         }
-        $this->runTasks($input, $output, $tasks);
 
-        return $this->succeedBuild($output);
+        $this->addEvent(Event::PRE_PROFILE, new Events\ProfileEvent($this->getApplication(), $input, $tasks, true));
+        $this->runTasks($input, $output, $tasks);
+        $this->addEvent(Event::POST_PROFILE, new Events\ProfileEvent($this->getApplication(), $input, $tasks, false));
+
+        $this->succeedBuild($output);
+
+        $this->addEvent(Event::START, new Events\BuildEvent($this->getApplication(), $input, false));
+
+        return 0;
     }
 
     /**
@@ -86,7 +99,7 @@ EOF
     private function getTasks(OutputInterface $output, $profileName, ParameterBag $config)
     {
         $profile = $config->get('profiles')[$profileName];
-        $tasks   = $profile['tasks'];
+        $tasks   = $this->buildTasks($config, $profile['tasks']);
 
         $projectFormat = [
             sprintf("Building the '%s' project", $config->get('name'))
@@ -116,6 +129,25 @@ EOF
     }
 
     /**
+     * @param Config $config
+     * @param        $names
+     *
+     * @return array
+     */
+    private function buildTasks(Config $config, $names)
+    {
+        $tasks = [];
+        foreach ($names as $name) {
+            $taskInfo     = $config->get('tasks')[$name];
+            $description  = isset($taskInfo['description']) ? $taskInfo['description'] : "";
+            $task         = new Task($name, $description, $taskInfo['calls']);
+            $tasks[$name] = $task;
+        }
+
+        return $tasks;
+    }
+
+    /**
      * @param string|array $output
      * @param string       $background
      * @param string       $foreground
@@ -133,7 +165,7 @@ EOF
     /**
      * @param InputInterface  $input
      * @param OutputInterface $output
-     * @param array           $tasks
+     * @param Task[]          $tasks
      */
     private function runTasks(InputInterface $input, OutputInterface $output, array $tasks)
     {
@@ -145,30 +177,30 @@ EOF
     /**
      * @param InputInterface  $input
      * @param OutputInterface $output
-     * @param string          $taskName
+     * @param Task            $task
      */
-    private function runTask(InputInterface $input, OutputInterface $output, $taskName)
+    private function runTask(InputInterface $input, OutputInterface $output, Task $task)
     {
-        $config      = $this->getApplication()->getConfig();
-        $taskInfo    = $config->get('tasks')[$taskName];
-        $description = isset($taskInfo['description']) ? $taskInfo['description'] : "";
-        $task        = new Task($taskName, $description, $taskInfo['calls']);
-
         $output->writeln(
             [
                 "",
                 sprintf(
                     "<info>Running the %s task</info>\n<comment>%s</comment>",
-                    $taskName,
+                    $task->getName(),
                     $task->getDescription() !== '' ? '> ' . $task->getDescription() : ''
                 ),
                 ""
             ]
         );
 
+        $this->addEvent(Event::PRE_TASK, new Events\TaskEvent($this->getApplication(), $input, $task, true));
         foreach ($task->getCalls() as $call) {
+            $this->addEvent(Event::PRE_CALL, new Events\CallEvent($this->getApplication(), $input, $call, true));
             $this->runCall($input, $output, $task, $call);
+            $this->addEvent(Event::POST_CALL, new Events\CallEvent($this->getApplication(), $input, $call, false));
         }
+        $this->addEvent(Event::POST_TASK, new Events\TaskEvent($this->getApplication(), $input, $task, false));
+
         $output->writeln("");
     }
 
@@ -181,7 +213,8 @@ EOF
     private function runCall(InputInterface $input, OutputInterface $output, Task $task, Call $call)
     {
 
-        $config = $this->getApplication()->getConfig();
+        $config = $this->getApplication()
+            ->getConfig();
 
         $service = $this->fetchServiceForCall($call->getType());
 
@@ -189,7 +222,9 @@ EOF
         $service->setTask($task);
         $service->setCall($call);
 
+        $this->addEvent(Event::PRE_SERVICE, new Events\ServiceEvent($this->getApplication(), $input, $service, true));
         $service->run($call->getArguments());
+        $this->addEvent(Event::POST_SERVICE, new Events\ServiceEvent($this->getApplication(), $input, $service, false));
         $output->writeln("");
     }
 

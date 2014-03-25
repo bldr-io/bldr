@@ -12,10 +12,11 @@
 namespace Bldr\Command;
 
 use Bldr\Application;
+use Bldr\Event\EventInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
@@ -37,6 +38,15 @@ class AbstractCommand extends Command implements ContainerAwareInterface
     public function setContainer(ContainerInterface $container = null)
     {
         $this->container = $container;
+    }
+
+    /**
+     * @param string         $name
+     * @param EventInterface $event
+     */
+    public function addEvent($name, EventInterface $event)
+    {
+        $this->getApplication()->addEvent($name, $event);
     }
 
     /**
