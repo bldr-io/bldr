@@ -39,6 +39,22 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException \Exception
+     */
+    public function testIsTypeAllowedException()
+    {
+        Config::isTypeAllowed('badType');
+    }
+
+    /**
+     * @expectedException \Exception
+     */
+    public function testCheckForFileException()
+    {
+        Config::checkForFile(__FILE__);
+    }
+
+    /**
      *
      */
     protected function tearDown()
