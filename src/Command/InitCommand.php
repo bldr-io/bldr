@@ -11,18 +11,14 @@
 
 namespace Bldr\Command;
 
-use Bldr\Application;
 use Bldr\Config;
 use Bldr\Helper\DialogHelper;
-use Composer\Json\JsonFile;
-use Seld\JsonLint\JsonParser;
 use Symfony\Component\Console\Helper\FormatterHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\ExecutableFinder;
 use Symfony\Component\Process\Process;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
