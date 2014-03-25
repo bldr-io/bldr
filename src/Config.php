@@ -45,16 +45,17 @@ class Config extends ParameterBag
         list($file, $type) = static::getFile();
         static::isTypeAllowed($type);
 
-        switch ($type) {
-            case 'yml':
-                $data = file_get_contents($file);
+        // Yaml
+        if ($type === 'yml') {
+            $data = file_get_contents($file);
 
-                return new static(Yaml::parse($data));
-            case 'json':
-                $json = new JsonFile($file);
-
-                return new static($json->read());
+            return new static(Yaml::parse($data));
         }
+
+        // Json
+        $json = new JsonFile($file);
+
+        return new static($json->read());
     }
 
     /**
@@ -114,18 +115,19 @@ class Config extends ParameterBag
 
         static::checkForFile($file, $delete);
 
-        switch ($type) {
-            case 'yml':
-                $yaml = Yaml::dump($data, 8);
-                file_put_contents($file, $yaml);
+        // Yaml
+        if ($type === 'yml') {
+            $yaml = Yaml::dump($data, 8);
+            file_put_contents($file, $yaml);
 
-                return new static($data);
-            case 'json':
-                $json = new JsonFile($file);
-                $json->write($data);
-
-                return new static($json->read());
+            return new static($data);
         }
+
+        // Json
+        $json = new JsonFile($file);
+        $json->write($data);
+
+        return new static($json->read());
     }
 
     /**

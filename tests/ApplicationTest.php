@@ -61,9 +61,9 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $app->setBuildName();
         $this->assertEquals('travis_test', $app::$BUILD_NAME);
         putenv('TRAVIS=false');
-        $date = date('Y-m-d_h-i-s');
+        $date = date('Y-m-d_H-i-s');
         $app->setBuildName();
-        $app->setBuildName('local_test-app_'.$date);
+        $this->assertEquals('local_test-app_'.$date, $app::$BUILD_NAME);
 
         putenv("TRAVIS={$travis}");
         putenv("TRAVIS_JOB_NUMBER={$travisJobNumber}");
