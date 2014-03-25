@@ -55,6 +55,15 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException \Exception
+     */
+    public function testGetFileException()
+    {
+        Config::$NAME = '.badTest';
+        Config::getFile();
+    }
+
+    /**
      *
      */
     protected function tearDown()

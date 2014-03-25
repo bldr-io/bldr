@@ -62,7 +62,7 @@ class Config extends ParameterBag
      * @return string
      * @throws \Exception
      */
-    private static function getFile()
+    public static function getFile()
     {
         $tried = [];
         foreach (array_keys(static::$TYPES) as $type) {
