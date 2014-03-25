@@ -70,10 +70,6 @@ EOF
 
         if ([] === $tasks = $input->getOption('tasks')) {
             $tasks = $this->getTasks($output, $input->getOption('profile'), $config);
-        } else {
-            if (sizeof($tasks) === 1 && strpos($tasks[0], ',') !== false) {
-                $tasks = explode(',', $tasks[0]);
-            }
         }
         $this->runTasks($input, $output, $tasks);
 
