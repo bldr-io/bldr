@@ -11,12 +11,9 @@
 
 namespace Bldr\Call;
 
+use Bldr\Command\BuildCommand;
 use Bldr\Model\Call;
 use Bldr\Model\Task;
-use Symfony\Component\Console\Helper\HelperSet;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
 /**
  * Class AbstractCall
@@ -26,58 +23,36 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 abstract class AbstractCall implements CallInterface
 {
     /**
-     * @var InputInterface $input
+     * @var BuildCommand $command
      */
-    protected $input;
-
-    /**
-     * @var OutputInterface $output
-     */
-    protected $output;
-
-    /**
-     * @var HelperSet $helperSet
-     */
-    protected $helperSet;
-
-    /**
-     * @var ParameterBag $config
-     */
-    protected $config;
-
+    private $command;
+    
     /**
      * @var Task $task
      */
-    protected $task;
+    private $task;
 
     /**
      * @var Call $call
      */
-    protected $call;
+    private $call;
 
     /**
      * @var Boolean $failOnError
      */
-    protected $failOnError;
+    private $failOnError;
 
     /**
      * @var integer[] $successStatusCodes
      */
-    protected $successStatusCodes;
+    private $successStatusCodes;
 
     /**
      * {@inheritDoc}
      */
-    public function initialize(
-        InputInterface $input,
-        OutputInterface $output,
-        HelperSet $helperSet,
-        ParameterBag $config
-    ) {
-        $this->input              = $input;
-        $this->output             = $output;
-        $this->helperSet          = $helperSet;
-        $this->config             = $config;
+    public function initialize(BuildCommand $command)
+    {
+        $this->command            = $command;
         $this->task               = null;
         $this->call               = null;
         $this->failOnError        = false;
@@ -104,5 +79,66 @@ abstract class AbstractCall implements CallInterface
         $this->call = $call;
 
         return $this;
+    }
+
+    /**
+     * @return Call
+     */
+    public function getCall()
+    {
+        return $this->call;
+    }
+
+    /**
+     * @return Boolean
+     */
+    public function getFailOnError()
+    {
+        return $this->failOnError;
+    }
+
+    /**
+     * @return integer[]
+     */
+    public function getSuccessStatusCodes()
+    {
+        return $this->successStatusCodes;
+    }
+
+    /**
+     * @return Task
+     */
+    public function getTask()
+    {
+        return $this->task;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCommand()
+    {
+        return $this->command;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getInput()
+    {
+        return $this->command->getInput();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getOutput()
+    {
+        return $this->command->getOutput();
+    }
+
+    public function getHelperSet()
+    {
+        return $this->command->getHelperSet();
     }
 }

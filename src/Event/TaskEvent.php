@@ -11,64 +11,28 @@
 
 namespace Bldr\Event;
 
-use Bldr\Application;
+use Bldr\Command\BuildCommand;
 use Bldr\Model\Task;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\EventDispatcher\Event;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
  */
-class TaskEvent extends Event implements EventInterface
+class TaskEvent extends AbstractEvent
 {
-    /**
-     * @var Application $application
-     */
-    private $application;
-
-    /**
-     * @var InputInterface $input
-     */
-    private $input;
-
     /**
      * @var Task $task
      */
     private $task;
 
     /**
-     * @var Boolean $running
+     * @param BuildCommand $command
+     * @param Task         $task
+     * @param Boolean      $running
      */
-    private $running;
-
-    /**
-     * @param Application    $application
-     * @param InputInterface $input
-     * @param Task           $task
-     * @param Boolean        $running
-     */
-    public function __construct(Application $application, InputInterface $input, Task $task, $running = true)
+    public function __construct(BuildCommand $command, Task $task, $running = true)
     {
-        $this->application = $application;
-        $this->input       = $input;
-        $this->task        = $task;
-        $this->running     = $running;
-    }
-
-    /**
-     * @return Application
-     */
-    public function getApplication()
-    {
-        return $this->application;
-    }
-
-    /**
-     * @return InputInterface
-     */
-    public function getInput()
-    {
-        return $this->input;
+        parent::__construct($command, $running);
+        $this->task = $task;
     }
 
     /**
@@ -85,13 +49,5 @@ class TaskEvent extends Event implements EventInterface
     public function setTask(Task $task)
     {
         $this->task = $task;
-    }
-
-    /**
-     * @return Boolean
-     */
-    public function isRunning()
-    {
-        return $this->running;
     }
 }

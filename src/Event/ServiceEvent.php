@@ -11,25 +11,25 @@
 
 namespace Bldr\Event;
 
-use Bldr\Application;
 use Bldr\Call\CallInterface;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\EventDispatcher\Event;
+use Bldr\Command\BuildCommand;
+use Bldr\Model\Call;
+use Bldr\Model\Task;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
  */
-class ServiceEvent extends Event implements EventInterface
+class ServiceEvent extends AbstractEvent
 {
     /**
-     * @var Application $application
+     * @var Task $task
      */
-    private $application;
+    private $task;
 
     /**
-     * @var InputInterface $input
+     * @var Call $call
      */
-    private $input;
+    private $call;
 
     /**
      * @var CallInterface $service
@@ -37,42 +37,34 @@ class ServiceEvent extends Event implements EventInterface
     private $service;
 
     /**
-     * @var Boolean $running
+     * @param BuildCommand  $command
+     * @param Task          $task
+     * @param Call          $call
+     * @param CallInterface $service
+     * @param Boolean       $running
      */
-    private $running;
-
-    /**
-     * @param Application    $application
-     * @param InputInterface $input
-     * @param CallInterface  $service
-     * @param Boolean        $running
-     */
-    public function __construct(
-        Application $application,
-        InputInterface $input,
-        CallInterface $service,
-        $running = true
-    ) {
-        $this->application = $application;
-        $this->input       = $input;
-        $this->service     = $service;
-        $this->running     = $running;
+    public function __construct(BuildCommand $command, Task $task, Call $call, CallInterface $service, $running = true)
+    {
+        parent::__construct($command, $running);
+        $this->task    = $task;
+        $this->call    = $call;
+        $this->service = $service;
     }
 
     /**
-     * @return Application
+     * @return Task
      */
-    public function getApplication()
+    public function getTask()
     {
-        return $this->application;
+        return $this->task;
     }
 
     /**
-     * @return InputInterface
+     * @return Call
      */
-    public function getInput()
+    public function getCall()
     {
-        return $this->input;
+        return $this->call;
     }
 
     /**
@@ -81,13 +73,5 @@ class ServiceEvent extends Event implements EventInterface
     public function getService()
     {
         return $this->service;
-    }
-
-    /**
-     * @return Boolean
-     */
-    public function isRunning()
-    {
-        return $this->running;
     }
 }

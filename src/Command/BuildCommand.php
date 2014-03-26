@@ -30,6 +30,11 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 class BuildCommand extends AbstractCommand
 {
     /**
+     * @var Task[] $tasks
+     */
+    private $tasks;
+
+    /**
      * {@inheritDoc}
      */
     protected function configure()
@@ -62,83 +67,106 @@ EOF
     }
 
     /**
+     * @return Config
+     */
+    public function getConfig()
+    {
+        return $this->getApplication()
+            ->getConfig();
+    }
+
+    /**
      * {@inheritDoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->getApplication()
+        $this->setInput($input)
+            ->setOutput($output)
+            ->getApplication()
             ->setBuildName();
 
-        $output->writeln(["\n", Application::$logo, "\n"]);
-        $config = $this->getApplication()
-            ->getConfig();
-        $this->addEvent(Event::START, new Events\BuildEvent($this->getApplication(), $input, true));
+        $this->output->writeln(["\n", Application::$logo, "\n"]);
+        $this->addEvent(Event::START, new Events\BuildEvent($this, true));
 
-        if ([] === $tasks = $input->getOption('tasks')) {
-            $tasks = $this->getTasks($output, $input->getOption('profile'), $config);
-        }
+        $this->doExecute($this->input->getOption('profile'), $this->input->getOption('tasks'));
 
-        $this->addEvent(Event::PRE_PROFILE, new Events\ProfileEvent($this->getApplication(), $input, $tasks, true));
-        $this->runTasks($input, $output, $tasks);
-        $this->addEvent(Event::POST_PROFILE, new Events\ProfileEvent($this->getApplication(), $input, $tasks, false));
+        $this->succeedBuild();
 
-        $this->succeedBuild($output);
-
-        $this->addEvent(Event::START, new Events\BuildEvent($this->getApplication(), $input, false));
+        $this->addEvent(Event::START, new Events\BuildEvent($this, false));
 
         return 0;
     }
 
-    /**
-     * @param OutputInterface $output
-     * @param string          $profileName
-     * @param ParameterBag    $config
-     *
-     * @return mixed
-     */
-    private function getTasks(OutputInterface $output, $profileName, ParameterBag $config)
+    public function doExecute($profileName = null, array $tasks = [])
     {
+        if ([] === $tasks) {
+            $config = $this->getConfig();
+
+            $profile = $config->get('profiles')[$profileName];
+
+            $projectFormat = [
+                sprintf("Building the '%s' project", $config->get('name'))
+            ];
+            if ($config->has('description')) {
+                $projectFormat[] = sprintf(" - %s - ", $config->get('description'));
+            }
+
+            $profileFormat = [
+                sprintf("Using the '%s' profile", $profileName)
+            ];
+            if (isset($profile['description'])) {
+                $profileFormat[] = sprintf(" - %s - ", $profile['description']);
+            }
+
+            $this->output->writeln(
+                [
+                    "",
+                    $this->formatBlock($projectFormat, 'blue', 'black'),
+                    "",
+                    $this->formatBlock($profileFormat, 'blue', 'black'),
+                    ""
+                ]
+            );
+
+            $this->tasks = $this->fetchTasks($profileName);
+            $this->addEvent(Event::PRE_PROFILE, new Events\ProfileEvent($this, true));
+        } else {
+
+            $this->tasks = $this->buildTasks($tasks);
+        }
+
+        $this->runTasks();
+
+        if ([] === $tasks) {
+            $this->addEvent(Event::POST_PROFILE, new Events\ProfileEvent($this, false));
+        }
+    }
+
+    /**
+     * @param string       $profileName
+     *
+     * @return Task[]
+     */
+    public function fetchTasks($profileName)
+    {
+        $config = $this->getConfig();
+
         $profile = $config->get('profiles')[$profileName];
-        $tasks   = $this->buildTasks($config, $profile['tasks']);
-
-        $projectFormat = [
-            sprintf("Building the '%s' project", $config->get('name'))
-        ];
-        if ($config->has('description')) {
-            $projectFormat[] = sprintf(" - %s - ", $config->get('description'));
-        }
-
-        $profileFormat = [
-            sprintf("Using the '%s' profile", $profileName)
-        ];
-        if (isset($profile['description'])) {
-            $profileFormat[] = sprintf(" - %s - ", $profile['description']);
-        }
-
-        $output->writeln(
-            [
-                "",
-                $this->formatBlock($projectFormat, 'blue', 'black'),
-                "",
-                $this->formatBlock($profileFormat, 'blue', 'black'),
-                ""
-            ]
-        );
+        $tasks   = $this->buildTasks($profile['tasks']);
 
         return $tasks;
     }
 
     /**
-     * @param Config $config
-     * @param        $names
+     * @param string[] $names
      *
      * @return array
      */
-    private function buildTasks(Config $config, $names)
+    public function buildTasks($names)
     {
         $tasks = [];
         foreach ($names as $name) {
-            $taskInfo     = $config->get('tasks')[$name];
+            $taskInfo     = $this->getConfig()->get('tasks')[$name];
             $description  = isset($taskInfo['description']) ? $taskInfo['description'] : "";
             $task         = new Task($name, $description, $taskInfo['calls']);
             $tasks[$name] = $task;
@@ -163,69 +191,59 @@ EOF
     }
 
     /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     * @param Task[]          $tasks
+     *
      */
-    private function runTasks(InputInterface $input, OutputInterface $output, array $tasks)
+    public function runTasks()
     {
-        foreach ($tasks as $task) {
-            $this->runTask($input, $output, $task);
+        while (sizeof($this->tasks) > 0) {
+            $this->runTask(array_shift($this->tasks));
         }
     }
 
     /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     * @param Task            $task
+     * @param Task $task
      */
-    private function runTask(InputInterface $input, OutputInterface $output, Task $task)
+    public function runTask(Task $task)
     {
-        $output->writeln(
+        $this->output->writeln(
             [
                 "",
                 sprintf(
-                    "<info>Running the %s task</info>\n<comment>%s</comment>",
+                    "<info>Running the %s task</info><comment>%s</comment>",
                     $task->getName(),
-                    $task->getDescription() !== '' ? '> ' . $task->getDescription() : ''
+                    $task->getDescription() !== '' ? "\n> " . $task->getDescription() : ''
                 ),
                 ""
             ]
         );
 
-        $this->addEvent(Event::PRE_TASK, new Events\TaskEvent($this->getApplication(), $input, $task, true));
+        $this->addEvent(Event::PRE_TASK, new Events\TaskEvent($this, $task, true));
         foreach ($task->getCalls() as $call) {
-            $this->addEvent(Event::PRE_CALL, new Events\CallEvent($this->getApplication(), $input, $call, true));
-            $this->runCall($input, $output, $task, $call);
-            $this->addEvent(Event::POST_CALL, new Events\CallEvent($this->getApplication(), $input, $call, false));
+            $this->addEvent(Event::PRE_CALL, new Events\CallEvent($this, $task, $call, true));
+            $this->runCall($task, $call);
+            $this->addEvent(Event::POST_CALL, new Events\CallEvent($this, $task, $call, false));
         }
-        $this->addEvent(Event::POST_TASK, new Events\TaskEvent($this->getApplication(), $input, $task, false));
+        $this->addEvent(Event::POST_TASK, new Events\TaskEvent($this, $task, false));
 
-        $output->writeln("");
+        $this->output->writeln("");
     }
 
     /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     * @param Task            $task
-     * @param Call            $call
+     * @param Task $task
+     * @param Call $call
      */
-    private function runCall(InputInterface $input, OutputInterface $output, Task $task, Call $call)
+    private function runCall(Task $task, Call $call)
     {
-
-        $config = $this->getApplication()
-            ->getConfig();
-
         $service = $this->fetchServiceForCall($call->getType());
 
-        $service->initialize($input, $output, $this->getHelperSet(), $config);
+        $service->initialize($this);
         $service->setTask($task);
         $service->setCall($call);
 
-        $this->addEvent(Event::PRE_SERVICE, new Events\ServiceEvent($this->getApplication(), $input, $service, true));
+        $this->addEvent(Event::PRE_SERVICE, new Events\ServiceEvent($this, $task, $call, $service, true));
         $service->run($call->getArguments());
-        $this->addEvent(Event::POST_SERVICE, new Events\ServiceEvent($this->getApplication(), $input, $service, false));
-        $output->writeln("");
+        $this->addEvent(Event::POST_SERVICE, new Events\ServiceEvent($this, $task, $call, $service, false));
+        $this->output->writeln("");
     }
 
     /**
@@ -249,14 +267,36 @@ EOF
     }
 
     /**
-     * @param OutputInterface $output
-     *
      * @return Integer
      */
-    public function succeedBuild(OutputInterface $output)
+    public function succeedBuild()
     {
-        $output->writeln(["", $this->formatBlock('Build Success!', 'green', 'white'), ""]);
+        $this->output->writeln(["", $this->formatBlock('Build Success!', 'green', 'white'), ""]);
 
         return 0;
+    }
+
+    /**
+     * @return Task[]
+     */
+    public function getTasks()
+    {
+        return $this->tasks;
+    }
+
+    /**
+     * @param Task[] $tasks
+     */
+    public function setTasks($tasks)
+    {
+        $this->tasks = $tasks;
+    }
+
+    /**
+     * @param Task $task
+     */
+    public function addTask(Task $task)
+    {
+        $this->tasks[] = $task;
     }
 }

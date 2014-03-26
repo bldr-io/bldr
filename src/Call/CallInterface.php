@@ -11,12 +11,11 @@
 
 namespace Bldr\Call;
 
+use Bldr\Command\BuildCommand;
 use Bldr\Model\Call;
 use Bldr\Model\Task;
-use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
@@ -33,19 +32,11 @@ interface CallInterface
     public function run(array $arguments);
 
     /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     * @param HelperSet       $helperSet
-     * @param ParameterBag    $config
+     * @param BuildCommand $command
      *
      * @return CallInterface
      */
-    public function initialize(
-        InputInterface $input,
-        OutputInterface $output,
-        HelperSet $helperSet,
-        ParameterBag $config
-    );
+    public function initialize(BuildCommand $command);
 
     /**
      * @param Task $task
@@ -60,4 +51,19 @@ interface CallInterface
      * @return CallInterface
      */
     public function setCall(Call $call);
+
+    /**
+     * @return BuildCommand
+     */
+    public function getCommand();
+
+    /**
+     * @return InputInterface
+     */
+    public function getInput();
+
+    /**
+     * @return OutputInterface
+     */
+    public function getOutput();
 }

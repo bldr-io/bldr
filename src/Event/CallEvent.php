@@ -12,24 +12,20 @@
 namespace Bldr\Event;
 
 use Bldr\Application;
+use Bldr\Command\BuildCommand;
 use Bldr\Model\Call;
+use Bldr\Model\Task;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\EventDispatcher\Event;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
  */
-class CallEvent extends Event implements EventInterface
+class CallEvent extends AbstractEvent
 {
     /**
-     * @var Application $application
+     * @var Task $task
      */
-    private $application;
-
-    /**
-     * @var InputInterface $input
-     */
-    private $input;
+    private $task;
 
     /**
      * @var Call $call
@@ -37,38 +33,24 @@ class CallEvent extends Event implements EventInterface
     private $call;
 
     /**
-     * @var Boolean $running
+     * @param BuildCommand $command
+     * @param Task         $task
+     * @param Call         $call
+     * @param Boolean      $running
      */
-    private $running;
-
-    /**
-     * @param Application    $application
-     * @param InputInterface $input
-     * @param Call           $call
-     * @param Boolean        $running
-     */
-    public function __construct(Application $application, InputInterface $input, Call $call, $running = true)
+    public function __construct(BuildCommand $command, Task $task, Call $call, $running = true)
     {
-        $this->application = $application;
-        $this->input       = $input;
-        $this->call        = $call;
-        $this->running     = $running;
+        parent::__construct($command, $running);
+        $this->task = $task;
+        $this->call = $call;
     }
 
     /**
-     * @return Application
+     * @return Task
      */
-    public function getApplication()
+    public function getTask()
     {
-        return $this->application;
-    }
-
-    /**
-     * @return InputInterface
-     */
-    public function getInput()
-    {
-        return $this->input;
+        return $this->task;
     }
 
     /**
@@ -85,13 +67,5 @@ class CallEvent extends Event implements EventInterface
     public function setCall(Call $call)
     {
         $this->call = $call;
-    }
-
-    /**
-     * @return Boolean
-     */
-    public function isRunning()
-    {
-        return $this->running;
     }
 }

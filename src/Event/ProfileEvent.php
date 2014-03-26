@@ -11,72 +11,20 @@
 
 namespace Bldr\Event;
 
-use Bldr\Application;
+use Bldr\Command\BuildCommand;
 use Bldr\Model\Task;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\EventDispatcher\Event;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
  */
-class ProfileEvent extends Event implements EventInterface
+class ProfileEvent extends AbstractEvent
 {
-    /**
-     * @var Application $application
-     */
-    private $application;
-
-    /**
-     * @var InputInterface $input
-     */
-    private $input;
-
-    /**
-     * @var Task[] $tasks
-     */
-    private $tasks;
-
-    /**
-     * @var Boolean $running
-     */
-    private $running;
-
-    /**
-     * @param Application    $application
-     * @param InputInterface $input
-     * @param Task[]         $tasks
-     * @param Boolean        $running
-     */
-    public function __construct(Application $application, InputInterface $input, array $tasks, $running = true)
-    {
-        $this->application = $application;
-        $this->input       = $input;
-        $this->tasks       = $tasks;
-        $this->running     = $running;
-    }
-
-    /**
-     * @return Application
-     */
-    public function getApplication()
-    {
-        return $this->application;
-    }
-
-    /**
-     * @return InputInterface
-     */
-    public function getInput()
-    {
-        return $this->input;
-    }
-
     /**
      * @return Task[]
      */
     public function getTasks()
     {
-        return $this->tasks;
+        return $this->command->getTasks();
     }
 
     /**
@@ -84,14 +32,14 @@ class ProfileEvent extends Event implements EventInterface
      */
     public function setTasks($tasks)
     {
-        $this->tasks = $tasks;
+        $this->command->setTasks($tasks);
     }
 
     /**
-     * @return Boolean
+     * @param Task $task
      */
-    public function isRunning()
+    public function addTask(Task $task)
     {
-        return $this->running;
+        $this->command->addTask($task);
     }
 }

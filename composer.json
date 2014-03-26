@@ -1,7 +1,7 @@
 {
-    "name":              "bldr-io/bldr",
-    "description":       "Simple Build System / Task Runner",
-    "require":           {
+    "name":         "bldr-io/bldr",
+    "description":  "Simple Build System / Task Runner",
+    "require":      {
         "symfony/console":              "~2.4",
         "symfony/config":               "~2.4",
         "symfony/dependency-injection": "~2.4",
@@ -12,37 +12,38 @@
         "bldr-io/bldr-execute":         ">=1.2.1,<2.0.0",
         "bldr-io/bldr-filesystem":      ">=1.1.0,<2.0.0",
         "bldr-io/bldr-git":             ">=1.0.3,<2.0.0",
+        "bldr-io/bldr-watch":           ">=1.0.0,<2.0.0",
         "zendframework/zend-json":      "2.3.*"
     },
-    "suggest":           {
+    "suggest":      {
         "bldr-io/bldr-symfony": "Allows for shorter syntax with symfony commands"
     },
-    "require-dev":       {
+    "require-dev":  {
         "phpunit/phpunit":           "4.0.*",
         "squizlabs/php_codesniffer": "~1.0",
         "mockery/mockery":           "dev-master"
     },
-    "license":           "MIT",
-    "authors":           [
+    "license":      "MIT",
+    "authors":      [
         {
             "name":  "Aaron Scherer",
             "email": "aequasi@gmail.com"
         }
     ],
-    "autoload":          {
+    "autoload":     {
         "psr-4": {
             "Bldr\\": "src/"
         }
     },
-    "autoload-dev":      {
+    "autoload-dev": {
         "psr-4": {
             "Bldr\\Test\\": "tests/"
         }
     },
-    "config":            {
+    "config":       {
         "bin-dir": "bin"
     },
-    "bin":               [
+    "bin":          [
         "bin/bldr"
     ]
 }
