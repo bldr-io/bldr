@@ -25,11 +25,9 @@ interface CallInterface
     /**
      * Runs the command
      *
-     * @param array $arguments
-     *
      * @return mixed
      */
-    public function run(array $arguments);
+    public function run();
 
     /**
      * @param BuildCommand $command

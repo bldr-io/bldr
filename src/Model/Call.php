@@ -32,13 +32,11 @@ class Call
     private $data;
 
     /**
-     * @param string   $type
-     * @param string[] $arguments
+     * @param string $type
      */
-    public function __construct($type, array $arguments = [])
+    public function __construct($type)
     {
-        $this->type      = $type;
-        $this->arguments = $arguments;
+        $this->type = $type;
     }
 
     /**
@@ -47,14 +45,6 @@ class Call
     public function getType()
     {
         return $this->type;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getArguments()
-    {
-        return $this->arguments;
     }
 
     /**

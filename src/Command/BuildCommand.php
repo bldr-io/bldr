@@ -241,7 +241,7 @@ EOF
         $service->setCall($call);
 
         $this->addEvent(Event::PRE_SERVICE, new Events\ServiceEvent($this, $task, $call, $service, true));
-        $service->run($call->getArguments());
+        $service->run();
         $this->addEvent(Event::POST_SERVICE, new Events\ServiceEvent($this, $task, $call, $service, false));
         $this->output->writeln("");
     }
