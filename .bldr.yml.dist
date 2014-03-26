@@ -1,0 +1,130 @@
+name: bldr-io/bldr
+description: 'Build System with YAML in mind'
+
+profiles:
+    default:
+        description: 'Development Profile'
+        tasks:
+            - prepare
+            - lint
+            - phpcs
+            - test
+            - artifacts
+
+tasks:
+    prepare:
+        description: 'Cleans up old builds and prepares the new one'
+        calls:
+            -
+                type: filesystem:remove
+                failOnError: true
+                arguments: [build/coverage, build/logs]
+            -
+                type: filesystem:mkdir
+                failOnError: true
+                arguments: [build/coverage, build/logs]
+            -
+                type: filesystem:touch
+                failOnError: true
+                arguments: [build/coverage/index.html]
+            -
+                type: exec
+                failOnError: true
+                arguments: [composer, install, --prefer-dist]
+    lint:
+        describe: 'Lints the files of the project'
+        calls:
+            -
+                type: apply
+                failOnError: true
+                fileset: src/**/*.php
+                arguments: [php, -l]
+
+    phpcs:
+        description: 'Runs the PHP Code Sniffer'
+        calls:
+            -
+                type: exec
+                arguments:
+                    - php
+                    - bin/phpcs
+                    - --standard=phpcs.xml
+                    - --report=summary
+                    - src/
+            -
+                type: exec
+                output: /dev/null
+                append: false
+                arguments:
+                    - php
+                    - bin/phpcs
+                    - --standard=phpcs.xml
+                    - --report=checkstyle
+                    - --report-file=build/logs/checkstyle.xml
+                    - src/
+    test:
+        description: 'Runs the PHPUnit Tests'
+        calls:
+            -
+                type: exec
+                failOnError: true
+                arguments:
+                    - php
+                    - bin/phpunit
+                    - --coverage-text=php://stdout
+    artifacts:
+        description: 'Deploy artifacts to git repository'
+        calls:
+            -
+                type: git:init
+                cwd: build
+            -
+                type: git:remote:remove
+                cwd: build
+                arguments: [artifacts]
+            -
+                type: git:remote:add
+                cwd: build
+                arguments:
+                    - artifacts
+                    - https://aequasi:1f88fa5ac84a017063aaf7dae415071cdd2bd2a8@github.com/bldr-io/artifacts.git
+            -
+                type: git:checkout
+                cwd: build
+                branch: $BUILD_NAME$
+            -
+                type: exec
+                output: build/README.md
+                arguments:
+                    - echo
+                    - "[Coverage History](https://rawgithub.com/bldr-io/artifacts/$BUILD_NAME$/coverage/index.html)"
+            -
+                type: git:add
+                cwd: build
+                arguments:
+                    - "."
+            -
+                type: git:config
+                cwd: build
+                arguments:
+                    - user.name
+                    - Travis CI
+            -
+                type: git:config
+                cwd: build
+                arguments:
+                    - user.email
+                    - travis@travis-ci.org
+            -
+                type: git:commit
+                cwd: build
+                message: 'Build Artifacts'
+            -
+                type: git:push
+                cwd: build
+                force: true
+                remote: artifacts
+                branch: $BUILD_NAME$
+
+extensions:
+    Bldr\Extension\Git\DependencyInjection\GitExtension: ~

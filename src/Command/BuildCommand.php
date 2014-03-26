@@ -13,55 +13,49 @@ namespace Bldr\Command;
 
 use Bldr\Application;
 use Bldr\Call\CallInterface;
-use Bldr\Helper\DialogHelper;
-use Symfony\Component\Console\Command\Command;
+use Bldr\Config;
+use Bldr\Event;
+use Bldr\Event as Events;
+use Bldr\Model\Call;
+use Bldr\Model\Task;
 use Symfony\Component\Console\Helper\FormatterHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
  */
-class BuildCommand extends Command implements ContainerAwareInterface
+class BuildCommand extends AbstractCommand
 {
-    /**
-     * @var ContainerInterface|ContainerBuilder $container
-     */
-    private $container;
-
-    /**
-     * Sets the Container.
-     *
-     * @param ContainerInterface|null $container A ContainerInterface instance or null
-     *
-     * @api
-     */
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
-    }
-
     /**
      * {@inheritDoc}
      */
     protected function configure()
     {
         $this->setName('build')
-            ->setDescription("Builds the project for the directory you are in. Must contain a .bldr.yml file.")
+            ->setDescription("Builds the project for the directory you are in. Must contain a config file.")
             ->addOption('profile', 'p', InputOption::VALUE_REQUIRED, 'Profile to run', 'default')
+            ->addOption('tasks', 't', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Tasks to run')
             ->setHelp(
                 <<<EOF
 
-The <info>%command.name%</info> builds the current project, using the .bldr.yml file in the root directory.
+The <info>%command.name%</info> builds the current project, using the config file in the root directory.
 
 To use:
 
     <info>$ bldr %command.full_name% </info>
+
+To specify a profile:
+
+    <info>$ bldr %command.full_name% profile_name</info>
+
+To specify tasks to run:
+
+    <info>$ bldr %command.full_name% --tasks=task_name</info>
+    <info>$ bldr %command.full_name% --tasks=task_name -t second_task</info>
+    <info>$ bldr %command.full_name% --tasks=task_name,second_task</info>
 
 EOF
             );
@@ -72,56 +66,106 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->getApplication()
+            ->setBuildName();
+
         $output->writeln(["\n", Application::$logo, "\n"]);
-
-        /** @var ParameterBag $config */
-        $config      = $this->getApplication()
+        $config = $this->getApplication()
             ->getConfig();
-        $profileName = $input->getOption('profile');
-        $profile     = $config->get('profiles')[$profileName];
+        $this->addEvent(Event::START, new Events\BuildEvent($this->getApplication(), $input, true));
 
-        /** @var DialogHelper $dialog */
-        $dialog = $this->getHelper('dialog');
-        /** @var FormatterHelper $formatter */
-        $formatter = $this->getHelper('formatter');
+        if ([] === $tasks = $input->getOption('tasks')) {
+            $tasks = $this->getTasks($output, $input->getOption('profile'), $config);
+        }
+
+        $this->addEvent(Event::PRE_PROFILE, new Events\ProfileEvent($this->getApplication(), $input, $tasks, true));
+        $this->runTasks($input, $output, $tasks);
+        $this->addEvent(Event::POST_PROFILE, new Events\ProfileEvent($this->getApplication(), $input, $tasks, false));
+
+        $this->succeedBuild($output);
+
+        $this->addEvent(Event::START, new Events\BuildEvent($this->getApplication(), $input, false));
+
+        return 0;
+    }
+
+    /**
+     * @param OutputInterface $output
+     * @param string          $profileName
+     * @param ParameterBag    $config
+     *
+     * @return mixed
+     */
+    private function getTasks(OutputInterface $output, $profileName, ParameterBag $config)
+    {
+        $profile = $config->get('profiles')[$profileName];
+        $tasks   = $this->buildTasks($config, $profile['tasks']);
+
+        $projectFormat = [
+            sprintf("Building the '%s' project", $config->get('name'))
+        ];
+        if ($config->has('description')) {
+            $projectFormat[] = sprintf(" - %s - ", $config->get('description'));
+        }
+
+        $profileFormat = [
+            sprintf("Using the '%s' profile", $profileName)
+        ];
+        if (isset($profile['description'])) {
+            $profileFormat[] = sprintf(" - %s - ", $profile['description']);
+        }
 
         $output->writeln(
             [
                 "",
-                $formatter->formatBlock(
-                    [
-                        sprintf("Building the '%s' project", $config->get('name')),
-                        sprintf(" - %s - ", $config->get('description'))
-                    ],
-                    'bg=blue;fg=white',
-                    true
-                ),
+                $this->formatBlock($projectFormat, 'blue', 'black'),
                 "",
-                $formatter->formatBlock(
-                    [
-                        sprintf("Using the '%s' profile", $profileName),
-                        sprintf(" - %s - ", $profile['description'])
-                    ],
-                    'bg=green;fg=white',
-                    true
-                ),
+                $this->formatBlock($profileFormat, 'blue', 'black'),
                 ""
             ]
         );
 
-        try {
-            $this->runTasks($input, $output, $profile['tasks']);
-        } catch (\Exception $e) {
-            return $this->failBuild($input, $output, $e);
+        return $tasks;
+    }
+
+    /**
+     * @param Config $config
+     * @param        $names
+     *
+     * @return array
+     */
+    private function buildTasks(Config $config, $names)
+    {
+        $tasks = [];
+        foreach ($names as $name) {
+            $taskInfo     = $config->get('tasks')[$name];
+            $description  = isset($taskInfo['description']) ? $taskInfo['description'] : "";
+            $task         = new Task($name, $description, $taskInfo['calls']);
+            $tasks[$name] = $task;
         }
 
-        return $this->succeedBuild($input, $output);
+        return $tasks;
+    }
+
+    /**
+     * @param string|array $output
+     * @param string       $background
+     * @param string       $foreground
+     *
+     * @return string
+     */
+    private function formatBlock($output, $background, $foreground)
+    {
+        /** @var FormatterHelper $formatter */
+        $formatter = $this->getHelper('formatter');
+
+        return $formatter->formatBlock($output, "bg={$background};fg={$foreground}");
     }
 
     /**
      * @param InputInterface  $input
      * @param OutputInterface $output
-     * @param array           $tasks
+     * @param Task[]          $tasks
      */
     private function runTasks(InputInterface $input, OutputInterface $output, array $tasks)
     {
@@ -133,116 +177,86 @@ EOF
     /**
      * @param InputInterface  $input
      * @param OutputInterface $output
-     * @param string          $taskName
-     *
-     * @throws \Exception
+     * @param Task            $task
      */
-    private function runTask(InputInterface $input, OutputInterface $output, $taskName)
+    private function runTask(InputInterface $input, OutputInterface $output, Task $task)
     {
-        /** @var ParameterBag $config */
-        $config = $this->getApplication()
-            ->getConfig();
-        $task   = $config->get('tasks')[$taskName];
-
-        /** @var DialogHelper $dialog */
-        $dialog = $this->getHelper('dialog');
-        /** @var FormatterHelper $formatter */
-        $formatter = $this->getHelper('formatter');
-
         $output->writeln(
             [
                 "",
                 sprintf(
                     "<info>Running the %s task</info>\n<comment>%s</comment>",
-                    $taskName,
-                    isset($task['description']) ? '> ' . $task['description'] : ''
+                    $task->getName(),
+                    $task->getDescription() !== '' ? '> ' . $task->getDescription() : ''
                 ),
                 ""
             ]
         );
 
-        foreach ($task['calls'] as $call) {
-            $services = array_keys($this->container->findTaggedServiceIds($call['type']));
-            if (sizeof($services) > 1) {
-                throw new \Exception("Multiple calls exist with the 'exec' tag.");
-            }
-            if (sizeof($services) === 0) {
-                throw new \Exception("No task type found for {$call['type']}.");
-            }
-
-            /** @var CallInterface $service */
-            $service = $this->container->get($services[0]);
-            $service->initialize($input, $output, $this->getHelperSet(), $config);
-            $service->setTask($taskName, $task);
-            $service->setFailOnError(isset($call['failOnError']) ? $call['failOnError'] : false);
-            $service->setSuccessStatusCodes(isset($call['successCodes']) ? $call['successCodes'] : [0]);
-
-            if (method_exists($service, 'setFileset') && isset($call['fileset'])) {
-                $service->setFileset($call['fileset']);
-            }
-
-            $service->run($call['arguments']);
-            $output->writeln("");
+        $this->addEvent(Event::PRE_TASK, new Events\TaskEvent($this->getApplication(), $input, $task, true));
+        foreach ($task->getCalls() as $call) {
+            $this->addEvent(Event::PRE_CALL, new Events\CallEvent($this->getApplication(), $input, $call, true));
+            $this->runCall($input, $output, $task, $call);
+            $this->addEvent(Event::POST_CALL, new Events\CallEvent($this->getApplication(), $input, $call, false));
         }
+        $this->addEvent(Event::POST_TASK, new Events\TaskEvent($this->getApplication(), $input, $task, false));
+
         $output->writeln("");
     }
 
     /**
      * @param InputInterface  $input
      * @param OutputInterface $output
-     * @param \Exception      $exception
-     *
-     * @return Boolean
+     * @param Task            $task
+     * @param Call            $call
      */
-    private function failBuild(InputInterface $input, OutputInterface $output, \Exception $exception)
+    private function runCall(InputInterface $input, OutputInterface $output, Task $task, Call $call)
     {
-        /** @var FormatterHelper $formatter */
-        $formatter = $this->getHelper('formatter');
 
-        $output->writeln(
-            [
-                "",
-                $formatter->formatBlock(
-                    [
-                        "",
-                        sprintf(
-                            "Build failed in file %s on line %d",
-                            $exception->getFile(),
-                            $exception->getLine()
-                        ),
-                        $exception->getMessage(),
-                        ""
-                    ],
-                    'bg=red;fg=white'
-                ),
-                ""
-            ]
-        );
+        $config = $this->getApplication()
+            ->getConfig();
 
-        return false;
+        $service = $this->fetchServiceForCall($call->getType());
+
+        $service->initialize($input, $output, $this->getHelperSet(), $config);
+        $service->setTask($task);
+        $service->setCall($call);
+
+        $this->addEvent(Event::PRE_SERVICE, new Events\ServiceEvent($this->getApplication(), $input, $service, true));
+        $service->run($call->getArguments());
+        $this->addEvent(Event::POST_SERVICE, new Events\ServiceEvent($this->getApplication(), $input, $service, false));
+        $output->writeln("");
     }
 
-    public function succeedBuild(InputInterface $input, OutputInterface $output)
+    /**
+     * @param string $type
+     *
+     * @return CallInterface
+     * @throws \Exception
+     */
+    private function fetchServiceForCall($type)
     {
-        /** @var FormatterHelper $formatter */
-        $formatter = $this->getHelper('formatter');
+        $services = array_keys($this->container->findTaggedServiceIds($type));
 
-        $output->writeln(
-            [
-                "",
-                $formatter->formatBlock(
-                    [
-                        "",
-                        "Build Success!",
-                        ""
-                    ],
-                    'bg=green;fg=white'
-                ),
-                ""
-            ]
-        );
+        if (sizeof($services) > 1) {
+            throw new \Exception("Multiple calls exist with the 'exec' tag.");
+        }
+        if (sizeof($services) === 0) {
+            throw new \Exception("No task type found for {$type}.");
+        }
 
-        return true;
+        return $this->container->get($services[0]);
+    }
+
+    /**
+     * @param OutputInterface $output
+     *
+     * @return Integer
+     */
+    public function succeedBuild(OutputInterface $output)
+    {
+        $output->writeln(["", $this->formatBlock('Build Success!', 'green', 'white'), ""]);
+
+        return 0;
     }
 }
-

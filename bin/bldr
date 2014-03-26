@@ -10,9 +10,12 @@
  * with this source code in the file LICENSE.
  */
 
+if (__DIR__ !== getcwd()) {
+    $paths[] = getcwd() . '/vendor';
+}
+
 $paths[] = __DIR__.'/../vendor';
 $paths[] = __DIR__.'/../../..';
-$paths[] = getcwd().'/vendor';
 
 $autoloader = false;
 
@@ -20,12 +23,12 @@ foreach ($paths as $path) {
     $filePath = $path.'/autoload.php';
     if (file_exists($filePath)) {
         $autoloader = true;
-        require_once $filePath;
+        require $filePath;
     }
 }
 
 if (false === $autoloader) {
-        echo "Cannot find an autoupload.php file, have you executed composer install command?\n";
+        echo "Cannot find an autoload.php file, have you executed composer install command?\n";
         exit(1);
 }
     
