@@ -132,43 +132,21 @@ EOF;
     {
         $container  = new ContainerBuilder();
 
-        /** @var ExtensionInterface[] $extensions */
-        $extensions = [
-            new Extension\Execute\DependencyInjection\ExecuteExtension(),
-            new Extension\Filesystem\DependencyInjection\FilesystemExtension(),
-        ];
-
-        if (null !== $this->config && $this->config->has('extensions')) {
-            foreach ($this->config->get('extensions') as $extensionClass) {
-
-                if (!class_exists($extensionClass)) {
-                    throw new InvalidArgumentException(
-                        sprintf(
-                            "Attempted to load the %s extension. Couldn't find it.",
-                            $extensionClass
-                        )
-                    );
-                }
-
-                $extension = new $extensionClass();
-
-                if (!($extension instanceof ExtensionInterface)) {
-                    throw new InvalidArgumentException(
-                        sprintf(
-                            "Attempted to load the %s extension. Wasn't an instance of %s",
-                            $extensionClass,
-                            'Symfony\Component\DependencyInjection\Extension\ExtensionInterface'
-                        )
-                    );
-                }
-
-                $extensions[] = new $extension();
+        if (null !== $this->config) {
+            $extensions = $this->config->has('extensions') ? $this->config->get('extensions') : [];
+            if (!isset($extensions['Bldr\Extension\Execute\DependencyInjection\ExecuteExtension'])) {
+                $extensions['Bldr\Extension\Execute\DependencyInjection\ExecuteExtension'] = [];
             }
-        }
+            if (!isset($extensions['Bldr\Extension\Filesystem\DependencyInjection\FilesystemExtension'])) {
+                $extensions['Bldr\Extension\Filesystem\DependencyInjection\FilesystemExtension'] = [];
+            }
 
-        foreach ($extensions as $extension) {
-            $container->registerExtension($extension);
-            $container->loadFromExtension($extension->getAlias());
+            foreach ($extensions as $extensionClass => $config) {
+                /** @var ExtensionInterface $extension */
+                $extension = new $extensionClass;
+                $container->registerExtension($extension);
+                $container->loadFromExtension($extension->getAlias(), null === $config ? [] : $config);
+            }
         }
 
         $container->compile();
