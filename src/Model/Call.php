@@ -22,9 +22,19 @@ class Call
     private $type;
 
     /**
-     * @var array $data
+     * @var array $options
      */
-    private $data;
+    private $options;
+
+    /**
+     * @var Boolean $failOnError
+     */
+    private $failOnError = false;
+
+    /**
+     * @var integer[] $successCodes
+     */
+    private $successCodes = [0];
 
     /**
      * @param string $type
@@ -43,31 +53,58 @@ class Call
     }
 
     /**
-     * @param string $name
-     *
-     * @return mixed
+     * @return array
      */
-    public function __get($name)
+    public function getOptions()
     {
-        return $this->data[$name];
+        return $this->options;
     }
 
     /**
-     * @param string $name
-     * @param mixed  $value
+     * @param array $options
      */
-    public function __set($name, $value)
+    public function setOptions($options)
     {
-        $this->data[$name] = $value;
+        $this->options = $options;
     }
 
     /**
-     * @param string $name
-     *
-     * @return bool
+     * @return boolean
      */
-    public function has($name)
+    public function getFailOnError()
     {
-        return isset($this->data[$name]);
+        return $this->failOnError;
+    }
+
+    /**
+     * @param Boolean $failOnError
+     *
+     * @return Call
+     */
+    public function setFailOnError($failOnError)
+    {
+        $this->failOnError = $failOnError;
+
+        return $this;
+    }
+
+    /**
+     * @return integer[]
+     */
+    public function getSuccessCodes()
+    {
+        return $this->successCodes;
+    }
+
+    /**
+     * @param integer[] $successCodes
+     *
+     * @return Call
+     */
+    public function setSuccessCodes(array $successCodes)
+    {
+        $this->successCodes = $successCodes;
+
+        return $this;
     }
 }

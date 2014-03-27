@@ -19,42 +19,35 @@ use Symfony\Component\Console\Helper\FormatterHelper;
 class ApplyCall extends ExecuteCall
 {
     /**
-     * @var string $fileset
-     */
-    private $fileset;
-
-    /**
      * @var array $files
      */
     private $files;
 
+    public function configure()
+    {
+        parent::configure();
+        $this->setName('apply')
+            ->addOption('fileset', true, 'The fileset to run the executable on');
+    }
+
     /**
      * {@inheritDoc}
-     *
-     * Logic obtained from http://stackoverflow.com/a/6144213/248903
      */
     public function run()
     {
-        $arguments = $this->resolveProcessArgs();
-        
-        $this->setFileset($this->getCall()->fileset);
+        $this->setFileset($this->getOption('fileset'));
 
         /** @var FormatterHelper $formatter */
         $formatter = $this->getHelperSet()->get('formatter');
 
-        $this->getOutput()->writeln(
-            [
-                "",
-                $formatter->formatSection($this->getTask()->getName(), 'Starting'),
-                ""
-            ]
-        );
+        $this->getOutput()->writeln($formatter->formatSection($this->getTask()->getName(), 'Starting'));
 
+        $arguments = $this->getOption('arguments');
         foreach ($this->files as $file) {
-            $args   = $arguments;
+            $args = $arguments;
             $args[] = $file;
-
-            parent::run($args);
+            $this->setOption('arguments', $args);
+            parent::run();
         }
     }
 
@@ -63,7 +56,16 @@ class ApplyCall extends ExecuteCall
      */
     public function setFileset($fileset)
     {
-        $this->fileset = $fileset;
-        $this->files = glob($fileset);
+        $fileOption = $this->getOption('fileset');
+        if (is_array($fileOption)) {
+            $files = [];
+            foreach ($fileOption as $file) {
+                $files = array_merge($files, glob_recursive(getcwd() . '/' . $file));
+            }
+        } else {
+            $files = glob_recursive(getcwd() . '/' . $fileOption);
+        }
+
+        $this->files = $files;
     }
 }

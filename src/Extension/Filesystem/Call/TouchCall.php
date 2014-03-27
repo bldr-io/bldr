@@ -19,6 +19,16 @@ use Symfony\Component\Console\Helper\FormatterHelper;
 class TouchCall extends FilesystemCall
 {
     /**
+     * {@inheritDoc}
+     */
+    public function configure()
+    {
+        parent::configure();
+        $this->setName('touch')
+            ->setDescription('Touches all the files provided in `files`');
+    }
+
+    /**
      * Runs the command
      *
      * @throws \Exception

@@ -9,8 +9,19 @@ profiles:
             - lint
             - phpcs
             - test
+    watch:
+        description: "Watch Profile"
+        tasks:
+            - test
+            - watch
 
 tasks:
+    watch:
+        calls:
+            -
+                type: watch
+                files: [src/**.php, tests/**.php]
+                task: test
     prepare:
         description: 'Cleans up old builds and prepares the new one'
         calls:
@@ -31,13 +42,16 @@ tasks:
                 failOnError: true
                 executable: composer
                 arguments: [install, --prefer-dist]
+            -
+                type: notify
+                message: Prepare Task Finished
     lint:
         describe: 'Lints the files of the project'
         calls:
             -
                 type: apply
                 failOnError: true
-                fileset: src/**/*.php
+                fileset: [src/*.php, src/*/*.php]
                 executable: php
                 arguments: [-l]
 
@@ -50,7 +64,7 @@ tasks:
                 arguments:
                     - bin/phpcs
                     - --standard=phpcs.xml
-                    - --report=summary
+                    - --report=full
                     - src/
             -
                 type: exec
@@ -68,7 +82,7 @@ tasks:
         calls:
             -
                 type: exec
-                failOnError: true
+                failOnError: false
                 executable: php
                 arguments:
                     - bin/phpunit

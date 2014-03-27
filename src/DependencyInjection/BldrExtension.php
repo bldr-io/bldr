@@ -13,12 +13,11 @@ namespace Bldr\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\Extension\Extension;
 
 /**
  * @author Aaron Scherer <aaron@undergroundelephant.com>
  */
-class BldrExtension extends Extension
+class BldrExtension extends AbstractExtension
 {
     /**
      * Loads a specific configuration.
@@ -33,8 +32,18 @@ class BldrExtension extends Extension
     public function load(array $config, ContainerBuilder $container)
     {
         $container->setDefinition(
+            'bldr.dispatcher',
+            new Definition('Symfony\Component\EventDispatcher\EventDispatcher')
+        );
+
+        $container->setDefinition(
             'bldr.registry.task',
             new Definition('Bldr\Registry\TaskRegistry')
         );
+    }
+
+    public function getCompilerPasses()
+    {
+        return [new CompilerPass\BuilderCompilerPass];
     }
 }

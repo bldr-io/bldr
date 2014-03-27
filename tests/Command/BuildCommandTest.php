@@ -24,12 +24,49 @@ class BuildCommandTest extends \PHPUnit_Framework_TestCase
 {
     public function testExecute()
     {
-        $container = \Mockery::mock('Symfony\Component\DependencyInjection\ContainerBuilder');
+        $registry   = \Mockery::mock('Bldr\Registry\TaskRegistry');
+        $builder    = \Mockery::mock('Bldr\Service\Builder');
+        $dispatcher = \Mockery::mock('Symfony\Component\EventDispatcher\EventDispatcher');
+        $task       = \Mockery::mock('Bldr\Model\Task');
+        $container  = \Mockery::mock('Symfony\Component\DependencyInjection\ContainerBuilder');
+
+        $container->shouldReceive('get')
+            ->withArgs(['bldr.registry.task'])
+            ->andReturn($registry);
+
+        $container->shouldReceive('get')
+            ->withArgs(['bldr.builder'])
+            ->andReturn($builder);
+
+        $container->shouldReceive('get')
+            ->withArgs(['bldr.dispatcher'])
+            ->andReturn($dispatcher);
+
         $container->shouldReceive('findTaggedServiceIds')
             ->andReturn(['exec']);
         $container->shouldReceive('get')
             ->withArgs(['exec'])
             ->andReturn(new MockCall());
+
+        $builder->shouldReceive('initialize')
+            ->once()
+            ->andReturn(true);
+        $registry->shouldReceive('addTask')
+            ->once()
+            ->andReturn($registry);
+        $dispatcher->shouldReceive('dispatch')
+            ->twice()
+            ->andReturn(true);
+        $registry->shouldReceive('count')
+            ->twice()
+            ->andReturnValues([1, 0]);
+        $registry->shouldReceive('getNewTask')
+            ->once()
+            ->andReturn($task);
+        $builder->shouldReceive('runTask')
+            ->once()
+            ->andReturn(true);
+
 
         $application  = new Application();
         Config::$NAME = '.test';

@@ -9,28 +9,17 @@
  * with this source code in the file LICENSE
  */
 
-namespace Bldr\Test\Mock\Call;
+namespace Bldr\DependencyInjection;
 
-use Bldr\Call\AbstractCall;
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
  */
-class MockCall extends AbstractCall
+interface ExtensionInterface
 {
     /**
-     * Configures the Task
+     * @return CompilerPassInterface[]
      */
-    public function configure()
-    {
-        $this->setName('mock');
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function run()
-    {
-
-    }
+    public function getCompilerPasses();
 }

@@ -26,17 +26,27 @@ class NotifyCall extends AbstractCall
     /**
      * {@inheritDoc}
      */
+    public function configure()
+    {
+        $this->setName('notify')
+            ->setDescription('Sends a notification to the screen, or to an email')
+            ->addOption('message', true, 'Message to show/send')
+            ->addOption('email', false, 'Email to send to');
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function run()
     {
-        if (!$this->getCall()->has('message')) {
-            throw new \Exception("Notify must have a message.");
-        }
+        $message = $this->getOption('message');
 
-        $message = $this->getCall()->message;
-
-        $formatter = $this->getHelperSet()->get('formatter');
-        if (!$this->getCall()->has('email')) {
-            return $this->getOutput()->writeln($formatter->formatSection('notify', $message));
+        $formatter =
+            $this->getHelperSet()
+                ->get('formatter');
+        if (!$this->hasOption('email')) {
+            return $this->getOutput()
+                ->writeln($formatter->formatSection('notify', $message));
         }
 
         return $this->sendEmail($message);
@@ -47,14 +57,18 @@ class NotifyCall extends AbstractCall
      */
     private function sendEmail($content)
     {
-        $this->getOutput()->writeln("Sending an email");
+        $this->getOutput()
+            ->writeln("Sending an email");
         $transport = $this->getTransport();
         $mailer    = \Swift_Mailer::newInstance($transport);
 
         $message = \Swift_Message::newInstance('Bldr Notify - New Message')
             ->setFrom(['no-reply@bldr.io' => 'Bldr'])
-            ->setTo(strpos($this->getCall()->email, ',') !== false ? explode(',', $this->getCall()->email) : $this->getCall()->email)
-            ->setBody("<p>Bldr has a new message for you from the most recent build</p>\n<br /><pre>{$content}</pre>\n", "text/html")
+            ->setTo($this->getEmails())
+            ->setBody(
+                "<p>Bldr has a new message for you from the most recent build</p>\n<br /><pre>{$content}</pre>\n",
+                "text/html"
+            )
             ->addPart($content, 'text/plain');
 
         $result = $mailer->send($message);
@@ -63,7 +77,7 @@ class NotifyCall extends AbstractCall
     }
 
     /**
-     *
+     * @return mixed
      */
     private function getTransport()
     {
@@ -76,6 +90,21 @@ class NotifyCall extends AbstractCall
             ->setPassword($this->smtp['password']);
     }
 
+    /**
+     * @return array|int|string
+     */
+    private function getEmails()
+    {
+        if (strpos($this->getOption('email'), ',') !== false) {
+            return explode(',', $this->getOption('email'));
+        }
+
+        return $this->getOption('email');
+    }
+
+    /**
+     * @param array $smtp
+     */
     public function setSMTPInfo(array $smtp)
     {
         $this->smtp = $smtp;
