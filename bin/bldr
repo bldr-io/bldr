@@ -37,12 +37,14 @@ $paths[] = __DIR__ . '/../vendor';
 $paths[] = __DIR__ . '/../../..';
 
 $autoloader = false;
-
+$loaded = [];
 foreach ($paths as $path) {
     $filePath = $path . '/autoload.php';
-    if (file_exists($filePath)) {
+    $fileHash = sha1_file($filePath);
+    if (file_exists($filePath) && !in_array($fileHash, $loaded)) {
         $autoloader = true;
         require $filePath;
+        $loaded[] = $fileHash;
     }
 }
 
