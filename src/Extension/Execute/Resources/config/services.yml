@@ -1,0 +1,10 @@
+services:
+    bldr_execute.execute:
+        class: Bldr\Extension\Execute\Call\ExecuteCall
+        tags:
+          - { name: exec }
+
+    bldr_execute.apply:
+        class: Bldr\Extension\Execute\Call\ApplyCall
+        tags:
+          - { name: apply }
