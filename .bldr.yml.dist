@@ -12,6 +12,7 @@ profiles:
     watch:
         description: "Watch Profile"
         tasks:
+            - test
             - watch
 
 tasks:
@@ -19,8 +20,8 @@ tasks:
         calls:
             -
                 type: watch
-                files: [src/*.php, src/*/*.php]
-                profile: default
+                files: [src/**.php, tests/**.php]
+                task: test
     prepare:
         description: 'Cleans up old builds and prepares the new one'
         calls:
@@ -81,7 +82,7 @@ tasks:
         calls:
             -
                 type: exec
-                failOnError: true
+                failOnError: false
                 executable: php
                 arguments:
                     - bin/phpunit

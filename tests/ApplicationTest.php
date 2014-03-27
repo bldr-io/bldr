@@ -70,14 +70,6 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Changes the config name
-     */
-    private function changeConfig()
-    {
-        Config::$NAME = '.test';
-    }
-
-    /**
      */
     public function testSetConfig()
     {
@@ -171,6 +163,20 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     {
         $app    = new Application();
         $config = [
+            'profiles' => [
+                'test' => [
+                    'tasks' => [
+                        'test'
+                    ]
+                ]
+            ],
+            'tasks' => [
+                'test' => [
+                    'calls' => [
+
+                    ]
+                ]
+            ],
             'extensions' => [
                 'Bldr\Test\Mock\DependencyInjection\MockExtension' => null
             ]

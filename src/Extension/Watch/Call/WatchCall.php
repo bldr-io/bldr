@@ -71,8 +71,6 @@ class WatchCall extends AbstractCall
             $files = glob_recursive(getcwd() . '/' . $fileOption);
         }
 
-        var_dump($files);
-
         $this->watchForChanges($files);
     }
 
@@ -149,9 +147,11 @@ class WatchCall extends AbstractCall
     public function buildTasks($names)
     {
         foreach ($names as $name) {
-            $taskInfo    = $this->config['tasks'][$name];
-            $description = isset($taskInfo['description']) ? $taskInfo['description'] : "";
-            $task        = new Task($name, $description, $taskInfo['calls']);
+            $taskInfo                = $this->config['tasks'][$name];
+            $taskInfo['failOnError'] = false;
+            $description             = isset($taskInfo['description']) ? $taskInfo['description'] : "";
+
+            $task = new Task($name, $description, $taskInfo['calls']);
             $this->tasks->addTask($task);
         }
     }

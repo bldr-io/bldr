@@ -19,9 +19,17 @@ use Bldr\Call\AbstractCall;
 class MockCall extends AbstractCall
 {
     /**
+     * Configures the Task
+     */
+    public function configure()
+    {
+        $this->setName('mock');
+    }
+
+    /**
      * {@inheritDoc}
      */
-    public function run(array $arguments)
+    public function run()
     {
 
     }

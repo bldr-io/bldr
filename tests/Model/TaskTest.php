@@ -21,7 +21,7 @@ class TaskTest extends \PHPUnit_Framework_TestCase
 {
     public function testConstructor()
     {
-        $task = new Task('test', 'test-description', [['type' => 'test', 'arguments' => [], 'foo' => 'bar']]);
+        $task = new Task('test', 'test-description', [['type' => 'test', 'foo' => 'bar']]);
 
         $this->assertInstanceOf(
             'Bldr\Model\Task',
@@ -31,8 +31,9 @@ class TaskTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('test', $task->getName());
         $this->assertEquals('test-description', $task->getDescription());
 
-        $call = new Call('test', []);
-        $call->foo = 'bar';
+        $call = new Call('test');
+        $call->setOptions(['foo' => 'bar']);
+
         $this->assertEquals([$call], $task->getCalls());
     }
 }

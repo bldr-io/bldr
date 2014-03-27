@@ -37,7 +37,7 @@ abstract class AbstractCall implements CallInterface
     /**
      * @var array $options
      */
-    private $options;
+    private $options = [];
 
     /**
      * @var InputInterface $input

@@ -18,36 +18,13 @@ use Bldr\Model\Call;
  */
 class CallTest extends \PHPUnit_Framework_TestCase
 {
-
-    /**
-     * @return Call
-     */
-    public function testMagicSet()
+    public function testConstructor()
     {
-        $call       = new Call('test', []);
-        $call->test = 'foo';
+        $call = new Call('mock');
 
-        return $call;
-    }
-
-    /**
-     * @param Call $call
-     *
-     * @depends testMagicSet
-     */
-    public function testMagicGet(Call $call)
-    {
-        $this->assertEquals('foo', $call->test);
-    }
-
-    /**
-     * @param Call $call
-     *
-     * @depends testMagicSet
-     */
-    public function testHas(Call $call)
-    {
-        $this->assertTrue($call->has('test'));
-        $this->assertFalse($call->has('bad'));
+        $this->assertEquals('mock', $call->getType());
+        $this->assertEmpty($call->getOptions());
+        $this->assertFalse($call->getFailOnError());
+        $this->assertEquals([0], $call->getSuccessCodes());
     }
 }
