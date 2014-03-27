@@ -9,9 +9,10 @@
  * with this source code in the file LICENSE
  */
 
-namespace Bldr\Command;
+namespace Bldr\Command\Task;
 
 use Bldr\Call\CallInterface;
+use Bldr\Command\AbstractCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Helper\TableHelper;
@@ -19,7 +20,7 @@ use Symfony\Component\Console\Helper\TableHelper;
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
  */
-class TaskListCommand extends AbstractCommand
+class ListCommand extends AbstractCommand
 {
     /**
      * {@inheritDoc}
