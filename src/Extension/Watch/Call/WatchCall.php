@@ -71,6 +71,8 @@ class WatchCall extends AbstractCall
             $files = glob_recursive(getcwd() . '/' . $fileOption);
         }
 
+        var_dump($files);
+
         $this->watchForChanges($files);
     }
 

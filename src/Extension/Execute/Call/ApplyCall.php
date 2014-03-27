@@ -19,11 +19,6 @@ use Symfony\Component\Console\Helper\FormatterHelper;
 class ApplyCall extends ExecuteCall
 {
     /**
-     * @var string $fileset
-     */
-    private $fileset;
-
-    /**
      * @var array $files
      */
     private $files;
@@ -61,7 +56,16 @@ class ApplyCall extends ExecuteCall
      */
     public function setFileset($fileset)
     {
-        $this->fileset = $fileset;
-        $this->files = glob_recursive($fileset);
+        $fileOption = $this->getOption('fileset');
+        if (is_array($fileOption)) {
+            $files = [];
+            foreach ($fileOption as $file) {
+                $files = array_merge($files, glob_recursive(getcwd() . '/' . $file));
+            }
+        } else {
+            $files = glob_recursive(getcwd() . '/' . $fileOption);
+        }
+
+        $this->files = $files;
     }
 }

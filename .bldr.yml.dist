@@ -8,7 +8,7 @@ profiles:
             - prepare
             - lint
             - phpcs
-#            - test
+            - test
     watch:
         description: "Watch Profile"
         tasks:
@@ -19,7 +19,7 @@ tasks:
         calls:
             -
                 type: watch
-                files: [src/**/*.php]
+                files: [src/*.php, src/*/*.php]
                 profile: default
     prepare:
         description: 'Cleans up old builds and prepares the new one'
@@ -50,7 +50,7 @@ tasks:
             -
                 type: apply
                 failOnError: true
-                fileset: src/**/*.php
+                fileset: [src/*.php, src/*/*.php]
                 executable: php
                 arguments: [-l]
 

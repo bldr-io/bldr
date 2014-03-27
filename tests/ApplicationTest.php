@@ -70,21 +70,6 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests the Application::getDispatcher() method
-     *
-     * @param Application $application
-     *
-     * @depends testConstructor
-     */
-    public function testGetDispatcher(Application $application)
-    {
-        $this->assertInstanceOf(
-            'Symfony\Component\EventDispatcher\EventDispatcher',
-            $application->getDispatcher()
-        );
-    }
-
-    /**
      * Changes the config name
      */
     private function changeConfig()
