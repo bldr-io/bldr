@@ -35,6 +35,8 @@ class ApplyCall extends ExecuteCall
      */
     public function run()
     {
+        $arguments = $this->resolveProcessArgs();
+        
         $this->setFileset($this->getCall()->fileset);
 
         /** @var FormatterHelper $formatter */

@@ -9,7 +9,7 @@ profiles:
             - lint
             - phpcs
             - test
-            - artifacts
+#           - artifacts
 
 tasks:
     prepare:
@@ -18,19 +18,20 @@ tasks:
             -
                 type: filesystem:remove
                 failOnError: true
-                arguments: [build/coverage, build/logs]
+                files: [build/coverage, build/logs]
             -
                 type: filesystem:mkdir
                 failOnError: true
-                arguments: [build/coverage, build/logs]
+                files: [build/coverage, build/logs]
             -
                 type: filesystem:touch
                 failOnError: true
-                arguments: [build/coverage/index.html]
+                files: [build/coverage/index.html]
             -
                 type: exec
                 failOnError: true
-                arguments: [composer, install, --prefer-dist]
+                executable: composer
+                arguments: [install, --prefer-dist]
     lint:
         describe: 'Lints the files of the project'
         calls:
@@ -38,15 +39,16 @@ tasks:
                 type: apply
                 failOnError: true
                 fileset: src/**/*.php
-                arguments: [php, -l]
+                executable: php
+                arguments: [-l]
 
     phpcs:
         description: 'Runs the PHP Code Sniffer'
         calls:
             -
                 type: exec
+                executable: php
                 arguments:
-                    - php
                     - bin/phpcs
                     - --standard=phpcs.xml
                     - --report=summary
@@ -55,8 +57,8 @@ tasks:
                 type: exec
                 output: /dev/null
                 append: false
+                executable: php
                 arguments:
-                    - php
                     - bin/phpcs
                     - --standard=phpcs.xml
                     - --report=checkstyle
@@ -68,8 +70,8 @@ tasks:
             -
                 type: exec
                 failOnError: true
+                executable: php
                 arguments:
-                    - php
                     - bin/phpunit
                     - --coverage-text=php://stdout
     artifacts:
@@ -126,5 +128,5 @@ tasks:
                 remote: artifacts
                 branch: $BUILD_NAME$
 
-extensions:
-    Bldr\Extension\Git\DependencyInjection\GitExtension: ~
+extensions: ~
+#    Bldr\Extension\Git\DependencyInjection\GitExtension: ~
