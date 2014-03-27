@@ -11,29 +11,30 @@
 
 namespace Bldr\Extension\Execute\DependencyInjection;
 
+use Bldr\DependencyInjection\AbstractExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Extension\Extension;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
-use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Definition;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
  */
-class ExecuteExtension extends Extension
+class ExecuteExtension extends AbstractExtension
 {
     /**
-     * Loads a specific configuration.
-     *
-     * @param array            $config    An array of configuration values
-     * @param ContainerBuilder $container A ContainerBuilder instance
-     *
-     * @throws \InvalidArgumentException When provided tag is not defined in this extension
-     *
-     * @api
+     * {@inheritDoc}
      */
     public function load(array $config, ContainerBuilder $container)
     {
-        $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config/'));
-        $loader->load('services.yml');
+        $container->setDefinition(
+            'bldr_execute.execute',
+            new Definition('Bldr\Extension\Execute\Call\ExecuteCall')
+        )
+            ->addTag('bldr');
+
+        $container->setDefinition(
+            'bldr_execute.apply',
+            new Definition('Bldr\Extension\Execute\Call\ApplyCall')
+        )
+            ->addTag('bldr');
     }
 }

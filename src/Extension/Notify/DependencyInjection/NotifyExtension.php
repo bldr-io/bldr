@@ -11,17 +11,15 @@
 
 namespace Bldr\Extension\Notify\DependencyInjection;
 
+use Bldr\DependencyInjection\AbstractExtension;
 use Symfony\Component\Config\Definition\Processor;
-use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\Extension\Extension;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 /**
  * @author Aaron Scherer <aaron@undergroundelephant.com>
  */
-class NotifyExtension extends Extension
+class NotifyExtension extends AbstractExtension
 {
     /**
      * Loads a specific configuration.
@@ -41,7 +39,7 @@ class NotifyExtension extends Extension
             'bldr_notify_notify',
             new Definition('Bldr\Extension\Notify\Call\NotifyCall')
         )
-            ->addTag('notify');
+            ->addTag('bldr');
 
         if (isset($config['smtp'])) {
             $notify->addMethodCall('setSMTPInfo', [$config['smtp']]);

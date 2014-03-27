@@ -11,15 +11,15 @@
 
 namespace Bldr\Extension\Watch\DependencyInjection;
 
+use Bldr\DependencyInjection\AbstractExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * @author Aaron Scherer <aaron@undergroundelephant.com>
  */
-class WatchExtension extends Extension
+class WatchExtension extends AbstractExtension
 {
     /**
      * Loads a specific configuration.
@@ -36,9 +36,16 @@ class WatchExtension extends Extension
         $container->setDefinition(
             'bldr_watch.watch',
             new Definition(
-                'Bldr\Extension\Watch\Call\WatchCall', [new Reference('bldr.registry.task')]
+                'Bldr\Extension\Watch\Call\WatchCall',
+                [
+                    new Reference('bldr.registry.task'),
+                    [
+                        'profiles' => $container->getParameter('profiles'),
+                        'tasks'    => $container->getParameter('tasks')
+                    ]
+                ]
             )
         )
-            ->addTag('watch');
+            ->addTag('bldr');
     }
 }

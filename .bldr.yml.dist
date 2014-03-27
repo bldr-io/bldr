@@ -8,22 +8,19 @@ profiles:
             - prepare
             - lint
             - phpcs
-            - test
+#            - test
+    watch:
+        description: "Watch Profile"
+        tasks:
+            - watch
 
 tasks:
-    echo:
-        calls:
-            -
-                type: exec
-                arguments:
-                    - echo
-                    - "test"
     watch:
         calls:
             -
                 type: watch
-                files: [src/*/*.php, src/*/*/*.php, src/*/*/*/*.php]
-                task: echo
+                files: [src/**/*.php]
+                profile: default
     prepare:
         description: 'Cleans up old builds and prepares the new one'
         calls:
@@ -44,6 +41,9 @@ tasks:
                 failOnError: true
                 executable: composer
                 arguments: [install, --prefer-dist]
+            -
+                type: notify
+                message: Prepare Task Finished
     lint:
         describe: 'Lints the files of the project'
         calls:
@@ -63,7 +63,7 @@ tasks:
                 arguments:
                     - bin/phpcs
                     - --standard=phpcs.xml
-                    - --report=summary
+                    - --report=full
                     - src/
             -
                 type: exec

@@ -29,13 +29,15 @@ interface CallInterface
 
     /**
      * Returns the name of the task used in the config file.
+     *
+     * @return string
      */
     public function getName();
 
     /**
      * Returns a key/value array of task arguments, and their descriptions.
      *
-     * @return array
+     * @return string
      */
     public function getDescription();
 

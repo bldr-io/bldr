@@ -19,6 +19,16 @@ use Symfony\Component\Console\Helper\FormatterHelper;
 class RemoveCall extends FilesystemCall
 {
     /**
+     * {@inheritDoc}
+     */
+    public function configure()
+    {
+        parent::configure();
+        $this->setName('remove')
+            ->setDescription('Removes all the directories and files provided in `files`');
+    }
+
+    /**
      * Runs the command
      *
      * @throws \Exception

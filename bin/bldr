@@ -10,17 +10,30 @@
  * with this source code in the file LICENSE.
  */
 
+
+if (!function_exists('glob_recursive')) {
+    // Does not support flag GLOB_BRACE
+    function glob_recursive($pattern, $flags = 0)
+    {
+        $files = glob($pattern, $flags);
+        foreach (glob(dirname($pattern) . '/*', GLOB_ONLYDIR | GLOB_NOSORT) as $dir) {
+            $files = array_merge($files, glob_recursive($dir . '/' . basename($pattern), $flags));
+        }
+        return $files;
+    }
+}
+
 if (__DIR__ !== getcwd()) {
     $paths[] = getcwd() . '/vendor';
 }
 
-$paths[] = __DIR__.'/../vendor';
-$paths[] = __DIR__.'/../../..';
+$paths[] = __DIR__ . '/../vendor';
+$paths[] = __DIR__ . '/../../..';
 
 $autoloader = false;
 
 foreach ($paths as $path) {
-    $filePath = $path.'/autoload.php';
+    $filePath = $path . '/autoload.php';
     if (file_exists($filePath)) {
         $autoloader = true;
         require $filePath;
@@ -28,10 +41,10 @@ foreach ($paths as $path) {
 }
 
 if (false === $autoloader) {
-        echo "Cannot find an autoload.php file, have you executed composer install command?\n";
-        exit(1);
+    echo "Cannot find an autoload.php file, have you executed composer install command?\n";
+    exit(1);
 }
-    
+
 error_reporting(-1);
 ini_set('display_errors', 1);
 

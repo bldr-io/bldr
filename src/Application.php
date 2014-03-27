@@ -12,7 +12,7 @@
 namespace Bldr;
 
 use Bldr\Command as Commands;
-use Bldr\Event\EventInterface;
+use Bldr\DependencyInjection\AbstractExtension;
 use Bldr\Helper\DialogHelper;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Command\Command;
@@ -22,8 +22,6 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class Application extends BaseApplication
 {
@@ -49,11 +47,6 @@ EOF;
     private $config;
 
     /**
-     * @var EventDispatcher $dispatcher
-     */
-    private $dispatcher;
-
-    /**
      * @var ContainerInterface $container
      */
     private $container;
@@ -64,8 +57,6 @@ EOF;
      */
     public function __construct($name = 'Bldr', $version = '@package_version@')
     {
-        $this->dispatcher = new EventDispatcher();
-
         parent::__construct($name, $version);
 
         $this->addCommands($this->getCommands());
@@ -124,14 +115,6 @@ EOF;
     }
 
     /**
-     * @return EventDispatcher
-     */
-    public function getDispatcher()
-    {
-        return $this->dispatcher;
-    }
-
-    /**
      * {@inheritDoc}
      *
      * @codeCoverageIgnore
@@ -140,16 +123,6 @@ EOF;
     {
         return "\n" . self::$logo . "\n\n" . parent::getHelp();
     }
-
-    /**
-     * @param string         $name
-     * @param EventInterface $event
-     */
-    public function addEvent($name, EventInterface $event)
-    {
-        $this->dispatcher->dispatch($name, $event);
-    }
-
     /**
      * Loads the config for the necessary commands, and sets the container for classes that need it.
      *
@@ -183,6 +156,8 @@ EOF;
     {
         $container = new ContainerBuilder();
 
+        $container->getParameterBag()->add($this->getConfig()->all());
+
         if (null !== $this->config) {
             $extensions = $this->config->has('extensions') ? $this->config->get('extensions') : [];
             if (!isset($extensions['Bldr\DependencyInjection\BldrExtension'])) {
@@ -202,10 +177,23 @@ EOF;
             }
 
             foreach ($extensions as $extensionClass => $config) {
-                /** @var ExtensionInterface $extension */
+                /** @var AbstractExtension $extension */
                 $extension = new $extensionClass;
+                if (!($extension instanceof AbstractExtension)) {
+                    throw new \RuntimeException(
+                        sprintf(
+                            "The %s extension doesn't extend %s.",
+                            $extensionClass,
+                            'Bldr\DependencyInjection\AbstractExtension'
+                        )
+                    );
+                }
+
                 $container->registerExtension($extension);
                 $container->loadFromExtension($extension->getAlias(), null === $config ? [] : $config);
+                foreach ($extension->getCompilerPasses() as $pass) {
+                    $container->addCompilerPass($pass);
+                }
             }
         }
 

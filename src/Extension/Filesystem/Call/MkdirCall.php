@@ -19,6 +19,16 @@ use Symfony\Component\Console\Helper\FormatterHelper;
 class MkdirCall extends FilesystemCall
 {
     /**
+     * {@inheritDoc}
+     */
+    public function configure()
+    {
+        parent::configure();
+        $this->setName('mkdir')
+            ->setDescription('Makes all the directories provided in `files`');
+    }
+
+    /**
      * Runs the command
      *
      * @throws \Exception

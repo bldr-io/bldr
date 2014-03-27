@@ -12,13 +12,12 @@
 namespace Bldr\Command;
 
 use Bldr\Application;
-use Bldr\Call\CallInterface;
 use Bldr\Config;
 use Bldr\Event as Events;
 use Bldr\Event;
-use Bldr\Model\Call;
 use Bldr\Model\Task;
 use Bldr\Registry\TaskRegistry;
+use Bldr\Service\Builder;
 use Symfony\Component\Console\Helper\FormatterHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -29,6 +28,11 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class BuildCommand extends AbstractCommand
 {
+    /**
+     * @var Builder $builder
+     */
+    private $builder;
+
     /**
      * @var TaskRegistry $tasks
      */
@@ -67,15 +71,6 @@ EOF
     }
 
     /**
-     * @return Config
-     */
-    public function getConfig()
-    {
-        return $this->getApplication()
-            ->getConfig();
-    }
-
-    /**
      * {@inheritDoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -86,15 +81,17 @@ EOF
             ->setBuildName();
 
         $this->tasks = $this->container->get('bldr.registry.task');
+        $this->builder = $this->container->get('bldr.builder');
+        $this->builder->initialize($input, $output, $this->getHelperSet());
 
         $this->output->writeln(["\n", Application::$logo, "\n"]);
-        $this->addEvent(Event::START, new Events\BuildEvent($this, true));
+        //$this->addEvent(Event::START, new Events\BuildEvent($this->tasks, $this->getConfig(), true));
 
         $this->doExecute($this->input->getOption('profile'), $this->input->getOption('tasks'));
 
         $this->succeedBuild();
 
-        $this->addEvent(Event::START, new Events\BuildEvent($this, false));
+        //$this->addEvent(Event::START, new Events\BuildEvent($this->tasks, $this->getConfig(), false));
 
         return 0;
     }
@@ -144,31 +141,12 @@ EOF
     }
 
     /**
-     * @param string $profileName
+     * @return Config
      */
-    public function fetchTasks($profileName)
+    public function getConfig()
     {
-        $config = $this->getConfig();
-
-        $profile = $config->get('profiles')[$profileName];
-        $this->buildTasks($profile['tasks']);
-    }
-
-    /**
-     * @param string[] $names
-     *
-     * @return array
-     */
-    public function buildTasks($names)
-    {
-        foreach ($names as $name) {
-            $taskInfo     =
-                $this->getConfig()
-                    ->get('tasks')[$name];
-            $description  = isset($taskInfo['description']) ? $taskInfo['description'] : "";
-            $task         = new Task($name, $description, $taskInfo['calls']);
-            $this->tasks->addTask($task);
-        }
+        return $this->getApplication()
+            ->getConfig();
     }
 
     /**
@@ -187,16 +165,42 @@ EOF
     }
 
     /**
+     * @param string $profileName
+     */
+    public function fetchTasks($profileName)
+    {
+        $config = $this->getConfig();
+
+        $profile = $config->get('profiles')[$profileName];
+        $this->buildTasks($profile['tasks']);
+    }
+
+    /**
+     * @param string[] $names
+     *
+     * @return array
+     */
+    public function buildTasks($names)
+    {
+        foreach ($names as $name) {
+            $taskInfo    = $this->getConfig()
+                ->get('tasks')[$name];
+            $description = isset($taskInfo['description']) ? $taskInfo['description'] : "";
+            $task        = new Task($name, $description, $taskInfo['calls']);
+            $this->tasks->addTask($task);
+        }
+    }
+
+    /**
      *
      */
     public function runTasks()
     {
         while ($this->tasks->count() > 0) {
-            $this->runTask($this->tasks->getNewTask());
+            $this->container->get('bldr.builder')
+                ->runTask($this->tasks->getNewTask());
         }
     }
-
-
 
     /**
      * @return Integer
@@ -206,29 +210,5 @@ EOF
         $this->output->writeln(["", $this->formatBlock('Build Success!', 'green', 'white'), ""]);
 
         return 0;
-    }
-
-    /**
-     * @return Task[]
-     */
-    public function getTasks()
-    {
-        return $this->tasks;
-    }
-
-    /**
-     * @param Task[] $tasks
-     */
-    public function setTasks($tasks)
-    {
-        $this->tasks = $tasks;
-    }
-
-    /**
-     * @param Task $task
-     */
-    public function addTask(Task $task)
-    {
-        $this->tasks[] = $task;
     }
 }

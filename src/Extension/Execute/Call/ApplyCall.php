@@ -31,7 +31,8 @@ class ApplyCall extends ExecuteCall
     public function configure()
     {
         parent::configure();
-        $this->addOption('fileset', true, 'The fileset to run the executable on');
+        $this->setName('apply')
+            ->addOption('fileset', true, 'The fileset to run the executable on');
     }
 
     /**
@@ -46,8 +47,9 @@ class ApplyCall extends ExecuteCall
 
         $this->getOutput()->writeln($formatter->formatSection($this->getTask()->getName(), 'Starting'));
 
+        $arguments = $this->getOption('arguments');
         foreach ($this->files as $file) {
-            $args = $this->getOption('arguments');
+            $args = $arguments;
             $args[] = $file;
             $this->setOption('arguments', $args);
             parent::run();
@@ -60,6 +62,6 @@ class ApplyCall extends ExecuteCall
     public function setFileset($fileset)
     {
         $this->fileset = $fileset;
-        $this->files = glob($fileset);
+        $this->files = glob_recursive($fileset);
     }
 }

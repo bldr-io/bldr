@@ -27,6 +27,16 @@ class Call
     private $options;
 
     /**
+     * @var Boolean $failOnError
+     */
+    private $failOnError = false;
+
+    /**
+     * @var integer[] $successCodes
+     */
+    private $successCodes = [0];
+
+    /**
      * @param string $type
      */
     public function __construct($type)
@@ -56,5 +66,45 @@ class Call
     public function setOptions($options)
     {
         $this->options = $options;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getFailOnError()
+    {
+        return $this->failOnError;
+    }
+
+    /**
+     * @param Boolean $failOnError
+     *
+     * @return Call
+     */
+    public function setFailOnError($failOnError)
+    {
+        $this->failOnError = $failOnError;
+
+        return $this;
+    }
+
+    /**
+     * @return integer[]
+     */
+    public function getSuccessCodes()
+    {
+        return $this->successCodes;
+    }
+
+    /**
+     * @param integer[] $successCodes
+     *
+     * @return Call
+     */
+    public function setSuccessCodes(array $successCodes)
+    {
+        $this->successCodes = $successCodes;
+
+        return $this;
     }
 }

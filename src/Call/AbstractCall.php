@@ -30,7 +30,7 @@ abstract class AbstractCall implements CallInterface
     private $name;
 
     /**
-     * @var string[] $description
+     * @var string $description
      */
     private $description;
 
@@ -65,16 +65,6 @@ abstract class AbstractCall implements CallInterface
     private $call;
 
     /**
-     * @var Boolean $failOnError
-     */
-    private $failOnError = false;
-
-    /**
-     * @var integer[] $successStatusCodes
-     */
-    private $successStatusCodes = [0];
-
-    /**
      * {@inheritDoc}
      */
     public function initialize(
@@ -89,6 +79,7 @@ abstract class AbstractCall implements CallInterface
         $this->helperSet = $helperSet;
         $this->task      = $task;
         $this->call      = $call;
+
         $this->setOptionValues($call);
 
         return $this;
@@ -164,11 +155,11 @@ abstract class AbstractCall implements CallInterface
     /**
      * Sets the description of the task
      *
-     * @param array $description
+     * @param string $description
      *
      * @return AbstractCall
      */
-    public function setDescription(array $description)
+    public function setDescription($description)
     {
         $this->description = $description;
 
@@ -212,7 +203,7 @@ abstract class AbstractCall implements CallInterface
     public function hasOption($name)
     {
         if (array_key_exists($name, $this->options)) {
-            if (null !== $this->options[$name]) {
+            if (null !== $this->options[$name]['value']) {
                 return true;
             }
         }
@@ -257,7 +248,7 @@ abstract class AbstractCall implements CallInterface
      */
     public function getFailOnError()
     {
-        return $this->failOnError;
+        return $this->getCall()->getFailOnError();
     }
 
     /**
@@ -265,7 +256,7 @@ abstract class AbstractCall implements CallInterface
      */
     public function getSuccessStatusCodes()
     {
-        return $this->successStatusCodes;
+        return $this->getCall()->getSuccessCodes();
     }
 
     /**

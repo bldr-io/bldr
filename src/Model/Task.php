@@ -42,17 +42,37 @@ class Task
         $this->description = $description;
         if (sizeof($calls) > 0) {
             foreach ($calls as $data) {
-                if (is_array($data)) {
-                    $call = new Call($data['type']);
-                    unset($data['type']);
-                    $call->setOptions($data);
-                } else {
-                    $call = $data;
-                }
-
-                $this->addCall($call);
+                $this->createCall($data);
             }
         }
+    }
+
+    /**
+     * @param array|Call $data
+     */
+    private function createCall($data)
+    {
+        if (is_array($data)) {
+            $call = new Call($data['type']);
+
+            if (isset($data['failOnError'])) {
+                $call->setFailOnError($data['failOnError']);
+                unset($data['failOnError']);
+            }
+
+            if (isset($data['successCodes'])) {
+                $call->setSuccessCodes($data['successCodes']);
+                unset($data['successCodes']);
+            }
+
+            unset($data['type']);
+
+            $call->setOptions($data);
+        } else {
+            $call = $data;
+        }
+
+        $this->addCall($call);
     }
 
     /**

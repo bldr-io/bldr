@@ -25,9 +25,27 @@ class WatchCall extends AbstractCall
      */
     private $tasks;
 
-    public function __construct(TaskRegistry $tasks)
+    /**
+     * @var array $config
+     */
+    private $config;
+
+    public function __construct(TaskRegistry $tasks, array $config)
     {
-        $this->tasks = $tasks;
+        $this->tasks  = $tasks;
+        $this->config = $config;
+    }
+
+    /**
+     * Configures the Task
+     */
+    public function configure()
+    {
+        $this->setName('watch')
+            ->setDescription('Watches the filesystem for changes')
+            ->addOption('files', true, 'Files to watch')
+            ->addOption('profile', false, 'Profile to run on filesystem change')
+            ->addOption('task', false, 'Task to run on filesystem change');
     }
 
     /**
@@ -39,28 +57,20 @@ class WatchCall extends AbstractCall
             throw new \RuntimeException("Travis does not support running the watch task.");
         }
 
-
-        if (!$this->getCall()
-            ->has('files')
-        ) {
-            throw new \Exception("Watch must have files.");
-        }
-
-        if (!$this->getCall()
-                ->has('task') && !$this->getCall()
-                ->has('profile')
-        ) {
+        if (!$this->hasOption('task') && !$this->hasOption('profile')) {
             throw new \Exception("Watch must have either a task, or a profile");
         }
 
-        if (is_array($this->getCall()->files)) {
+        $fileOption = $this->getOption('files');
+        if (is_array($fileOption)) {
             $files = [];
-            foreach ($this->getCall()->files as $file) {
-                $files = array_merge($files, glob(getcwd() . '/' . $file));
+            foreach ($fileOption as $file) {
+                $files = array_merge($files, glob_recursive(getcwd() . '/' . $file));
             }
         } else {
-            $files = glob(getcwd() . '/' . $this->getCall()->files);
+            $files = glob_recursive(getcwd() . '/' . $fileOption);
         }
+
         $this->watchForChanges($files);
     }
 
@@ -77,7 +87,9 @@ class WatchCall extends AbstractCall
             foreach ($files as $name) {
                 if ($this->checkFile($name, $previously)) {
                     $this->getOutput()
-                        ->writeln(sprintf("<info>>>>></info> <comment>The %s file changed.</comment>", $name));
+                        ->writeln(
+                            sprintf("<info>>>>></info> <comment>The %s file changed.</comment>", $name)
+                        );
 
                     $this->getTasks();
                     $this->tasks->addTask($this->getTask());
@@ -105,14 +117,40 @@ class WatchCall extends AbstractCall
     }
 
     /**
-     * @return array|Task[]
+     * Fetches the tasks for either the profile, or the passed task
      */
     private function getTasks()
     {
-        if ($this->getCall()->has('profile')) {
-            return $this->getCommand()->fetchTasks($this->getCall()->profile);
-        } else {
-            return $this->getCommand()->buildTasks([$this->getCall()->task]);
+        if ($this->hasOption('profile')) {
+            $this->fetchTasks($this->getOption('profile'));
+
+            return;
+        }
+
+        $this->buildTasks([$this->getOption('task')]);
+    }
+
+    /**
+     * @param string $profileName
+     */
+    public function fetchTasks($profileName)
+    {
+        $profile = $this->config['profiles'][$profileName];
+        $this->buildTasks($profile['tasks']);
+    }
+
+    /**
+     * @param string[] $names
+     *
+     * @return array
+     */
+    public function buildTasks($names)
+    {
+        foreach ($names as $name) {
+            $taskInfo    = $this->config['tasks'][$name];
+            $description = isset($taskInfo['description']) ? $taskInfo['description'] : "";
+            $task        = new Task($name, $description, $taskInfo['calls']);
+            $this->tasks->addTask($task);
         }
     }
 }

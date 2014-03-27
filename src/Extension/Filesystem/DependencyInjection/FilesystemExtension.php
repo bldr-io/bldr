@@ -11,15 +11,15 @@
 
 namespace Bldr\Extension\Filesystem\DependencyInjection;
 
+use Bldr\DependencyInjection\AbstractExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\Config\FileLocator;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
  */
-class FilesystemExtension extends Extension
+class FilesystemExtension extends AbstractExtension
 {
     /**
      * Loads a specific configuration.

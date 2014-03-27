@@ -11,21 +11,41 @@
 
 namespace Bldr\Extension\Filesystem\Call;
 
+use Bldr\Call\AbstractCall;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
  */
-abstract class FilesystemCall extends \Bldr\Call\AbstractCall
+abstract class FilesystemCall extends AbstractCall
 {
     /**
      * @var Filesystem $fileSystem
      */
     protected $fileSystem;
 
+    /**
+     * 
+     */
     public function __construct()
     {
         $this->fileSystem = new Filesystem();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function configure()
+    {
+        $this->addOption('files', true, "Files to run the filesystem command on");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getName()
+    {
+        return 'filesystem:' . parent::getName();
     }
 
     /**
@@ -35,12 +55,6 @@ abstract class FilesystemCall extends \Bldr\Call\AbstractCall
      */
     protected function resolveFiles()
     {
-        if (!$this->getCall()->has('files') && !is_array($this->getCall()->files)) {
-            throw new \RuntimeException(
-                'The File System Task requires an array of directories or files'
-            );
-        }
-
-        return $this->getCall()->files;
+        return $this->getOption('files');
     }
 }

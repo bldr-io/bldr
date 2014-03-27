@@ -11,10 +11,13 @@
 
 namespace Bldr\Service;
 
+use Bldr\Call\CallInterface;
+use Bldr\Event as Events;
+use Bldr\Event;
 use Bldr\Model\Call;
 use Bldr\Model\Task;
-use Bldr\Event;
-use Bldr\Event as Events;
+use Symfony\Component\Console\Helper\HelperSet;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -34,9 +37,19 @@ class Builder
     private $tasks;
 
     /**
+     * @var InputInterface $input
+     */
+    private $input;
+
+    /**
      * @var OutputInterface $output
      */
     private $output;
+
+    /**
+     * @var HelperSet $helperSet
+     */
+    private $helperSet;
 
     public function __construct(EventDispatcherInterface $dispatcher, array $tasks = [])
     {
@@ -45,11 +58,15 @@ class Builder
     }
 
     /**
+     * @param InputInterface  $input
      * @param OutputInterface $output
+     * @param HelperSet       $helperSet
      */
-    public function setOutput(OutputInterface $output)
+    public function initialize(InputInterface $input, OutputInterface $output, HelperSet $helperSet)
     {
-        $this->output = $output;
+        $this->input     = $input;
+        $this->output    = $output;
+        $this->helperSet = $helperSet;
     }
 
     /**
@@ -69,13 +86,13 @@ class Builder
             ]
         );
 
-        $this->addEvent(Event::PRE_TASK, new Events\TaskEvent($this, $task, true));
+        //$this->addEvent(Event::PRE_TASK, new Events\TaskEvent($this, $task, true));
         foreach ($task->getCalls() as $call) {
-            $this->addEvent(Event::PRE_CALL, new Events\CallEvent($this, $task, $call, true));
+            //$this->addEvent(Event::PRE_CALL, new Events\CallEvent($this, $task, $call, true));
             $this->runCall($task, $call);
-            $this->addEvent(Event::POST_CALL, new Events\CallEvent($this, $task, $call, false));
+            //$this->addEvent(Event::POST_CALL, new Events\CallEvent($this, $task, $call, false));
         }
-        $this->addEvent(Event::POST_TASK, new Events\TaskEvent($this, $task, false));
+        //$this->addEvent(Event::POST_TASK, new Events\TaskEvent($this, $task, false));
 
         $this->output->writeln("");
     }
@@ -86,36 +103,41 @@ class Builder
      */
     private function runCall(Task $task, Call $call)
     {
-        $service = $this->fetchServiceForCall($call->getType());
+        $service = $this->fetchServiceForCall($task, $call);
+        $service->initialize($this->input, $this->output, $this->helperSet, $task, $call);
 
-        $service->initialize($this);
-        $service->setTask($task);
-        $service->setCall($call);
-
-        $this->addEvent(Event::PRE_SERVICE, new Events\ServiceEvent($this, $task, $call, $service, true));
+        //$this->addEvent(Event::PRE_SERVICE, new Events\ServiceEvent($this, $task, $call, $service, true));
         $service->run();
-        $this->addEvent(Event::POST_SERVICE, new Events\ServiceEvent($this, $task, $call, $service, false));
+        //$this->addEvent(Event::POST_SERVICE, new Events\ServiceEvent($this, $task, $call, $service, false));
         $this->output->writeln("");
     }
 
     /**
-     * @param string $type
+     * @param Task $task
+     * @param Call $call
      *
-     * @return CallInterface
      * @throws \Exception
+     * @return CallInterface
      */
-    private function fetchServiceForCall($type)
+    private function fetchServiceForCall(Task $task, Call $call)
     {
-        $services = array_keys($this->container->findTaggedServiceIds($type));
+        $services = [];
+        foreach ($this->tasks as $service) {
+            $service->configure();
+
+            if ($service->getName() === $call->getType()) {
+                $services[] = $service;
+            }
+        }
 
         if (sizeof($services) > 1) {
             throw new \Exception("Multiple calls exist with the 'exec' tag.");
         }
         if (sizeof($services) === 0) {
-            throw new \Exception("No task type found for {$type}.");
+            throw new \Exception("No task type found for {$call->getType()}.");
         }
 
-        return $this->container->get($services[0]);
+        return $services[0];
     }
 
     private function addEvent($eventName, Event\EventInterface $event)

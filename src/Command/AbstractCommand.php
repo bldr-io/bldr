@@ -64,7 +64,7 @@ class AbstractCommand extends Command implements ContainerAwareInterface
      */
     public function addEvent($name, EventInterface $event)
     {
-        $this->getApplication()->addEvent($name, $event);
+        $this->container->get('bldr.dispatcher')->dispatch($name, $event);
 
         return $this;
     }
