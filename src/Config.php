@@ -126,6 +126,7 @@ class Config extends ParameterBag
         }
 
         file_put_contents($file, $content);
+        
         return new static($data);
     }
 

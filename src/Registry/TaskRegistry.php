@@ -11,7 +11,6 @@
 
 namespace Bldr\Registry;
 
-use Bldr\Model\Call;
 use Bldr\Model\Task;
 
 /**

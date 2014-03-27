@@ -41,9 +41,7 @@ class AbstractCallTest extends \PHPUnit_Framework_TestCase
             ->withNoArgs()
             ->andReturn([]);
 
-
         $call = new MockCall();
-        $ref  = new \ReflectionClass($call);
 
         $result = $call->initialize(
             $properties['input'],

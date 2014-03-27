@@ -11,7 +11,7 @@
 
 namespace Bldr\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerBuilder as SymfonyContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
 /**
@@ -20,16 +20,9 @@ use Symfony\Component\DependencyInjection\Definition;
 class BldrExtension extends AbstractExtension
 {
     /**
-     * Loads a specific configuration.
-     *
-     * @param array            $config    An array of configuration values
-     * @param ContainerBuilder $container A ContainerBuilder instance
-     *
-     * @throws \InvalidArgumentException When provided tag is not defined in this extension
-     *
-     * @api
+     * {@inheritDoc}
      */
-    public function load(array $config, ContainerBuilder $container)
+    public function load(array $config, SymfonyContainerBuilder $container)
     {
         $container->setDefinition(
             'bldr.dispatcher',

@@ -90,7 +90,6 @@ EOF
         $this->doExecute($this->input->getOption('profile'), $this->input->getOption('tasks'));
 
         $this->succeedBuild();
-
         //$this->addEvent(Event::START, new Events\BuildEvent($this->tasks, $this->getConfig(), false));
 
         return 0;

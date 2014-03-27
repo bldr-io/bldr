@@ -51,7 +51,6 @@ EOF
     {
         $service = $this->findService($input->getArgument('task'));
 
-
         $output->writeln(
             [
                 "",
@@ -79,7 +78,6 @@ EOF
                 }
                 $default = $option['default'];
             }
-
 
             $tableHelper->addRow(
                 [

@@ -26,36 +26,34 @@ Well, here's one written for Bldr using yaml (json is also supported):
             calls:
                 -
                     type: filesystem:remove
-                    arguments: [build/coverage, build/logs]
+                    files: [build/coverage, build/logs]
                 -
                     type: filesystem:mkdir
-                    arguments: [build/coverage, build/logs]
+                    files: [build/coverage, build/logs]
                 -
                     type: filesystem:touch
-                    arguments: [build/coverage/index.html]
+                    files: [build/coverage/index.html]
                 -
                     type: exec
-                    arguments:
-                        - composer
-                        - --prefer-dist
-                        - install
+                    executable: composer
+                    arguments: [install, --prefer-dist]
         lint:
             describe: 'Lints the files of the project'
             calls:
                 -
                     type: apply
-                    fileset: src/**/*.php
-                    arguments:
-                        - /usr/bin/php
-                        - -l
+                    failOnError: true
+                    fileset: [src/*.php, src/**/*.php]
+                    executable: php
+                    arguments: [-l]
 
         phpcs:
             description: 'Runs the PHP Code Sniffer'
             calls:
                 -
                     type: exec
+                    executable: php
                     arguments:
-                        - /usr/bin/php
                         - bin/phpcs
                         - -p
                         - --standard=build/phpcs.xml
@@ -68,8 +66,8 @@ Well, here's one written for Bldr using yaml (json is also supported):
                 -
                     type: exec
                     failOnError: true
+                    executable: php
                     arguments:
-                        - /usr/bin/php
                         - bin/phpunit
                         - --testdox
                         - --coverage-text=php://stdout

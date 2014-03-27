@@ -11,6 +11,7 @@
 
 namespace Bldr\Call;
 
+use Bldr\Application;
 use Bldr\Model\Call;
 use Bldr\Model\Task;
 use Symfony\Component\Console\Helper\HelperSet;
@@ -175,10 +176,10 @@ abstract class AbstractCall implements CallInterface
     }
 
     /**
-     * @param string         $name
-     * @param Boolean        $required
-     * @param string         $description
-     * @param string|integer $default
+     * @param string  $name
+     * @param Boolean $required
+     * @param string  $description
+     * @param mixed   $default
      *
      * @return AbstractCall
      */
@@ -236,6 +237,15 @@ abstract class AbstractCall implements CallInterface
     }
 
     /**
+     * @return Boolean
+     */
+    public function getFailOnError()
+    {
+        return $this->getCall()
+            ->getFailOnError();
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function getCall()
@@ -244,19 +254,12 @@ abstract class AbstractCall implements CallInterface
     }
 
     /**
-     * @return Boolean
-     */
-    public function getFailOnError()
-    {
-        return $this->getCall()->getFailOnError();
-    }
-
-    /**
      * @return integer[]
      */
     public function getSuccessStatusCodes()
     {
-        return $this->getCall()->getSuccessCodes();
+        return $this->getCall()
+            ->getSuccessCodes();
     }
 
     /**
@@ -271,7 +274,41 @@ abstract class AbstractCall implements CallInterface
             throw new \RuntimeException($name . ' is not a valid option.');
         }
 
+        $this->replaceTokens($this->options[$name]['value']);
+
         return $this->options[$name]['value'];
+    }
+
+    /**
+     * Tokenize the given option, if it is a string.
+     *
+     * @param mixed $option
+     *
+     * @return mixed
+     */
+    private function replaceTokens(&$option)
+    {
+        if (!is_string($option)) {
+            if (is_array($option)) {
+                foreach ($option as &$opt) {
+                    $this->replaceTokens($opt);
+                }
+            }
+
+            return;
+        }
+
+        $token_format = '/\$(.+)\$/';
+
+        preg_match_all($token_format, $option, $matches, PREG_SET_ORDER);
+
+        if (sizeof($matches) < 1) {
+            return;
+        }
+
+        foreach ($matches as $match) {
+            $option = str_replace($match[0], Application::$$match[1], $option);
+        }
     }
 
     /**

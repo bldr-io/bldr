@@ -67,7 +67,6 @@ class BuildCommandTest extends \PHPUnit_Framework_TestCase
             ->once()
             ->andReturn(true);
 
-
         $application  = new Application();
         Config::$NAME = '.test';
 

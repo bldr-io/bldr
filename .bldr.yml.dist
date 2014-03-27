@@ -50,7 +50,7 @@ tasks:
             -
                 type: apply
                 failOnError: true
-                fileset: [src/*.php, src/*/*.php]
+                fileset: [src/*.php, src/**/*.php]
                 executable: php
                 arguments: [-l]
 

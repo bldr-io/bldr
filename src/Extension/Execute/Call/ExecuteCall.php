@@ -46,8 +46,6 @@ class ExecuteCall extends AbstractCall
         /** @var FormatterHelper $formatter */
         $formatter = $this->getHelperSet()->get('formatter');
 
-        $this->findTokens($arguments);
-
         $builder = new ProcessBuilder($arguments);
 
         if ($this->hasOption('cwd')) {
@@ -104,41 +102,5 @@ class ExecuteCall extends AbstractCall
             [$this->getOption('executable')],
             $this->getOption('arguments')
         );
-    }
-
-    /**
-     * Runs the tokenizer on all the arguments
-     *
-     * @param string[] $arguments
-     */
-    private function findTokens(array &$arguments)
-    {
-        foreach ($arguments as $index => $argument) {
-            $arguments[$index] = $this->replaceTokens($argument);
-        }
-    }
-
-    /**
-     * Tokenize the given string
-     *
-     * @param string $argument
-     *
-     * @return string
-     */
-    private function replaceTokens($argument)
-    {
-        $token_format = '/\$(.+)\$/';
-
-        preg_match_all($token_format, $argument, $matches, PREG_SET_ORDER);
-
-        if (sizeof($matches) < 1) {
-            return $argument;
-        }
-
-        foreach ($matches as $match) {
-            $argument = str_replace($match[0], Application::$$match[1], $argument);
-        }
-
-        return $argument;
     }
 }

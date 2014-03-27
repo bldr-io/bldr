@@ -11,11 +11,9 @@
 
 namespace Bldr\Event;
 
-use Bldr\Application;
 use Bldr\Command\BuildCommand;
 use Bldr\Model\Call;
 use Bldr\Model\Task;
-use Symfony\Component\Console\Input\InputInterface;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
