@@ -9,7 +9,6 @@ profiles:
             - lint
             - phpcs
             - test
-#           - artifacts
 
 tasks:
     prepare:
@@ -74,59 +73,5 @@ tasks:
                 arguments:
                     - bin/phpunit
                     - --coverage-text=php://stdout
-    artifacts:
-        description: 'Deploy artifacts to git repository'
-        calls:
-            -
-                type: git:init
-                cwd: build
-            -
-                type: git:remote:remove
-                cwd: build
-                arguments: [artifacts]
-            -
-                type: git:remote:add
-                cwd: build
-                arguments:
-                    - artifacts
-                    - https://aequasi:1f88fa5ac84a017063aaf7dae415071cdd2bd2a8@github.com/bldr-io/artifacts.git
-            -
-                type: git:checkout
-                cwd: build
-                branch: $BUILD_NAME$
-            -
-                type: exec
-                output: build/README.md
-                arguments:
-                    - echo
-                    - "[Coverage History](https://rawgithub.com/bldr-io/artifacts/$BUILD_NAME$/coverage/index.html)"
-            -
-                type: git:add
-                cwd: build
-                arguments:
-                    - "."
-            -
-                type: git:config
-                cwd: build
-                arguments:
-                    - user.name
-                    - Travis CI
-            -
-                type: git:config
-                cwd: build
-                arguments:
-                    - user.email
-                    - travis@travis-ci.org
-            -
-                type: git:commit
-                cwd: build
-                message: 'Build Artifacts'
-            -
-                type: git:push
-                cwd: build
-                force: true
-                remote: artifacts
-                branch: $BUILD_NAME$
 
 extensions: ~
-#    Bldr\Extension\Git\DependencyInjection\GitExtension: ~
