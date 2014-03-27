@@ -27,7 +27,7 @@ tasks:
         calls:
             -
                 type: filesystem:remove
-                failOnError: true
+                failOnError: false
                 files: [build/coverage, build/logs]
             -
                 type: filesystem:mkdir
