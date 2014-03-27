@@ -70,7 +70,8 @@ EOF;
         $commands = [
             new Commands\InitCommand(),
             new Commands\BuildCommand(),
-            new Commands\TaskListCommand()
+            new Commands\Task\ListCommand(),
+            new Commands\Task\InfoCommand(),
         ];
 
         return $commands;
