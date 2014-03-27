@@ -5,13 +5,27 @@ profiles:
     default:
         description: 'Development Profile'
         tasks:
-            - prepare
-            - lint
-            - phpcs
-            - test
-            - artifacts
+            #- prepare
+            #- lint
+            #- phpcs
+            # - test
+            - watch
+#            - artifacts
 
 tasks:
+    echo:
+        calls:
+            -
+                type: exec
+                arguments:
+                    - echo
+                    - "test"
+    watch:
+        calls:
+            -
+                type: watch
+                files: [src/*/*.php, src/*/*/*.php, src/*/*/*/*.php]
+                task: echo
     prepare:
         description: 'Cleans up old builds and prepares the new one'
         calls:
@@ -125,6 +139,3 @@ tasks:
                 force: true
                 remote: artifacts
                 branch: $BUILD_NAME$
-
-extensions:
-    Bldr\Extension\Git\DependencyInjection\GitExtension: ~

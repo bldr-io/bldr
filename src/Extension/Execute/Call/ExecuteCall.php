@@ -23,12 +23,27 @@ use Symfony\Component\Process\ProcessBuilder;
 class ExecuteCall extends AbstractCall
 {
     /**
+     * Configures the Task
+     */
+    public function configure()
+    {
+        $this->setName('exec')
+            ->setDescription('Executes the given options using the executable')
+            ->addOption('executable', true, 'Executable to run')
+            ->addOption('arguments', false, 'Arguments to run on the executable', [])
+            ->addOption('cwd', false, 'Sets the working directory for the executable')
+            ->addOption('output', false, 'Sets the location to output to')
+            ->addOption('append', false, 'If output is set, should it append?', false);
+    }
+
+    /**
      * {@inheritDoc}
      *
      * Logic obtained from http://stackoverflow.com/a/6144213/248903
      */
     public function run()
     {
+        $arguments = $this->getOption('arguments');
 
         /** @var FormatterHelper $formatter */
         $formatter = $this->getHelperSet()->get('formatter');

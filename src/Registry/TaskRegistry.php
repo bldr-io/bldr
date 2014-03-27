@@ -24,11 +24,19 @@ class TaskRegistry
      */
     private $tasks;
 
+    /**
+     * @return mixed
+     */
     public function getNewTask()
     {
-        return array_pop($this->tasks);
+        return array_shift($this->tasks);
     }
 
+    /**
+     * @param Task $task
+     *
+     * @return $this
+     */
     public function addTask(Task $task)
     {
         $this->tasks[] = $task;
@@ -36,8 +44,19 @@ class TaskRegistry
         return $this;
     }
 
+    /**
+     * @return int
+     */
     public function count()
     {
         return sizeof($this->tasks);
+    }
+
+    /**
+     * @return Task[]
+     */
+    public function getTasks()
+    {
+        return $this->tasks;
     }
 }

@@ -22,14 +22,9 @@ class Call
     private $type;
 
     /**
-     * @var string[] $arguments
+     * @var array $options
      */
-    private $arguments;
-
-    /**
-     * @var array $data
-     */
-    private $data;
+    private $options;
 
     /**
      * @param string $type
@@ -48,31 +43,18 @@ class Call
     }
 
     /**
-     * @param string $name
-     *
-     * @return mixed
+     * @return array
      */
-    public function __get($name)
+    public function getOptions()
     {
-        return $this->data[$name];
+        return $this->options;
     }
 
     /**
-     * @param string $name
-     * @param mixed  $value
+     * @param array $options
      */
-    public function __set($name, $value)
+    public function setOptions($options)
     {
-        $this->data[$name] = $value;
-    }
-
-    /**
-     * @param string $name
-     *
-     * @return bool
-     */
-    public function has($name)
-    {
-        return isset($this->data[$name]);
+        $this->options = $options;
     }
 }

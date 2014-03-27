@@ -196,71 +196,7 @@ EOF
         }
     }
 
-    /**
-     * @param Task $task
-     */
-    public function runTask(Task $task)
-    {
-        $this->output->writeln(
-            [
-                "",
-                sprintf(
-                    "<info>Running the %s task</info><comment>%s</comment>",
-                    $task->getName(),
-                    $task->getDescription() !== '' ? "\n> " . $task->getDescription() : ''
-                ),
-                ""
-            ]
-        );
 
-        $this->addEvent(Event::PRE_TASK, new Events\TaskEvent($this, $task, true));
-        foreach ($task->getCalls() as $call) {
-            $this->addEvent(Event::PRE_CALL, new Events\CallEvent($this, $task, $call, true));
-            $this->runCall($task, $call);
-            $this->addEvent(Event::POST_CALL, new Events\CallEvent($this, $task, $call, false));
-        }
-        $this->addEvent(Event::POST_TASK, new Events\TaskEvent($this, $task, false));
-
-        $this->output->writeln("");
-    }
-
-    /**
-     * @param Task $task
-     * @param Call $call
-     */
-    private function runCall(Task $task, Call $call)
-    {
-        $service = $this->fetchServiceForCall($call->getType());
-
-        $service->initialize($this);
-        $service->setTask($task);
-        $service->setCall($call);
-
-        $this->addEvent(Event::PRE_SERVICE, new Events\ServiceEvent($this, $task, $call, $service, true));
-        $service->run();
-        $this->addEvent(Event::POST_SERVICE, new Events\ServiceEvent($this, $task, $call, $service, false));
-        $this->output->writeln("");
-    }
-
-    /**
-     * @param string $type
-     *
-     * @return CallInterface
-     * @throws \Exception
-     */
-    private function fetchServiceForCall($type)
-    {
-        $services = array_keys($this->container->findTaggedServiceIds($type));
-
-        if (sizeof($services) > 1) {
-            throw new \Exception("Multiple calls exist with the 'exec' tag.");
-        }
-        if (sizeof($services) === 0) {
-            throw new \Exception("No task type found for {$type}.");
-        }
-
-        return $this->container->get($services[0]);
-    }
 
     /**
      * @return Integer

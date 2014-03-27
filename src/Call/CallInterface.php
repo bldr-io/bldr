@@ -11,9 +11,9 @@
 
 namespace Bldr\Call;
 
-use Bldr\Command\BuildCommand;
 use Bldr\Model\Call;
 use Bldr\Model\Task;
+use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -23,6 +23,28 @@ use Symfony\Component\Console\Output\OutputInterface;
 interface CallInterface
 {
     /**
+     * Configures the Task
+     */
+    public function configure();
+
+    /**
+     * Returns the name of the task used in the config file.
+     */
+    public function getName();
+
+    /**
+     * Returns a key/value array of task arguments, and their descriptions.
+     *
+     * @return array
+     */
+    public function getDescription();
+
+    /**
+     * @return array
+     */
+    public function getOptions();
+
+    /**
      * Runs the command
      *
      * @return mixed
@@ -30,30 +52,31 @@ interface CallInterface
     public function run();
 
     /**
-     * @param BuildCommand $command
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     * @param HelperSet       $helperSet
+     * @param Task            $task
+     * @param Call            $call
      *
      * @return CallInterface
      */
-    public function initialize(BuildCommand $command);
+    public function initialize(
+        InputInterface $input,
+        OutputInterface $output,
+        HelperSet $helperSet,
+        Task $task,
+        Call $call
+    );
 
     /**
-     * @param Task $task
-     *
-     * @return CallInterface
+     * @return Task
      */
-    public function setTask(Task $task);
+    public function getTask();
 
     /**
-     * @param Call $call
-     *
-     * @return CallInterface
+     * @return Call
      */
-    public function setCall(Call $call);
-
-    /**
-     * @return BuildCommand
-     */
-    public function getCommand();
+    public function getCall();
 
     /**
      * @return InputInterface
@@ -64,4 +87,19 @@ interface CallInterface
      * @return OutputInterface
      */
     public function getOutput();
+
+    /**
+     * @return HelperSet
+     */
+    public function getHelperSet();
+
+    /**
+     * @return Boolean
+     */
+    public function getFailOnError();
+
+    /**
+     * @return integer[]
+     */
+    public function getSuccessStatusCodes();
 }

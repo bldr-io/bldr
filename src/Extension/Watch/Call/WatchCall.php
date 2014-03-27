@@ -13,6 +13,7 @@ namespace Bldr\Extension\Watch\Call;
 
 use Bldr\Call\AbstractCall;
 use Bldr\Model\Task;
+use Bldr\Registry\TaskRegistry;
 
 /**
  * @author Aaron Scherer <aaron@undergroundelephant.com>
@@ -20,19 +21,46 @@ use Bldr\Model\Task;
 class WatchCall extends AbstractCall
 {
     /**
+     * @var TaskRegistry $tasks
+     */
+    private $tasks;
+
+    public function __construct(TaskRegistry $tasks)
+    {
+        $this->tasks = $tasks;
+    }
+
+    /**
      * {@inheritDoc}
      */
-    public function run(array $arguments)
+    public function run()
     {
-        if (!$this->getCall()->has('files')) {
+        if (getenv('TRAVIS')) {
+            throw new \RuntimeException("Travis does not support running the watch task.");
+        }
+
+
+        if (!$this->getCall()
+            ->has('files')
+        ) {
             throw new \Exception("Watch must have files.");
         }
 
-        if (!$this->getCall()->has('task') && !$this->getCall()->has('profile')) {
+        if (!$this->getCall()
+                ->has('task') && !$this->getCall()
+                ->has('profile')
+        ) {
             throw new \Exception("Watch must have either a task, or a profile");
         }
 
-        $files = glob(getcwd() . '/' . $this->getCall()->files);
+        if (is_array($this->getCall()->files)) {
+            $files = [];
+            foreach ($this->getCall()->files as $file) {
+                $files = array_merge($files, glob(getcwd() . '/' . $file));
+            }
+        } else {
+            $files = glob(getcwd() . '/' . $this->getCall()->files);
+        }
         $this->watchForChanges($files);
     }
 
@@ -41,24 +69,24 @@ class WatchCall extends AbstractCall
      */
     private function watchForChanges(array $files)
     {
-        $this->getOutput()->writeln("Watching for changes");
+        $this->getOutput()
+            ->writeln("Watching for changes");
 
         $previously = [];
         while (true) {
             foreach ($files as $name) {
                 if ($this->checkFile($name, $previously)) {
-                    $this->getOutput()->writeln(sprintf("<info>>>>></info> <comment>The %s file changed.</comment>", $name));
-                    foreach ($this->getTasks() as $task) {
-                        $this->getCommand()->runTask($task);
-                    }
-                    break;
+                    $this->getOutput()
+                        ->writeln(sprintf("<info>>>>></info> <comment>The %s file changed.</comment>", $name));
+
+                    $this->getTasks();
+                    $this->tasks->addTask($this->getTask());
+
+                    return;
                 }
             }
-
             sleep(1);
         }
-
-        $this->watchForChanges($files);
     }
 
     /**
@@ -69,8 +97,8 @@ class WatchCall extends AbstractCall
      */
     private function checkFile($name, array &$previously)
     {
-        $hash = sha1_file($name);
-        $changed = array_key_exists($name, $previously) ? ($previously[$name] !== $hash) : false;
+        $hash              = sha1_file($name);
+        $changed           = array_key_exists($name, $previously) ? ($previously[$name] !== $hash) : false;
         $previously[$name] = $hash;
 
         return $changed;
@@ -84,7 +112,7 @@ class WatchCall extends AbstractCall
         if ($this->getCall()->has('profile')) {
             return $this->getCommand()->fetchTasks($this->getCall()->profile);
         } else {
-            return $this->getCommand()->buildTasks([$this->getCall()->tasks]);
+            return $this->getCommand()->buildTasks([$this->getCall()->task]);
         }
     }
 }

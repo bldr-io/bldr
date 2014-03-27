@@ -11,9 +11,11 @@
 
 namespace Bldr\Call;
 
-use Bldr\Command\BuildCommand;
 use Bldr\Model\Call;
 use Bldr\Model\Task;
+use Symfony\Component\Console\Helper\HelperSet;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class AbstractCall
@@ -23,10 +25,35 @@ use Bldr\Model\Task;
 abstract class AbstractCall implements CallInterface
 {
     /**
-     * @var BuildCommand $command
+     * @var string $name
      */
-    private $command;
-    
+    private $name;
+
+    /**
+     * @var string[] $description
+     */
+    private $description;
+
+    /**
+     * @var array $options
+     */
+    private $options;
+
+    /**
+     * @var InputInterface $input
+     */
+    private $input;
+
+    /**
+     * @var OutputInterface $output
+     */
+    private $output;
+
+    /**
+     * @var HelperSet $helperSet
+     */
+    private $helperSet;
+
     /**
      * @var Task $task
      */
@@ -40,23 +67,79 @@ abstract class AbstractCall implements CallInterface
     /**
      * @var Boolean $failOnError
      */
-    private $failOnError;
+    private $failOnError = false;
 
     /**
      * @var integer[] $successStatusCodes
      */
-    private $successStatusCodes;
+    private $successStatusCodes = [0];
 
     /**
      * {@inheritDoc}
      */
-    public function initialize(BuildCommand $command)
+    public function initialize(
+        InputInterface $input,
+        OutputInterface $output,
+        HelperSet $helperSet,
+        Task $task,
+        Call $call
+    ) {
+        $this->input     = $input;
+        $this->output    = $output;
+        $this->helperSet = $helperSet;
+        $this->task      = $task;
+        $this->call      = $call;
+        $this->setOptionValues($call);
+
+        return $this;
+    }
+
+    /**
+     * @param Call $call
+     *
+     * @throws \RuntimeException
+     */
+    protected function setOptionValues(Call $call)
     {
-        $this->command            = $command;
-        $this->task               = null;
-        $this->call               = null;
-        $this->failOnError        = false;
-        $this->successStatusCodes = [0];
+        foreach ($call->getOptions() as $key => $value) {
+            $this->options[$key]['value'] = $value;
+        }
+
+        foreach ($this->options as $option) {
+            if ($option['value'] === null && $option['default'] !== null) {
+                $option['value'] = $option['default'];
+            }
+
+            if ($option['required'] && $option['value'] === null) {
+                throw new \RuntimeException(
+                    sprintf(
+                        "Running the %s task failed. The %s option requires a value.",
+                        $this->getTask()->getName(),
+                        $option['name']
+                    )
+                );
+            }
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Sets the name of the task
+     *
+     * @param string $name
+     *
+     * @return AbstractCall
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
 
         return $this;
     }
@@ -64,9 +147,21 @@ abstract class AbstractCall implements CallInterface
     /**
      * {@inheritDoc}
      */
-    public function setTask(Task $task)
+    public function getDescription()
     {
-        $this->task = $task;
+        return $this->description;
+    }
+
+    /**
+     * Sets the description of the task
+     *
+     * @param array $description
+     *
+     * @return AbstractCall
+     */
+    public function setDescription(array $description)
+    {
+        $this->description = $description;
 
         return $this;
     }
@@ -74,15 +169,73 @@ abstract class AbstractCall implements CallInterface
     /**
      * {@inheritDoc}
      */
-    public function setCall(Call $call)
+    public function getOptions()
     {
-        $this->call = $call;
+        return $this->options;
+    }
+
+    /**
+     * @param string         $name
+     * @param Boolean        $required
+     * @param string         $description
+     * @param string|integer $default
+     *
+     * @return AbstractCall
+     */
+    public function addOption($name, $required = false, $description = '', $default = null)
+    {
+        $this->options[$name] = [
+            'name'        => $name,
+            'required'    => $required,
+            'description' => $description,
+            'default'     => $default,
+            'value'       => null
+        ];
 
         return $this;
     }
 
     /**
-     * @return Call
+     * @param string $name
+     *
+     * @return string|integer
+     * @throws \RuntimeException
+     */
+    protected function getOption($name)
+    {
+        if (!array_key_exists($name, $this->options)) {
+            throw new \RuntimeException($name . ' is not a valid option.');
+        }
+
+        return $this->options[$name];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getInput()
+    {
+        return $this->input;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getOutput()
+    {
+        return $this->output;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getHelperSet()
+    {
+        return $this->helperSet;
+    }
+
+    /**
+     * {@inheritDoc}
      */
     public function getCall()
     {
@@ -111,34 +264,5 @@ abstract class AbstractCall implements CallInterface
     public function getTask()
     {
         return $this->task;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getCommand()
-    {
-        return $this->command;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getInput()
-    {
-        return $this->command->getInput();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getOutput()
-    {
-        return $this->command->getOutput();
-    }
-
-    public function getHelperSet()
-    {
-        return $this->command->getHelperSet();
     }
 }
