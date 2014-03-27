@@ -74,7 +74,7 @@ EOF
             if ($option['default'] !== null) {
                 if (is_array($option['default'])) {
                     $option['default'] = json_encode($option['default']);
-                } elseif(is_bool($option['default'])) {
+                } elseif (is_bool($option['default'])) {
                     $option['default'] = $option['default'] ? 'True' : 'False';
                 }
                 $default = $option['default'];
