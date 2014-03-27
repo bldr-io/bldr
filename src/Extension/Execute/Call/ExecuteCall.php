@@ -38,8 +38,6 @@ class ExecuteCall extends AbstractCall
 
     /**
      * {@inheritDoc}
-     *
-     * Logic obtained from http://stackoverflow.com/a/6144213/248903
      */
     public function run()
     {

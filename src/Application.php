@@ -67,9 +67,11 @@ EOF;
      */
     public function getCommands()
     {
-        $commands   = [];
-        $commands[] = new Commands\InitCommand();
-        $commands[] = new Commands\BuildCommand();
+        $commands = [
+            new Commands\InitCommand(),
+            new Commands\BuildCommand(),
+            new Commands\TaskListCommand()
+        ];
 
         return $commands;
     }
@@ -123,6 +125,7 @@ EOF;
     {
         return "\n" . self::$logo . "\n\n" . parent::getHelp();
     }
+
     /**
      * Loads the config for the necessary commands, and sets the container for classes that need it.
      *
@@ -156,7 +159,13 @@ EOF;
     {
         $container = new ContainerBuilder();
 
-        $container->getParameterBag()->add($this->getConfig()->all());
+        if (null !== $this->config) {
+            $container->getParameterBag()
+                ->add(
+                    $this->getConfig()
+                        ->all()
+                );
+        }
 
         if (null !== $this->config) {
             $extensions = $this->config->has('extensions') ? $this->config->get('extensions') : [];
