@@ -114,12 +114,21 @@ abstract class AbstractCall implements CallInterface
                 throw new \RuntimeException(
                     sprintf(
                         "Running the %s task failed. The %s option requires a value.",
-                        $this->getTask()->getName(),
+                        $this->getTask()
+                            ->getName(),
                         $option['name']
                     )
                 );
             }
         }
+    }
+
+    /**
+     * @return Task
+     */
+    public function getTask()
+    {
+        return $this->task;
     }
 
     /**
@@ -198,21 +207,6 @@ abstract class AbstractCall implements CallInterface
     /**
      * @param string $name
      *
-     * @return string|integer
-     * @throws \RuntimeException
-     */
-    protected function getOption($name)
-    {
-        if (!array_key_exists($name, $this->options)) {
-            throw new \RuntimeException($name . ' is not a valid option.');
-        }
-
-        return $this->options[$name];
-    }
-
-    /**
-     * @param string $name
-     *
      * @return Boolean
      */
     public function hasOption($name)
@@ -275,10 +269,32 @@ abstract class AbstractCall implements CallInterface
     }
 
     /**
-     * @return Task
+     * @param string $name
+     *
+     * @return string|integer
+     * @throws \RuntimeException
      */
-    public function getTask()
+    protected function getOption($name)
     {
-        return $this->task;
+        if (!array_key_exists($name, $this->options)) {
+            throw new \RuntimeException($name . ' is not a valid option.');
+        }
+
+        return $this->options[$name]['value'];
+    }
+
+    /**
+     * @param string         $name
+     * @param string|integer $value
+     *
+     * @throws \RuntimeException
+     */
+    protected function setOption($name, $value)
+    {
+        if (!array_key_exists($name, $this->options)) {
+            throw new \RuntimeException($name . ' is not a valid option.');
+        }
+
+        $this->options[$name]['value'] = $value;
     }
 }

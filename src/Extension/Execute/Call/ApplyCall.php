@@ -28,33 +28,29 @@ class ApplyCall extends ExecuteCall
      */
     private $files;
 
+    public function configure()
+    {
+        parent::configure();
+        $this->addOption('fileset', true, 'The fileset to run the executable on');
+    }
+
     /**
      * {@inheritDoc}
-     *
-     * Logic obtained from http://stackoverflow.com/a/6144213/248903
      */
     public function run()
     {
-        $arguments = $this->resolveProcessArgs();
-        
-        $this->setFileset($this->getCall()->fileset);
+        $this->setFileset($this->getOption('fileset'));
 
         /** @var FormatterHelper $formatter */
         $formatter = $this->getHelperSet()->get('formatter');
 
-        $this->getOutput()->writeln(
-            [
-                "",
-                $formatter->formatSection($this->getTask()->getName(), 'Starting'),
-                ""
-            ]
-        );
+        $this->getOutput()->writeln($formatter->formatSection($this->getTask()->getName(), 'Starting'));
 
         foreach ($this->files as $file) {
-            $args   = $arguments;
+            $args = $this->getOption('arguments');
             $args[] = $file;
-
-            parent::run($args);
+            $this->setOption('arguments', $args);
+            parent::run();
         }
     }
 
