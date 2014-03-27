@@ -22,7 +22,7 @@ class WatchCall extends AbstractCall
     /**
      * {@inheritDoc}
      */
-    public function run(array $arguments)
+    public function run()
     {
         if (!$this->getCall()->has('files')) {
             throw new \Exception("Watch must have files.");

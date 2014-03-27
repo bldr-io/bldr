@@ -43,8 +43,8 @@ class Task
         if (sizeof($calls) > 0) {
             foreach ($calls as $data) {
                 if (is_array($data)) {
-                    $call = new Call($data['type'], isset($data['arguments']) ? $data['arguments'] : []);
-                    unset($data['type'], $data['arguments']);
+                    $call = new Call($data['type']);
+                    unset($data['type']);
                     foreach ($data as $key => $value) {
                         $call->$key = $value;
                     }

@@ -29,6 +29,7 @@ class ExecuteCall extends AbstractCall
      */
     public function run()
     {
+        $arguments = $this->resolveProcessArgs();
 
         /** @var FormatterHelper $formatter */
         $formatter = $this->getHelperSet()->get('formatter');
@@ -76,6 +77,29 @@ class ExecuteCall extends AbstractCall
                 throw new \Exception("Failed on the {$this->getTask()->getName()} task.\n" . $process->getErrorOutput());
             }
         }
+    }
+
+    /**
+     * Resolves the Executable and Arguments and returns a merged array
+     *
+     * @return array
+     */
+    protected function resolveProcessArgs()
+    {
+        if (!$this->getCall()->has('executable')) {
+            throw new \RuntimeException(
+                'The Exec Task requires an executable to be specified!'
+            );
+        }
+
+        $executable = $this->getCall()->executable;
+        $arguments  = [$executable];
+
+        if ($this->getCall()->has('arguments')) {
+            $arguments = array_merge($arguments, $this->getCall()->arguments);
+        }
+
+        return $arguments;
     }
 
     /**

@@ -21,16 +21,16 @@ class MkdirCall extends FilesystemCall
     /**
      * Runs the command
      *
-     * @param array $arguments
-     *
      * @throws \Exception
      * @return mixed
      */
     public function run()
     {
-        foreach ($arguments as $file) {
+        $files = $this->resolveFiles();
+
+        foreach ($files as $file) {
             if ($this->fileSystem->exists($file)) {
-                if ($this->failOnError) {
+                if ($this->getFailOnError()) {
                     throw new \Exception("File `$file` already exist.");
                 }
 
@@ -40,10 +40,10 @@ class MkdirCall extends FilesystemCall
             $this->fileSystem->mkdir([$file]);
 
             /** @var FormatterHelper $formatter */
-            $formatter = $this->helperSet->get('formatter');
-            $this->output->writeln(
+            $formatter = $this->getHelperSet()->get('formatter');
+            $this->getOutput()->writeln(
                 $formatter->formatSection(
-                    $this->task->getName(),
+                    $this->getTask()->getName(),
                     "Creating $file"
                 )
             );

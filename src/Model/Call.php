@@ -22,11 +22,6 @@ class Call
     private $type;
 
     /**
-     * @var string[] $arguments
-     */
-    private $arguments;
-
-    /**
      * @var array $data
      */
     private $data;
