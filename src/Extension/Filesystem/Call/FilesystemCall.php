@@ -27,4 +27,20 @@ abstract class FilesystemCall extends \Bldr\Call\AbstractCall
     {
         $this->fileSystem = new Filesystem();
     }
+
+    /**
+     * Returns an array of files or directories for the call
+     *
+     * @return array
+     */
+    protected function resolveFiles()
+    {
+        if (!$this->getCall()->has('files') && !is_array($this->getCall()->files)) {
+            throw new \RuntimeException(
+                'The File System Task requires an array of directories or files'
+            );
+        }
+
+        return $this->getCall()->files;
+    }
 }

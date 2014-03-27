@@ -211,6 +211,22 @@ abstract class AbstractCall implements CallInterface
     }
 
     /**
+     * @param string $name
+     *
+     * @return Boolean
+     */
+    public function hasOption($name)
+    {
+        if (array_key_exists($name, $this->options)) {
+            if (null !== $this->options[$name]) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function getInput()

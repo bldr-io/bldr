@@ -43,7 +43,7 @@ class ExecuteCall extends AbstractCall
      */
     public function run()
     {
-        $arguments = $this->getOption('arguments');
+        $arguments = $this->resolveProcessArgs();
 
         /** @var FormatterHelper $formatter */
         $formatter = $this->getHelperSet()->get('formatter');
@@ -52,8 +52,8 @@ class ExecuteCall extends AbstractCall
 
         $builder = new ProcessBuilder($arguments);
 
-        if ($this->getCall()->has('cwd')) {
-            $builder->setWorkingDirectory($this->getCall()->cwd);
+        if ($this->hasOption('cwd')) {
+            $builder->setWorkingDirectory($this->getOption('cwd'));
         }
 
         $process = $builder->getProcess();
@@ -72,9 +72,9 @@ class ExecuteCall extends AbstractCall
             $this->getOutput()->writeln($process->getCommandLine());
         }
 
-        if ($this->getCall()->has('output')) {
-            $append = $this->getCall()->has('append') && $this->getCall()->append ? 'a' : 'w';
-            $stream = fopen($this->getCall()->output, $append);
+        if ($this->hasOption('output')) {
+            $append = $this->hasOption('append') && $this->getOption('append') ? 'a' : 'w';
+            $stream = fopen($this->getOption('output'), $append);
             $output = new StreamOutput($stream, StreamOutput::VERBOSITY_NORMAL, true);
         } else {
             $output = $this->getOutput();
@@ -86,11 +86,24 @@ class ExecuteCall extends AbstractCall
             }
         );
 
-        if ($this->getCall()->has('failOnError') && $this->getCall()->failOnError) {
-            if ($this->getCall()->has('successCodes') && !in_array($process->getExitCode(), $this->getCall()->successCodes)) {
+        if ($this->getFailOnError()) {
+            if (!in_array($process->getExitCode(), $this->getSuccessStatusCodes())) {
                 throw new \Exception("Failed on the {$this->getTask()->getName()} task.\n" . $process->getErrorOutput());
             }
         }
+    }
+
+    /**
+     * Resolves the Executable and Arguments and returns a merged array
+     *
+     * @return array
+     */
+    protected function resolveProcessArgs()
+    {
+        return array_merge(
+            [$this->getOption('executable')],
+            $this->getOption('arguments')
+        );
     }
 
     /**

@@ -21,22 +21,22 @@ class TouchCall extends FilesystemCall
     /**
      * Runs the command
      *
-     * @param array $arguments
-     *
      * @throws \Exception
      * @return mixed
      */
     public function run()
     {
-        foreach ($arguments as $file) {
+        $files = $this->resolveFiles();
+
+        foreach ($files as $file) {
 
             $this->fileSystem->touch([$file]);
 
             /** @var FormatterHelper $formatter */
-            $formatter = $this->helperSet->get('formatter');
-            $this->output->writeln(
+            $formatter = $this->getHelperSet()->get('formatter');
+            $this->getOutput()->writeln(
                 $formatter->formatSection(
-                    $this->task->getName(),
+                    $this->getTask()->getName(),
                     "Touching $file"
                 )
             );
