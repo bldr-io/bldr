@@ -185,11 +185,20 @@ EOF;
 
         if (null !== $this->config) {
             $extensions = $this->config->has('extensions') ? $this->config->get('extensions') : [];
+            if (!isset($extensions['Bldr\DependencyInjection\BldrExtension'])) {
+                $extensions['Bldr\DependencyInjection\BldrExtension'] = [];
+            }
             if (!isset($extensions['Bldr\Extension\Execute\DependencyInjection\ExecuteExtension'])) {
                 $extensions['Bldr\Extension\Execute\DependencyInjection\ExecuteExtension'] = [];
             }
             if (!isset($extensions['Bldr\Extension\Filesystem\DependencyInjection\FilesystemExtension'])) {
                 $extensions['Bldr\Extension\Filesystem\DependencyInjection\FilesystemExtension'] = [];
+            }
+            if (!isset($extensions['Bldr\Extension\Notify\DependencyInjection\NotifyExtension'])) {
+                $extensions['Bldr\Extension\Notify\DependencyInjection\NotifyExtension'] = [];
+            }
+            if (!isset($extensions['Bldr\Extension\Watch\DependencyInjection\WatchExtension'])) {
+                $extensions['Bldr\Extension\Watch\DependencyInjection\WatchExtension'] = [];
             }
 
             foreach ($extensions as $extensionClass => $config) {

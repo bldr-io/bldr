@@ -14,15 +14,15 @@ namespace Bldr\Command;
 use Bldr\Application;
 use Bldr\Call\CallInterface;
 use Bldr\Config;
-use Bldr\Event;
 use Bldr\Event as Events;
+use Bldr\Event;
 use Bldr\Model\Call;
 use Bldr\Model\Task;
+use Bldr\Registry\TaskRegistry;
 use Symfony\Component\Console\Helper\FormatterHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
@@ -30,7 +30,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 class BuildCommand extends AbstractCommand
 {
     /**
-     * @var Task[] $tasks
+     * @var TaskRegistry $tasks
      */
     private $tasks;
 
@@ -85,6 +85,8 @@ EOF
             ->getApplication()
             ->setBuildName();
 
+        $this->tasks = $this->container->get('bldr.registry.task');
+
         $this->output->writeln(["\n", Application::$logo, "\n"]);
         $this->addEvent(Event::START, new Events\BuildEvent($this, true));
 
@@ -128,11 +130,10 @@ EOF
                 ]
             );
 
-            $this->tasks = $this->fetchTasks($profileName);
+            $this->fetchTasks($profileName);
             $this->addEvent(Event::PRE_PROFILE, new Events\ProfileEvent($this, true));
         } else {
-
-            $this->tasks = $this->buildTasks($tasks);
+            $this->buildTasks($tasks);
         }
 
         $this->runTasks();
@@ -143,18 +144,14 @@ EOF
     }
 
     /**
-     * @param string       $profileName
-     *
-     * @return Task[]
+     * @param string $profileName
      */
     public function fetchTasks($profileName)
     {
         $config = $this->getConfig();
 
         $profile = $config->get('profiles')[$profileName];
-        $tasks   = $this->buildTasks($profile['tasks']);
-
-        return $tasks;
+        $this->buildTasks($profile['tasks']);
     }
 
     /**
@@ -164,15 +161,14 @@ EOF
      */
     public function buildTasks($names)
     {
-        $tasks = [];
         foreach ($names as $name) {
-            $taskInfo     = $this->getConfig()->get('tasks')[$name];
+            $taskInfo     =
+                $this->getConfig()
+                    ->get('tasks')[$name];
             $description  = isset($taskInfo['description']) ? $taskInfo['description'] : "";
             $task         = new Task($name, $description, $taskInfo['calls']);
-            $tasks[$name] = $task;
+            $this->tasks->addTask($task);
         }
-
-        return $tasks;
     }
 
     /**
@@ -195,8 +191,8 @@ EOF
      */
     public function runTasks()
     {
-        while (sizeof($this->tasks) > 0) {
-            $this->runTask(array_shift($this->tasks));
+        while ($this->tasks->count() > 0) {
+            $this->runTask($this->tasks->getNewTask());
         }
     }
 
