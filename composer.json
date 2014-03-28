@@ -9,7 +9,6 @@
         "symfony/process":              "~2.4",
         "symfony/yaml":                 "~2.4",
         "symfony/filesystem":           "~2.4",
-        "herrera-io/phar-update":       "2.*",
         "zendframework/zend-json":      "2.3.*"
     },
     "suggest":      {

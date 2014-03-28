@@ -9,7 +9,7 @@ in ``$PATH`` as shown here_.
 
 .. code-block:: shell
 
-    $ composer global require bldr-io/bldr "~1.0.0"
+    $ composer global require bldr-io/bldr "~2.0.0"
 
     # Or
 
@@ -21,7 +21,7 @@ in ``$PATH`` as shown here_.
 
 .. code-block:: shell
 
-    $ composer require bldr-io/bldr "~1.0.0"
+    $ composer require bldr-io/bldr "~2.0.0"
 
 
 

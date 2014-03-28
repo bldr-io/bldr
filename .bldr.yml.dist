@@ -1,90 +1,124 @@
-name: bldr-io/bldr
-description: 'Build System with YAML in mind'
+bldr:
+    name: bldr-io/bldr
+    description: 'Build System with YAML in mind'
 
-profiles:
-    default:
-        description: 'Development Profile'
-        tasks:
-            - prepare
-            - lint
-            - phpcs
-            - test
-    watch:
-        description: "Watch Profile"
-        tasks:
-            - test
-            - watch
+    profiles:
+        default:
+            description: 'Development Profile'
+            tasks:
+                - prepare
+                - lint
+                - phpcs
+                - test
+        watch:
+            description: "Watch Profile"
+            tasks:
+                - test
+                - watch
+        server:
+            description: Starts a server and waits for a bit. Then kills it.
+            tasks:
+                - server
 
-tasks:
-    watch:
-        calls:
-            -
-                type: watch
-                files: [src/**.php, tests/**.php]
-                task: test
-    prepare:
-        description: 'Cleans up old builds and prepares the new one'
-        calls:
-            -
-                type: filesystem:remove
-                files: [build/coverage, build/logs]
-            -
-                type: filesystem:mkdir
-                failOnError: true
-                files: [build/coverage, build/logs]
-            -
-                type: filesystem:touch
-                failOnError: true
-                files: [build/coverage/index.html]
-            -
-                type: exec
-                failOnError: true
-                executable: composer
-                arguments: [install, --prefer-dist]
-            -
-                type: notify
-                message: Prepare Task Finished
-    lint:
-        describe: 'Lints the files of the project'
-        calls:
-            -
-                type: apply
-                failOnError: true
-                fileset: [src/*.php, src/**/*.php]
-                executable: php
-                arguments: [-l]
+    tasks:
+        server:
+            calls:
+                -
+                    type: notify
+                    message: Starting Web Server
+                -
+                    type: background
+                    executable: php
+                    arguments:
+                        - -S
+                        - 127.0.0.1:8080
+                -
+                    type: notify
+                    message: Started Web Server
+                -
+                    type: exec
+                    executable: sleep
+                    arguments: [30]
+                -
+                    type: notify
+                    message: Killing Web Server
+                -
+                    type: background
+                    executable: php
+                    kill: true
+                    arguments:
+                        - -S
+                        - 127.0.0.1
+                -
+                    type: notify
+                    message: Killed Web Server
+        watch:
+            calls:
+                -
+                    type: watch
+                    files: [src/**.php, tests/**.php]
+                    task: test
+        prepare:
+            description: 'Cleans up old builds and prepares the new one'
+            calls:
+                -
+                    type: filesystem:remove
+                    files: [build/coverage, build/logs]
+                -
+                    type: filesystem:mkdir
+                    failOnError: true
+                    files: [build/coverage, build/logs]
+                -
+                    type: filesystem:touch
+                    failOnError: true
+                    files: [build/coverage/index.html]
+                -
+                    type: exec
+                    failOnError: true
+                    executable: composer
+                    arguments: [install, --prefer-dist]
+                -
+                    type: notify
+                    message: Prepare Task Finished
+        lint:
+            description: 'Lints the files of the project'
+            calls:
+                -
+                    type: apply
+                    failOnError: true
+                    fileset: [src/*.php, src/**/*.php]
+                    executable: php
+                    arguments: [-l]
 
-    phpcs:
-        description: 'Runs the PHP Code Sniffer'
-        calls:
-            -
-                type: exec
-                executable: php
-                arguments:
-                    - bin/phpcs
-                    - --standard=phpcs.xml
-                    - --report=full
-                    - src/
-            -
-                type: exec
-                output: /dev/null
-                append: false
-                executable: php
-                arguments:
-                    - bin/phpcs
-                    - --standard=phpcs.xml
-                    - --report=checkstyle
-                    - --report-file=build/logs/checkstyle.xml
-                    - src/
-    test:
-        description: 'Runs the PHPUnit Tests'
-        calls:
-            -
-                type: exec
-                failOnError: false
-                executable: php
-                arguments:
-                    - bin/phpunit
-                    - --coverage-text=php://stdout
-
-extensions: ~
+        phpcs:
+            description: 'Runs the PHP Code Sniffer'
+            calls:
+                -
+                    type: exec
+                    executable: php
+                    arguments:
+                        - bin/phpcs
+                        - --standard=phpcs.xml
+                        - --report=full
+                        - src/
+                -
+                    type: exec
+                    output: /dev/null
+                    append: false
+                    executable: php
+                    arguments:
+                        - bin/phpcs
+                        - --standard=phpcs.xml
+                        - --report=checkstyle
+                        - --report-file=build/logs/checkstyle.xml
+                        - src/
+        test:
+            description: 'Runs the PHPUnit Tests'
+            calls:
+                -
+                    type: exec
+                    failOnError: false
+                    executable: php
+                    arguments:
+                        - bin/phpunit
+                        - --coverage-text=php://stdout

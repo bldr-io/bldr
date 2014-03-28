@@ -97,7 +97,7 @@ abstract class AbstractCall implements CallInterface
             $this->options[$key]['value'] = $value;
         }
 
-        foreach ($this->options as $option) {
+        foreach ($this->options as &$option) {
             if ($option['value'] === null && $option['default'] !== null) {
                 $option['value'] = $option['default'];
             }

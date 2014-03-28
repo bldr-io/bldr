@@ -42,24 +42,35 @@ class Application extends BaseApplication
 EOF;
 
     /**
-     * @var Config $config
-     */
-    private $config;
-
-    /**
      * @var ContainerInterface $container
      */
     private $container;
 
     /**
+     * @return Application
+     */
+    public static function create()
+    {
+        return new static('Bldr', '@package_version@');
+    }
+
+    /**
      * @param string $name
      * @param string $version
      */
-    public function __construct($name = 'Bldr', $version = '@package_version@')
+    public function __construct($name, $version)
     {
+        if ($version === '@package_version@') {
+            $version = `git rev-parse --verify HEAD`;
+        }
+
         parent::__construct($name, $version);
 
+        $this->buildContainer();
+
         $this->addCommands($this->getCommands());
+
+        $this->run($this->container->get('input'), $this->container->get('output'));
     }
 
     /**
@@ -78,11 +89,10 @@ EOF;
     }
 
     /**
-     *
+     * @todo Fix config references
      */
     public function setBuildName()
     {
-        $config = $this->getConfig();
         $date   = new \DateTime('now');
 
         if (getenv('TRAVIS') === 'true') {
@@ -93,28 +103,12 @@ EOF;
         } else {
             $name = sprintf(
                 'local_%s_%s',
-                str_replace('/', '_', $config->get('name')),
+                str_replace('/', '_', $this->container->getParameter('name')),
                 $date->format("Y-m-d_H-i-s")
             );
         }
 
         static::$BUILD_NAME = $name;
-    }
-
-    /**
-     * @return Config
-     */
-    public function getConfig()
-    {
-        return $this->config;
-    }
-
-    /**
-     * @param Config $config
-     */
-    public function setConfig(Config $config)
-    {
-        $this->config = $config;
     }
 
     /**
@@ -138,12 +132,6 @@ EOF;
      */
     protected function doRunCommand(Command $command, InputInterface $input, OutputInterface $output)
     {
-        $skipYaml = ['Bldr\Command\InitCommand', 'Symfony\Component\Console\Command\ListCommand'];
-        if (!in_array(get_class($command), $skipYaml)) {
-            $this->config = Config::factory();
-        }
-
-        $this->buildContainer();
         if ($command instanceof ContainerAwareInterface) {
             $command->setContainer($this->container);
         }
@@ -158,7 +146,7 @@ EOF;
      */
     private function buildContainer()
     {
-        $this->container = new ContainerBuilder($this->config);
+        $this->container = new ContainerBuilder();
 
         return $this->container;
     }

@@ -39,14 +39,13 @@
             "in": "vendor"
         },
         {
-            "name": "schema.json",
-            "in": "vendor/herrera-io/phar-update/res"
-        },
-        {
             "name": "hiddeninput.exe",
             "in": "vendor/symfony/console/Symfony/Component/Console/Resources/bin"
         }
     ],
+    "extract": true,
+    "git-commit": "git-commit",
+    "git-version": "package_version",
     "main": "bin/bldr",
     "output": "bldr.phar",
     "stub": true

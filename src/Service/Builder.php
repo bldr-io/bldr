@@ -51,7 +51,12 @@ class Builder
      */
     private $helperSet;
 
-    public function __construct(EventDispatcherInterface $dispatcher, array $tasks = [])
+    public function __construct(
+        EventDispatcherInterface $dispatcher,
+        InputInterface $input,
+        OutputInterface $output,
+        array $tasks = []
+    )
     {
         $this->dispatcher = $dispatcher;
         $this->tasks      = $tasks;

@@ -11,14 +11,22 @@
 
 namespace Bldr;
 
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
+use Bldr\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Config\Loader\DelegatingLoader;
+use Symfony\Component\Config\Loader\LoaderResolver;
+use Bldr\DependencyInjection\Loader\YamlFileLoader;
+use Bldr\DependencyInjection\Loader\XmlFileLoader;
+use Bldr\DependencyInjection\Loader\PhpFileLoader;
+use Bldr\DependencyInjection\Loader\IniFileLoader;
+use Bldr\DependencyInjection\Loader\JsonFileLoader;
 use Symfony\Component\Yaml\Yaml;
 use Zend\Json\Json;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
  */
-class Config extends ParameterBag
+class Config
 {
     /**
      * @var string $NAME
@@ -28,7 +36,7 @@ class Config extends ParameterBag
     /**
      * @var array $TYPES
      */
-    public static $TYPES = ['yml' => true, 'json' => true];
+    public static $TYPES = ['yml', 'xml', 'php', 'ini', 'json'];
 
     /**
      * @var string $DEFAULT_TYPE
@@ -36,24 +44,25 @@ class Config extends ParameterBag
     public static $DEFAULT_TYPE = 'yml';
 
     /**
-     * @throws \Exception
-     * @internal param string $file
-     * @return Config
+     * @param ContainerBuilder $container
      */
-    public static function factory()
+    public static function read(ContainerBuilder $container)
     {
         list($file, $type) = static::getFile();
-        static::isTypeAllowed($type);
 
-        $data = file_get_contents($file);
+        $locator  = new FileLocator([getcwd(), getcwd() . '/.bldr/']);
+        $resolver = new LoaderResolver(
+            [
+                new YamlFileLoader($container, $locator),
+                new XmlFileLoader($container, $locator),
+                new PhpFileLoader($container, $locator),
+                new IniFileLoader($container, $locator),
+                new JsonFileLoader($container, $locator)
+            ]
+        );
 
-        // Yaml
-        if ($type === 'yml') {
-            return new static(Yaml::parse($data));
-        }
-
-        // Json
-        return new static(Json::decode($data, Json::TYPE_ARRAY));
+        $loader = new DelegatingLoader($resolver);
+        $loader->load($file);
     }
 
     /**
@@ -63,7 +72,7 @@ class Config extends ParameterBag
     public static function getFile()
     {
         $tried = [];
-        foreach (array_keys(static::$TYPES) as $type) {
+        foreach (static::$TYPES as $type) {
 
             $file = static::$NAME . '.' . $type;
 
@@ -82,67 +91,5 @@ class Config extends ParameterBag
         }
 
         throw new \Exception("Couldn't find a config file. Tried: " . implode(', ', $tried));
-    }
-
-    /**
-     * @param string $type
-     *
-     * @throws \Exception
-     */
-    public static function isTypeAllowed($type)
-    {
-        if (!array_key_exists($type, static::$TYPES)) {
-            throw new \Exception(sprintf("%s is not a valid extension. Feel free to make a PR", $type));
-        }
-    }
-
-    /**
-     * @param string  $type
-     * @param array   $data
-     * @param Boolean $dist
-     * @param Boolean $delete
-     *
-     * @throws \Exception
-     * @return static
-     */
-    public static function create($type, $data = [], $dist = false, $delete = false)
-    {
-        static::isTypeAllowed($type);
-
-        $file = static::$NAME . '.' . $type . ($dist ? '.dist' : '');
-
-        static::checkForFile($file, $delete);
-
-        $content = '';
-
-        // Yaml
-        if ($type === 'yml') {
-            $content = Yaml::dump($data, 8);
-        }
-
-        // Json
-        if ($type === 'json') {
-            $content = Json::prettyPrint(Json::encode($data));
-        }
-
-        file_put_contents($file, $content);
-        
-        return new static($data);
-    }
-
-    /**
-     * @param string  $file
-     * @param Boolean $delete
-     *
-     * @throws \Exception
-     */
-    public static function checkForFile($file, $delete = false)
-    {
-        if (file_exists($file)) {
-            if (!$delete) {
-                throw new \Exception(sprintf("File '%s' already exists."));
-            }
-            unlink($file);
-        }
     }
 }

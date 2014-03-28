@@ -11,8 +11,15 @@
 
 namespace Bldr\DependencyInjection;
 
+use Bldr\Config;
+use Bldr\Extension;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\DependencyInjection\ContainerBuilder as BaseContainerBuilder;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\Config\FileLocator;
+
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
@@ -25,57 +32,50 @@ class ContainerBuilder extends BaseContainerBuilder
     public function __construct(ParameterBagInterface $parameterBag = null)
     {
         parent::__construct($parameterBag);
-
-        if (null !== $parameterBag) {
-            $extensions = $parameterBag->has('extensions') ? $parameterBag->get('extensions') : [];
-            if ($extensions === null) {
-                $extensions = [];
-            }
-
-            $extensions = $this->getCoreExtensions($extensions);
-
-            foreach ($extensions as $extensionClass => $config) {
-                $this->prepareExtension(new $extensionClass, null === $config ? [] : $config);
-            }
-        }
-
         $this->compile();
     }
 
     /**
-     * @param string[] $extensions
      *
+     */
+    public function compile()
+    {
+        if (null !== $this->parameterBag) {
+            $extensions = $this->getCoreExtensions();
+
+            foreach ($extensions as $extension) {
+                $this->prepareExtension($extension);
+            }
+        }
+
+        Config::read($this);
+
+        parent::compile();
+    }
+
+    /**
      * @return array
      */
-    private function getCoreExtensions(array $extensions)
+    private function getCoreExtensions()
     {
-        if (!isset($extensions['Bldr\DependencyInjection\BldrExtension'])) {
-            $extensions['Bldr\DependencyInjection\BldrExtension'] = [];
-        }
-        if (!isset($extensions['Bldr\Extension\Execute\DependencyInjection\ExecuteExtension'])) {
-            $extensions['Bldr\Extension\Execute\DependencyInjection\ExecuteExtension'] = [];
-        }
-        if (!isset($extensions['Bldr\Extension\Filesystem\DependencyInjection\FilesystemExtension'])) {
-            $extensions['Bldr\Extension\Filesystem\DependencyInjection\FilesystemExtension'] = [];
-        }
-        if (!isset($extensions['Bldr\Extension\Notify\DependencyInjection\NotifyExtension'])) {
-            $extensions['Bldr\Extension\Notify\DependencyInjection\NotifyExtension'] = [];
-        }
-        if (!isset($extensions['Bldr\Extension\Watch\DependencyInjection\WatchExtension'])) {
-            $extensions['Bldr\Extension\Watch\DependencyInjection\WatchExtension'] = [];
-        }
+        $extensions = [
+            new BldrExtension(),
+            new Extension\Execute\DependencyInjection\ExecuteExtension(),
+            new Extension\Filesystem\DependencyInjection\FilesystemExtension(),
+            new Extension\Notify\DependencyInjection\NotifyExtension(),
+            new Extension\Watch\DependencyInjection\WatchExtension()
+        ];
 
         return $extensions;
     }
 
     /**
      * @param AbstractExtension $extension
-     * @param array             $config
      */
-    private function prepareExtension(AbstractExtension $extension, array $config)
+    private function prepareExtension(AbstractExtension $extension)
     {
         $this->registerExtension($extension);
-        $this->loadFromExtension($extension->getAlias(), $config);
+        $this->loadFromExtension($extension->getAlias());
         foreach ($extension->getCompilerPasses() as $pass) {
             $this->addCompilerPass($pass);
         }

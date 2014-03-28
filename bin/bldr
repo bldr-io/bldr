@@ -1,6 +1,10 @@
 #!/usr/bin/env php
 <?php
 
+error_reporting(-1);
+ini_set('display_errors', 1);
+
+
 /**
  * This file is part of Bldr.io.
  *
@@ -55,16 +59,4 @@ if (false === $autoloader) {
     exit(1);
 }
 
-error_reporting(-1);
-ini_set('display_errors', 1);
-
-$process = new Symfony\Component\Process\Process('git --version', getcwd());
-$process->run();
-
-if (!$process->isSuccessful()) {
-    throw new \RuntimeException('Git is required.');
-}
-
-$app = new Bldr\Application();
-
-$app->run();
+Bldr\Application::create();
