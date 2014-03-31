@@ -3,7 +3,7 @@ Bldr [![Build Status](https://travis-ci.org/bldr-io/bldr.svg?branch=master)](htt
 
 Simplified Build System/Task Runner
 
-Uses Yaml and JSON for config (can use others, just make a pull request)
+Uses Yaml, JSON, XML, PHP, or INI for configs
 
 
 ### Documentation
