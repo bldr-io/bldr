@@ -33,7 +33,8 @@ class ExecuteCall extends AbstractCall
             ->addOption('arguments', false, 'Arguments to run on the executable', [])
             ->addOption('cwd', false, 'Sets the working directory for the executable')
             ->addOption('output', false, 'Sets the location to output to')
-            ->addOption('append', false, 'If output is set, should it append?', false);
+            ->addOption('append', false, 'If output is set, should it append?', false)
+            ->addOption('dry-run', true, 'If set, will not run command', false);
     }
 
     /**
@@ -66,6 +67,10 @@ class ExecuteCall extends AbstractCall
 
         if ($this->getOutput()->isVerbose()) {
             $this->getOutput()->writeln($process->getCommandLine());
+        }
+
+        if ($this->getOption('dry-run')) {
+            return true;
         }
 
         if ($this->hasOption('output')) {
