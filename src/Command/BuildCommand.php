@@ -98,15 +98,13 @@ EOF
     public function doExecute($profileName = null, array $tasks = [])
     {
         if ([] === $tasks) {
-            $config = $this->getConfig();
-
-            $profile = $config->get('profiles')[$profileName];
+            $profile = $this->container->getParameter('profiles')[$profileName];
 
             $projectFormat = [
-                sprintf("Building the '%s' project", $config->get('name'))
+                sprintf("Building the '%s' project", $this->container->getParameter('name'))
             ];
-            if ($config->has('description')) {
-                $projectFormat[] = sprintf(" - %s - ", $config->get('description'));
+            if ($this->container->hasParameter('description')) {
+                $projectFormat[] = sprintf(" - %s - ", $this->container->getParameter('description'));
             }
 
             $profileFormat = [
@@ -140,15 +138,6 @@ EOF
     }
 
     /**
-     * @return Config
-     */
-    public function getConfig()
-    {
-        return $this->getApplication()
-            ->getConfig();
-    }
-
-    /**
      * @param string|array $output
      * @param string       $background
      * @param string       $foreground
@@ -168,9 +157,7 @@ EOF
      */
     public function fetchTasks($profileName)
     {
-        $config = $this->getConfig();
-
-        $profile = $config->get('profiles')[$profileName];
+        $profile = $this->container->getParameter('profiles')[$profileName];
         $this->buildTasks($profile['tasks']);
     }
 
@@ -182,8 +169,7 @@ EOF
     public function buildTasks($names)
     {
         foreach ($names as $name) {
-            $taskInfo    = $this->getConfig()
-                ->get('tasks')[$name];
+            $taskInfo    = $this->container->getParameter('tasks')[$name];
             $description = isset($taskInfo['description']) ? $taskInfo['description'] : "";
             $task        = new Task($name, $description, $taskInfo['calls']);
             $this->tasks->addTask($task);
