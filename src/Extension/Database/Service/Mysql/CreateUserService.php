@@ -72,13 +72,21 @@ class CreateUserService extends AbstractMysqlService
 
         file_put_contents($file, $sql);
 
-        $this->setOption('arguments', $arguments);
+        $arguments = 'mysql ' . implode(' ', $arguments);
 
-        $arguments = 'mysql ' . implode(' ', $this->getOption('arguments'));
+        if ($this->getOutput()->isVerbose()) {
+            $this->getOutput()->writeln($arguments);
+        }
+
+        if ($this->getOption('dry_run')) {
+            return 0;
+        }
 
         $result = `$arguments`;
 
-        $this->output->writeln($result);
+        unlink($file);
+
+        $this->getOutput()->writeln($result);
 
         return 0;
     }
