@@ -73,6 +73,13 @@ class CreateUserService extends AbstractMysqlService
         file_put_contents($file, $sql);
 
         $this->setOption('arguments', $arguments);
-        parent::run();
+
+        $arguments = 'mysql ' . implode(' ', $this->getOption('arguments'));
+
+        $result = `$arguments`;
+
+        $this->output->writeln($result);
+
+        return 0;
     }
 }

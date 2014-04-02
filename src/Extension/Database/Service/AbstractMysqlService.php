@@ -11,12 +11,12 @@
 
 namespace Bldr\Extension\Database\Service;
 
-use Bldr\Extension\Execute\Call\ExecuteCall;
+use Bldr\Call\AbstractCall;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
  */
-abstract class AbstractMysqlService extends ExecuteCall
+abstract class AbstractMysqlService extends AbstractCall
 {
     /**
      * {@inheritDoc}
@@ -29,7 +29,6 @@ abstract class AbstractMysqlService extends ExecuteCall
             ->addOption('password', true, 'Password for the mysql cli')
             ->addOption('host', true, 'IP/Host of the mysql server (127.0.0.1)', '127.0.0.1')
             ->addOption('port', true, 'Port of the mysql server (3306)', 3306)
-            ->addOption('database', false, 'Database to use for the mysql cli')
-            ->setOption('executable', 'mysql');
+            ->addOption('database', false, 'Database to use for the mysql cli');
     }
 }
