@@ -36,6 +36,8 @@ class BuilderCompilerPass implements CompilerPassInterface
                 'Bldr\Service\Builder',
                 [
                     new Reference('bldr.dispatcher'),
+                    new Reference('input'),
+                    new Reference('output'),
                     $this->findBldrServices($container)
                 ]
             )

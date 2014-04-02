@@ -11,13 +11,14 @@
 
 namespace Bldr\Extension\Database\DependencyInjection;
 
+use Bldr\DependencyInjection\AbstractExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Extension\Extension;
+use Symfony\Component\DependencyInjection\Definition;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
  */
-class MysqlExtension extends Extension
+class MysqlExtension extends AbstractExtension
 {
 	/**
 	 * Loads a specific configuration.
@@ -31,7 +32,12 @@ class MysqlExtension extends Extension
 	 */
 	public function load( array $config, ContainerBuilder $container )
 	{
-
+		$container->setDefinition(
+			'bldr_database.mysql.user',
+			new Definition('Bldr\Extension\Database\Service\Mysql\CreateUserService')
+		)
+			->addTag('bldr')
+		;
 	}
 
 } 

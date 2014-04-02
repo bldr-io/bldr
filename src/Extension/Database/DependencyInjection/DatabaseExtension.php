@@ -12,12 +12,12 @@
 namespace Bldr\Extension\Database\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Extension\Extension;
+use Bldr\DependencyInjection\AbstractExtension;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
  */
-class DatabaseExtension extends Extension
+class DatabaseExtension extends AbstractExtension
 {
 	/**
 	 * Loads a specific configuration.
@@ -31,8 +31,6 @@ class DatabaseExtension extends Extension
 	 */
 	public function load( array $config, ContainerBuilder $container )
 	{
-		$container->registerExtension(new MysqlExtension);
-		$container->loadFromExtension('database_mysql');
 	}
 
 } 

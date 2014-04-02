@@ -64,7 +64,8 @@ class ContainerBuilder extends BaseContainerBuilder
             new Extension\Filesystem\DependencyInjection\FilesystemExtension(),
             new Extension\Notify\DependencyInjection\NotifyExtension(),
             new Extension\Watch\DependencyInjection\WatchExtension(),
-            new Extension\Database\DependencyInjection\DatabaseExtension()
+            new Extension\Database\DependencyInjection\DatabaseExtension(),
+            new Extension\Database\DependencyInjection\MysqlExtension()
         ];
 
         return $extensions;

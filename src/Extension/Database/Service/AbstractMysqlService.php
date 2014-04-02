@@ -23,6 +23,8 @@ abstract class AbstractMysqlService extends ExecuteCall
      */
     public function configure()
     {
+        parent::configure();
+
         $this->addOption('username', true, 'Username for the mysql CLI')
             ->addOption('password', true, 'Password for the mysql cli')
             ->addOption('host', true, 'IP/Host of the mysql server (127.0.0.1)', '127.0.0.1')

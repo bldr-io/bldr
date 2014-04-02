@@ -58,7 +58,7 @@ class BldrExtension extends AbstractExtension
     {
         foreach ($configuration['tasks'] as $name => $task) {
             foreach ($task['calls'] as $index => $call) {
-                $options                                        = $config[0]['tasks'][$name]['calls'][$index];
+                $options                                        = $config[1]['tasks'][$name]['calls'][$index];
                 $configuration['tasks'][$name]['calls'][$index] = array_merge($call, $options);
             }
         }

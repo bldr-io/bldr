@@ -19,29 +19,39 @@ bldr:
             description: Starts a server and waits for a bit. Then kills it.
             tasks:
                 - server
+        mysql:
+            description: Tests the MysqlExtension calls
+            tasks:
+                - mysql
 
     tasks:
-        server:
+        mysql:
             calls:
                 -
-                    type: notify
-                    message: Starting Web Server
+                    type: mysql:user
+                    username: root
+                    password: root
+                    new_username: testUser
+                    new_password: testPass
+                    allowed_host: %
+                    privileges: [ALL]
+                    table: '*.*'
+
+        server:
+            calls:
+                - { type: notify, message: Starting Web Server]}
                 -
                     type: background
                     executable: php
                     arguments:
                         - -S
                         - 127.0.0.1:8080
-                -
-                    type: notify
-                    message: Started Web Server
+                - { type: notify, message: Started Web Server]}
                 -
                     type: exec
                     executable: sleep
                     arguments: [30]
-                -
-                    type: notify
-                    message: Killing Web Server
+                - { type: notify, message: Killing Web Server]}
                 -
                     type: background
                     executable: php
@@ -49,9 +59,7 @@ bldr:
                     arguments:
                         - -S
                         - 127.0.0.1
-                -
-                    type: notify
-                    message: Killed Web Server
+                - { type: notify, message: Killed Web Server]}
         watch:
             calls:
                 -

@@ -83,7 +83,6 @@ class BackgroundCall extends AbstractCall
         }
 
         $process = $builder->getProcess();
-        var_dump($arguments);
 
         if ($this->getOutput()->isVerbose()) {
             $this->getOutput()->writeln($process->getCommandLine());
