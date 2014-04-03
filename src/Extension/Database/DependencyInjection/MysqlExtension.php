@@ -36,8 +36,7 @@ class MysqlExtension extends AbstractExtension
 			'bldr_database.mysql.user',
 			new Definition('Bldr\Extension\Database\Service\Mysql\CreateUserService')
 		)
-			->addTag('bldr')
-		;
+			->addTag('bldr');
 	}
 
 } 
