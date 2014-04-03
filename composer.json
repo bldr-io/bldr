@@ -9,7 +9,8 @@
         "symfony/process":              "~2.4",
         "symfony/yaml":                 "~2.4",
         "symfony/filesystem":           "~2.4",
-        "zendframework/zend-json":      "2.3.*"
+        "zendframework/zend-json":      "2.3.*",
+        "kherge/box": "~2.4"
     },
     "suggest":      {
         "bldr-io/bldr-symfony": "Allows for shorter syntax with symfony commands",
