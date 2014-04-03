@@ -14,6 +14,7 @@ namespace Bldr\Extension\Filesystem\DependencyInjection;
 use Bldr\DependencyInjection\AbstractExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
@@ -40,9 +41,8 @@ class FilesystemExtension extends AbstractExtension
         ];
 
         foreach ($calls as $id => $class) {
-            $class = new Definition('Bldr\Extension\Filesystem\Call\\'.$class);
-            $container->setDefinition($id, $class)
-                ->setParent(new Reference('bldr_filesystem.abstract'))
+            $container->setDefinition($id, new DefinitionDecorator('bldr_filesystem.abstract'))
+                ->setClass('Bldr\Extension\Filesystem\Call\\'.$class)
                 ->addTag('bldr');
         }
     }
