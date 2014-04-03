@@ -197,6 +197,20 @@ abstract class AbstractCall implements CallInterface
     }
 
     /**
+     * Removes the named option
+     *
+     * @param string $name
+     * 
+     * @return AbstractCall
+     */
+    public function removeOption($name)
+    {
+        unset($this->options[$name]);
+
+        return $this;
+    }
+
+    /**
      * @param string $name
      *
      * @return Boolean

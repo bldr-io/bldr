@@ -13,8 +13,9 @@ namespace Bldr\Extension\Filesystem\DependencyInjection;
 
 use Bldr\DependencyInjection\AbstractExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
-use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\DefinitionDecorator;
+use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
@@ -22,18 +23,27 @@ use Symfony\Component\Config\FileLocator;
 class FilesystemExtension extends AbstractExtension
 {
     /**
-     * Loads a specific configuration.
-     *
-     * @param array            $config    An array of configuration values
-     * @param ContainerBuilder $container A ContainerBuilder instance
-     *
-     * @throws \InvalidArgumentException When provided tag is not defined in this extension
-     *
-     * @api
+     * {@inheritDoc}
      */
     public function load(array $config, ContainerBuilder $container)
     {
-        $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config/'));
-        $loader->load('services.yml');
+        $container->setDefinition(
+            'bldr_filesystem.abstract',
+            new Definition('Bldr\Extension\Filesystem\Call\FilesystemCall')
+        )
+            ->setAbstract(true);
+
+        $calls = [
+            'bldr_filesystem.remove' => 'RemoveCall',
+            'bldr_filesystem.mkdir' => 'MkdirCall',
+            'bldr_filesystem.touch' => 'TouchCall',
+            'bldr_filesystem.dump' => 'DumpCall'
+        ];
+
+        foreach ($calls as $id => $class) {
+            $container->setDefinition($id, new DefinitionDecorator('bldr_filesystem.abstract'))
+                ->setClass('Bldr\Extension\Filesystem\Call\\'.$class)
+                ->addTag('bldr');
+        }
     }
 }
