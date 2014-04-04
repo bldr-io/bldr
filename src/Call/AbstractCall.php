@@ -102,7 +102,7 @@ abstract class AbstractCall implements CallInterface
                 $option['value'] = $option['default'];
             }
 
-            if ($option['required'] && $option['value'] === null) {
+            if (isset($option['required']) && $option['required'] && $option['value'] === null) {
                 throw new \RuntimeException(
                     sprintf(
                         "Running the %s task failed. The %s option requires a value.",
