@@ -49,7 +49,7 @@ class DumpCall extends FilesystemCall
             $content = file_get_contents($file) . $this->getOption('character') . $content;
         }
 
-        $this->filesystem->dumpFile($file, $content);
+        $this->fileSystem->dumpFile($file, $content);
 
         return true;
     }
