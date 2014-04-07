@@ -1,4 +1,4 @@
-3<?php
+<?php
 
 /**
  * This file is part of Bldr.io
