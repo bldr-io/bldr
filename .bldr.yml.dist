@@ -120,8 +120,7 @@ bldr:
                         - --report=checkstyle
                         - --report-file=build/logs/checkstyle.xml
                         - src/
-        testi:
-            runOnFailure: true
+        test:
             description: 'Runs the PHPUnit Tests'
             calls:
                 -
