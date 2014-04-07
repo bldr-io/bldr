@@ -1,4 +1,4 @@
-<?php
+3<?php
 
 /**
  * This file is part of Bldr.io
@@ -26,8 +26,9 @@ class JsonFileLoader extends YamlFileLoader
      *
      * @param string $file
      *
+     * @throws \Zend\Json\Exception\RuntimeException
+     * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
      * @return array
-     * @throws InvalidArgumentException
      */
     protected function loadFile($file)
     {
@@ -84,7 +85,8 @@ class JsonFileLoader extends YamlFileLoader
                 );
                 throw new InvalidArgumentException(
                     sprintf(
-                        'There is no extension able to load the configuration for "%s" (in %s). Looked for namespace "%s", found %s',
+                        'There is no extension able to load the configuration for "%s" (in %s). ' .
+                        'Looked for namespace "%s", found %s',
                         $namespace,
                         $file,
                         $namespace,

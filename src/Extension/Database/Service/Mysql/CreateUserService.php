@@ -44,22 +44,21 @@ class CreateUserService extends AbstractMysqlService
         $database = $this->hasOption('database') ? '--database=' . $this->getOption('database') : '';
 
         $arguments = [
-            '--user='.$this->getOption('username'),
-            '--password='.$this->getOption('password')
+            '--user=' . $this->getOption('username'),
+            '--password=' . $this->getOption('password')
         ];
 
         if ($this->hasOption('database')) {
-            $arguments[] = '--database'.$this->getOption('database');
+            $arguments[] = '--database' . $this->getOption('database');
         }
         if ($this->getOption('host') !== '127.0.0.1') {
-            $arguments[] = '--host='.$this->getOption('host');
+            $arguments[] = '--host=' . $this->getOption('host');
         }
         if ($this->getOption('port') !== 3306) {
-            $arguments[] = '--port='.$this->getOption('port');
+            $arguments[] = '--port=' . $this->getOption('port');
         }
         $arguments[] = '<';
         $arguments[] = $file;
-
 
         $sql = sprintf(
             'GRANT %s ON %s to \'%s\'@\'%s\' IDENTIFIED BY \'%s\'',
