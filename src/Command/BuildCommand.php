@@ -169,9 +169,10 @@ EOF
     public function buildTasks($names)
     {
         foreach ($names as $name) {
-            $taskInfo    = $this->container->getParameter('tasks')[$name];
-            $description = isset($taskInfo['description']) ? $taskInfo['description'] : "";
-            $task        = new Task($name, $description, $taskInfo['calls']);
+            $taskInfo     = $this->container->getParameter('tasks')[$name];
+            $description  = isset($taskInfo['description']) ? $taskInfo['description'] : "";
+            $runOnFailure = isset($taskInfo['runOnFailure']) ? $taskInfo['runOnFailure'] : false;
+            $task         = new Task($name, $description, $runOnFailure, $taskInfo['calls']);
             $this->tasks->addTask($task);
         }
     }
@@ -181,10 +182,7 @@ EOF
      */
     public function runTasks()
     {
-        while ($this->tasks->count() > 0) {
-            $this->container->get('bldr.builder')
-                ->runTask($this->tasks->getNewTask());
-        }
+        $this->container->get('bldr.builder')->runTasks($this->tasks);
     }
 
     /**
