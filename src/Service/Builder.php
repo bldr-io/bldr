@@ -16,6 +16,7 @@ use Bldr\Event as Events;
 use Bldr\Event;
 use Bldr\Model\Call;
 use Bldr\Model\Task;
+use Bldr\Registry\TaskRegistry;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -75,7 +76,37 @@ class Builder
     }
 
     /**
+     * @param TaskRegistry $tasks
+     *
+     * @throws \Exception
+     */
+    public function runTasks(TaskRegistry $tasks)
+    {
+        $failed = false;
+        $exception = null;
+
+        while ($tasks->count() > 0) {
+            $task = $tasks->getNewTask();
+            if ($failed && !$task->isRunOnFailure()) {
+                continue;
+            }
+
+            try {
+                $this->runTask($task);
+            } catch (\Exception $e) {
+                $exception = $e;
+            }
+        }
+
+        if ($exception !== null) {
+            throw $exception;
+        }
+    }
+
+    /**
      * @param Task $task
+     *
+     * @throws \Exception
      */
     public function runTask(Task $task)
     {

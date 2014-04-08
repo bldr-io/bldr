@@ -26,11 +26,12 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests the Application::__construct($name, $version) method
      *
+     * @throws \PHPUnit_Framework_Exception
      * @return Application
      */
     public function testConstructor()
     {
-        $application = new Application();
+        $application = new Application('test', 'test-version');
 
         $this->assertInstanceOf(
             'Bldr\Application',
