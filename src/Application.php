@@ -60,7 +60,7 @@ EOF;
      */
     public function __construct($name, $version)
     {
-        if ($version === '@package_version@') {
+        if ($version === '@' . 'package_version@') {
             $version = `git rev-parse --verify HEAD`;
         }
 
