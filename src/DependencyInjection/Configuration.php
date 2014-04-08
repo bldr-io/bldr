@@ -80,6 +80,7 @@ class Configuration implements ConfigurationInterface
                 ->addDefaultsIfNotSet()
                 ->children()
                     ->scalarNode('description')->defaultValue('')->end()
+                    ->booleanNode('runOnFailure')->defaultFalse()->end()
                     ->arrayNode('calls')
                         ->requiresAtLeastOneElement()
                         ->prototype('array')
