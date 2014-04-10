@@ -25,15 +25,14 @@ class MiscellaneousExtension extends AbstractExtension
      */
     public function load(array $config, ContainerBuilder $container)
     {
-        $container->setDefinition(
-            'bldr_miscellaneous.sleep',
-            new Definition('Bldr\Extension\Miscellaneous\Call\SleepCall')
-        )
-            ->addTag('bldr');
-        $container->setDefinition(
-            'bldr_miscellaneous.service',
-            new Definition('Bldr\Extension\Miscellaneous\Call\ServiceCall')
-        )
-            ->addTag('bldr');
+        $services = [
+            'bldr_miscellaneous.sleep' => 'Bldr\Extension\Miscellaneous\Call\SleepCall',
+            'bldr_miscellaneous.service' => 'Bldr\Extension\Miscellaneous\Call\ServiceCall',
+        ];
+
+        foreach ($services as $name => $class) {
+            $container->setDefinition($name, new Definition($class))
+                ->addTag('bldr');
+        }
     }
 }
