@@ -38,6 +38,7 @@ class ServiceCall extends ExecuteCall
             )
             ->addOption('service', true, 'Service to manage')
             ->addOption('method', true, 'Method to run on the service manager. <restart>', 'restart')
+            ->addOption('sudo', true, 'Run as sudo?', false)
             ->addOption('dry_run', true, 'If set, will not run command', false);
     }
 
@@ -51,21 +52,32 @@ class ServiceCall extends ExecuteCall
             ->addOption('arguments', true);
 
         $arguments  = [];
-        $manager = $this->getOption('manager');
+        $sudo       = $this->getOption('sudo');
+        $manager    = $this->getOption('manager');
         switch ($manager) {
             case 'service':
-                $executable  = 'sudo';
-                $arguments[] = $manager;
+                $executable = $manager;
+                if ($sudo) {
+                    $executable  = 'sudo';
+                    $arguments[] = $manager;
+                }
                 $arguments[] = $this->getOption('service');
                 $arguments[] = $this->getOption('method');
                 break;
             case 'init.d':
-                $executable  = 'sudo';
-                $arguments[] = '/etc/init.d/'.$this->getOption('service');
+                $executable = '/etc/init.d/'.$this->getOption('service');
+                if ($sudo) {
+                    $executable  = 'sudo';
+                    $arguments[] = $manager;
+                }
                 $arguments[] = $this->getOption('method');
                 break;
             case 'launchctl':
-                $executable  = $manager;
+                $executable = $manager;
+                if ($sudo) {
+                    $executable  = 'sudo';
+                    $arguments[] = $manager;
+                }
                 $arguments[] = $this->getOption('method');
                 $arguments[] = $this->getOption('service');
                 break;
