@@ -23,8 +23,37 @@ bldr:
             description: Tests the MysqlExtension calls
             tasks:
                 - mysql
+        misc:
+            description: Tests the MiscellaneousExtension calls
+            tasks:
+                - misc
 
     tasks:
+        misc:
+            calls:
+                -
+                    type: notify
+                    message: "Sleeping for 1 Second"
+                -
+                    type: sleep
+                    seconds: 1
+                -
+                    type: notify
+                    message: "Done sleeping for 1 Second"
+                -
+                    type: notify
+                    message: "Stopping and Starting redis service"
+                -
+                    type: service
+                    manager: launchctl # Using OS X
+                    service: homebrew.mxcl.redis
+                    method: stop
+                -
+                    type: service
+                    manager: launchctl # Using OS X
+                    service: homebrew.mxcl.redis
+                    method: start
+
         mysql:
             calls:
                 -
@@ -69,6 +98,9 @@ bldr:
         prepare:
             description: 'Cleans up old builds and prepares the new one'
             calls:
+                -
+                    type: sleep
+                    seconds: 5
                 -
                     type: filesystem:remove
                     files: [build/coverage, build/logs]

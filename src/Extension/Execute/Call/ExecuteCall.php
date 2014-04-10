@@ -65,7 +65,7 @@ class ExecuteCall extends AbstractCall
             );
         }
 
-        if ($this->getOutput()->isVerbose()) {
+        if ($this->getOutput()->isVerbose() || $this->getOption('dry_run')) {
             $this->getOutput()->writeln($process->getCommandLine());
         }
 
