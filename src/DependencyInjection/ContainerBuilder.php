@@ -27,7 +27,7 @@ use Symfony\Component\Config\FileLocator;
 class ContainerBuilder extends BaseContainerBuilder
 {
     /**
-     * @param ParameterBagInterface $parameterBag
+     * @param ParameterBagInterface|null $parameterBag
      */
     public function __construct(ParameterBagInterface $parameterBag = null)
     {
@@ -65,7 +65,8 @@ class ContainerBuilder extends BaseContainerBuilder
             new Extension\Notify\DependencyInjection\NotifyExtension(),
             new Extension\Watch\DependencyInjection\WatchExtension(),
             new Extension\Database\DependencyInjection\DatabaseExtension(),
-            new Extension\Database\DependencyInjection\MysqlExtension()
+            new Extension\Database\DependencyInjection\MysqlExtension(),
+            new Extension\Miscellaneous\DependencyInjection\MiscellaneousExtension(),
         ];
 
         return $extensions;

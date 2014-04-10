@@ -70,6 +70,9 @@ bldr:
             description: 'Cleans up old builds and prepares the new one'
             calls:
                 -
+                    type: sleep
+                    seconds: 5
+                -
                     type: filesystem:remove
                     files: [build/coverage, build/logs]
                 -
