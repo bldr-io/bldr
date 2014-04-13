@@ -44,7 +44,6 @@ $loaded = [];
 foreach ($autoloaders as $autoloader) {
     if (file_exists($autoloader)) {
         @$fileHash = sha1_file($autoloader);
-        echo $fileHash."\n";
         if (!in_array($fileHash, $loaded)) {
             require $autoloader;
             $loaded[] = $fileHash;
