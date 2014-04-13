@@ -13,7 +13,6 @@ bldr:
         watch:
             description: "Watch Profile"
             tasks:
-                - test
                 - watch
         server:
             description: Starts a server and waits for a bit. Then kills it.
@@ -93,8 +92,9 @@ bldr:
             calls:
                 -
                     type: watch
-                    files: [src/**.php, tests/**.php]
-                    task: test
+                    profile: default
+                    src:
+                        - { path: [src, tests], files: *.php, recursive: true }
         prepare:
             description: 'Cleans up old builds and prepares the new one'
             calls:
@@ -126,7 +126,9 @@ bldr:
                 -
                     type: apply
                     failOnError: true
-                    fileset: [src/*.php, src/**/*.php]
+                    src:
+                        - { path: [src, tests], files: *.php, recursive: true }
+                    output: /dev/null
                     executable: php
                     arguments: [-l]
 
@@ -162,3 +164,10 @@ bldr:
                     arguments:
                         - bin/phpunit
                         - --coverage-text=php://stdout
+        build:
+            description: Builds the Box
+            calls:
+                -
+                    type: exec
+                    executable: bin/box
+                    arguments: [build]
