@@ -16,6 +16,7 @@ use Bldr\Call\Traits\FinderAwareTrait;
 use Bldr\Model\Task;
 use Bldr\Registry\TaskRegistry;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
 
 /**
  * @author Aaron Scherer <aaron@undergroundelephant.com>
@@ -74,7 +75,7 @@ class WatchCall extends AbstractCall
     }
 
     /**
-     * @param \Symfony\Component\Finder\SplFileInfo[] $files
+     * @param SplFileInfo[] $files
      */
     private function watchForChanges(array $files)
     {
@@ -84,7 +85,7 @@ class WatchCall extends AbstractCall
         $previously = [];
         while (true) {
             foreach ($files as $file) {
-                /** @var \Symfony\Component\Finder\SplFileInfo $file */
+                /** @var SplFileInfo $file */
                 if ($this->checkFile($file->getRealPath(), $previously)) {
                     $this->getOutput()
                         ->writeln(
