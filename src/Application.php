@@ -18,6 +18,7 @@ use Bldr\Helper\DialogHelper;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -60,7 +61,7 @@ EOF;
      */
     public function __construct($name, $version)
     {
-        if ($version === '@' . 'package_version@') {
+        if ($version === '@'.'package_version@') {
             $version = `git rev-parse --verify HEAD`;
         }
 
@@ -93,7 +94,7 @@ EOF;
      */
     public function setBuildName()
     {
-        $date   = new \DateTime('now');
+        $date = new \DateTime('now');
 
         if (getenv('TRAVIS') === 'true') {
             $name = sprintf(
@@ -118,7 +119,7 @@ EOF;
      */
     public function getHelp()
     {
-        return "\n" . self::$logo . "\n\n" . parent::getHelp();
+        return "\n".self::$logo."\n\n".parent::getHelp();
     }
 
     /**

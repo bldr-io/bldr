@@ -168,8 +168,18 @@ EOF
      */
     public function buildTasks($names)
     {
+        $tasks = $this->container->getParameter('tasks');
         foreach ($names as $name) {
-            $taskInfo     = $this->container->getParameter('tasks')[$name];
+            if (!array_key_exists($name, $tasks)) {
+                throw new \Exception(
+                    sprintf(
+                        "Task `%s` does not exist. Found: %s",
+                        $name,
+                        implode(', ', array_keys($tasks))
+                    )
+                );
+            }
+            $taskInfo     = $tasks[$name];
             $description  = isset($taskInfo['description']) ? $taskInfo['description'] : "";
             $runOnFailure = isset($taskInfo['runOnFailure']) ? $taskInfo['runOnFailure'] : false;
             $task         = new Task($name, $description, $runOnFailure, $taskInfo['calls']);
