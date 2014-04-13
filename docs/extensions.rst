@@ -40,7 +40,7 @@ This extension lets you run ``exec`` and ``apply`` tasks.
                     executeable: php
                     output: /dev/null
                     src:
-                        - { path: [src,tests], files: *.php, recursive: true } # Checks src and tests directories for *.php files recursively
+                        - { path: [src, tests], files: *.php, recursive: true } # Checks src and tests directories for *.php files recursively
                     arguments: [-l]
 
 `Filesystem Extension`_ (Official)
@@ -113,15 +113,15 @@ This extension lets you run the ``watch`` commands. It will let you watch the fi
                 -
                     task: watch
                     src:
-                        - { path: [src,tests], files: *.php, recursive: true } # Checks src and tests directories for *.php files recursively
-                        - { path: vendor/, files: [*.php,*.yml], recursive: true } # Checks vendor/ directory for *.php and *.yml files recursively
+                        - { path: [src, tests], files: *.php, recursive: true } # Checks src and tests directories for *.php files recursively
+                        - { path: vendor/, files: [*.php, *.yml], recursive: true } # Checks vendor/ directory for *.php and *.yml files recursively
                     profile: someProfile
         sample2:
             calls:
                 -
                     task: watch
                     src:
-                        - { path: [src,tests], files: *.php, recursive: true } # Checks src and tests directories for *.php files recursively
+                        - { path: [src, tests], files: *.php, recursive: true } # Checks src and tests directories for *.php files recursively
                         - { files: *.yml } # Checks current directory, non-recursively
                     task: someTask
 

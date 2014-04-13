@@ -94,7 +94,7 @@ bldr:
                     type: watch
                     profile: default
                     src:
-                        - { path: [src,tests], files: *.php, recursive: true }
+                        - { path: [src, tests], files: *.php, recursive: true }
         prepare:
             description: 'Cleans up old builds and prepares the new one'
             calls:
@@ -127,7 +127,7 @@ bldr:
                     type: apply
                     failOnError: true
                     src:
-                        - { path: [src,tests], files: *.php, recursive: true }
+                        - { path: [src, tests], files: *.php, recursive: true }
                     output: /dev/null
                     executable: php
                     arguments: [-l]
