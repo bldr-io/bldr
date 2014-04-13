@@ -45,7 +45,7 @@ $loaded = [];
 foreach ($paths as $path) {
     $filePath = $path . '/autoload.php';
     if (file_exists($filePath)) {
-        $fileHash = sha1_file($filePath);
+        @$fileHash = sha1_file($filePath);
         if(!in_array($fileHash, $loaded)) {
             $autoloader = true;
             require $filePath;
