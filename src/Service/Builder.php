@@ -95,6 +95,7 @@ class Builder
                 $this->runTask($task);
             } catch (\Exception $e) {
                 $exception = $e;
+                $failed = true;
             }
         }
 
