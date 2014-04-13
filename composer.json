@@ -13,8 +13,7 @@
         "kherge/box": "~2.4"
     },
     "suggest":      {
-        "bldr-io/bldr-symfony": "Allows for shorter syntax with symfony commands",
-        "bldr-io/bldr-git":     "Allows for interacting with git commands"
+        "bldr-io/bldr-symfony": "Allows for shorter syntax with symfony commands (Not fully tested)"
     },
     "require-dev":  {
         "phpunit/phpunit":           "4.0.*",

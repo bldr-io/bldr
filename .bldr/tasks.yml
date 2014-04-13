@@ -1,0 +1,145 @@
+bldr:
+    tasks:
+        misc:
+            calls:
+                -
+                    type: notify
+                    message: "Sleeping for 1 Second"
+                -
+                    type: sleep
+                    seconds: 1
+                -
+                    type: notify
+                    message: "Done sleeping for 1 Second"
+                -
+                    type: notify
+                    message: "Stopping and Starting redis service"
+                -
+                    type: service
+                    manager: launchctl # Using OS X
+                    service: homebrew.mxcl.redis
+                    method: stop
+                -
+                    type: service
+                    manager: launchctl # Using OS X
+                    service: homebrew.mxcl.redis
+                    method: start
+
+        mysql:
+            calls:
+                -
+                    type: mysql:user
+                    username: root
+                    password: root
+                    new_username: testUser
+                    new_password: testPass
+                    allowed_host: %
+                    privileges: [ALL]
+                    table: '*.*'
+
+        server:
+            calls:
+                - { type: notify, message: Starting Web Server]}
+                -
+                    type: background
+                    executable: php
+                    arguments:
+                        - -S
+                        - 127.0.0.1:8080
+                - { type: notify, message: Started Web Server]}
+                -
+                    type: exec
+                    executable: sleep
+                    arguments: [30]
+                - { type: notify, message: Killing Web Server]}
+                -
+                    type: background
+                    executable: php
+                    kill: true
+                    arguments:
+                        - -S
+                        - 127.0.0.1
+                - { type: notify, message: Killed Web Server]}
+        watch:
+            calls:
+                -
+                    type: watch
+                    profile: default
+                    src:
+                        - { path: [src, tests], files: *.php, recursive: true }
+        prepare:
+            description: 'Cleans up old builds and prepares the new one'
+            calls:
+                -
+                    type: sleep
+                    seconds: 5
+                -
+                    type: filesystem:remove
+                    files: [build/coverage, build/logs]
+                -
+                    type: filesystem:mkdir
+                    failOnError: true
+                    files: [build/coverage, build/logs]
+                -
+                    type: filesystem:touch
+                    failOnError: true
+                    files: [build/coverage/index.html]
+                -
+                    type: exec
+                    failOnError: true
+                    executable: composer
+                    arguments: [install, --prefer-dist]
+                -
+                    type: notify
+                    message: Prepare Task Finished
+        lint:
+            description: 'Lints the files of the project'
+            calls:
+                -
+                    type: apply
+                    failOnError: true
+                    src:
+                        - { path: [src, tests], files: *.php, recursive: true }
+                    output: /dev/null
+                    executable: php
+                    arguments: [-l]
+
+        phpcs:
+            description: 'Runs the PHP Code Sniffer'
+            calls:
+                -
+                    type: exec
+                    executable: php
+                    arguments:
+                        - bin/phpcs
+                        - --standard=phpcs.xml
+                        - --report=full
+                        - src/
+                -
+                    type: exec
+                    output: /dev/null
+                    append: false
+                    executable: php
+                    arguments:
+                        - bin/phpcs
+                        - --standard=phpcs.xml
+                        - --report=checkstyle
+                        - --report-file=build/logs/checkstyle.xml
+                        - src/
+        test:
+            description: 'Runs the PHPUnit Tests'
+            calls:
+                -
+                    type: exec
+                    failOnError: false
+                    executable: php
+                    arguments:
+                        - bin/phpunit
+                        - --coverage-text=php://stdout
+        build:
+            description: Builds the Box
+            calls:
+                -
+                    type: exec
+                    executable: bin/box
+                    arguments: [build]

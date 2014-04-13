@@ -54,12 +54,18 @@ class BldrExtension extends AbstractExtension
         );
     }
 
-    private function addCallOptions(array &$configuration, array $config)
+    private function addCallOptions(array &$configuration, array $configs)
     {
-        foreach ($configuration['tasks'] as $name => $task) {
-            foreach ($task['calls'] as $index => $call) {
-                $options                                        = $config[1]['tasks'][$name]['calls'][$index];
-                $configuration['tasks'][$name]['calls'][$index] = array_merge($call, $options);
+        foreach ($configs as $config) {
+            foreach ($configuration['tasks'] as $name => $task) {
+                if (!isset($config['tasks'])) {
+                    continue;
+                }
+
+                foreach ($task['calls'] as $index => $call) {
+                    $options                                        = $config['tasks'][$name]['calls'][$index];
+                    $configuration['tasks'][$name]['calls'][$index] = array_merge($call, $options);
+                }
             }
         }
     }

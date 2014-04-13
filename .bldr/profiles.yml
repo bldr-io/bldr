@@ -1,0 +1,25 @@
+bldr:
+    profiles:
+        default:
+            description: 'Development Profile'
+            tasks:
+                - prepare
+                - lint
+                - phpcs
+                - test
+        watch:
+            description: "Watch Profile"
+            tasks:
+                - watch
+        server:
+            description: Starts a server and waits for a bit. Then kills it.
+            tasks:
+                - server
+        mysql:
+            description: Tests the MysqlExtension calls
+            tasks:
+                - mysql
+        misc:
+            description: Tests the MiscellaneousExtension calls
+            tasks:
+                - misc

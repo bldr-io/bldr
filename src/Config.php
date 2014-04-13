@@ -72,22 +72,24 @@ class Config
     public static function getFile()
     {
         $tried = [];
-        foreach (static::$TYPES as $type) {
+        foreach ([getcwd(), getcwd().'/.bldr/'] as $dir) {
+            foreach (static::$TYPES as $type) {
 
-            $file = static::$NAME . '.' . $type;
+                $file = static::$NAME . '.' . $type;
 
-            if (file_exists($file)) {
-                return [$file, $type];
+                if (file_exists($dir.'/'.$file)) {
+                    return [$file, $type];
+                }
+
+                $tried[] = $file;
+                $file .= ".dist";
+
+                if (file_exists($dir.'/'.$file)) {
+                    return [$file, $type];
+                }
+
+                $tried[] = $file;
             }
-
-            $tried[] = $file;
-            $file .= ".dist";
-
-            if (file_exists($file)) {
-                return [$file, $type];
-            }
-
-            $tried[] = $file;
         }
 
         throw new \Exception("Couldn't find a config file. Tried: " . implode(', ', $tried));
