@@ -12,6 +12,7 @@
 namespace Bldr\Call\Traits;
 
 use Symfony\Component\Finder\Finder;
+use \Symfony\Component\Finder\SplFileInfo;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
@@ -22,6 +23,8 @@ trait FinderAwareTrait
      * Finds all the files for the given config
      *
      * @param array $source
+     *
+     * @return string[]
      *
      * @throws \Exception
      */
@@ -68,7 +71,7 @@ trait FinderAwareTrait
     protected function appendFileSet(Finder $finder, array $fileSet)
     {
         foreach ($finder as $file) {
-            /** @var \Symfony\Component\Finder\SplFileInfo $file */
+            /** @var SplFileInfo $file */
             $fileSet[] = $file->getRealPath();
         }
 
