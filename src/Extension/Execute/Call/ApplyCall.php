@@ -47,10 +47,10 @@ class ApplyCall extends ExecuteCall
         $this->getOutput()->writeln($formatter->formatSection($this->getTask()->getName(), 'Starting'));
 
         $arguments = $this->getOption('arguments');
-        $files = $this->getFiles($this->getOption('src'));
+        $files     = $this->getFiles($this->getOption('src'));
         foreach ($files as $file) {
-            $args = $arguments;
-            $args[] = $file;
+            $args   = $arguments;
+            $args[] = $file->getRealPath();
             $this->setOption('arguments', $args);
             parent::run();
         }

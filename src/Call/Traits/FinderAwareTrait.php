@@ -24,7 +24,7 @@ trait FinderAwareTrait
      *
      * @param array $source
      *
-     * @return string[]
+     * @return SplFileInfo[]
      *
      * @throws \Exception
      */
@@ -66,13 +66,13 @@ trait FinderAwareTrait
      * @param Finder $finder
      * @param array  $fileSet
      *
-     * @return array
+     * @return SplFileInfo[]
      */
     protected function appendFileSet(Finder $finder, array $fileSet)
     {
         foreach ($finder as $file) {
             /** @var SplFileInfo $file */
-            $fileSet[] = $file->getRealPath();
+            $fileSet[] = $file;
         }
 
         return $fileSet;
