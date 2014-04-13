@@ -18,9 +18,10 @@ function glob_r($pattern, $flags = 0)
 {
     $files = glob($pattern, $flags);
 
-    foreach (glob(dirname($pattern) . '/*', GLOB_ONLYDIR | GLOB_NOSORT) as $dir) {
-        $files = array_merge($files, glob_r($dir . '/' . basename($pattern), $flags));
+    foreach (glob(dirname($pattern).'/*', GLOB_ONLYDIR | GLOB_NOSORT) as $dir) {
+        $files = array_merge($files, glob_r($dir.'/'.basename($pattern), $flags));
     }
+
     return $files;
 }
 
@@ -33,29 +34,26 @@ function glob_recursive($pattern, $flags = 0)
     return glob($pattern, $flags);
 }
 
-if (__DIR__ !== getcwd()) {
-    $paths[] = getcwd() . '/vendor';
-}
+$autoloaders = [
+    getcwd().'/vendor/autoload.php',
+    __DIR__.'/../vendor/autoload.php',
+    __DIR__.'/../../../autoload.php'
+];
 
-$paths[] = __DIR__ . '/../vendor';
-$paths[] = __DIR__ . '/../../..';
-
-$autoloader = false;
 $loaded = [];
-foreach ($paths as $path) {
-    $filePath = $path . '/autoload.php';
-    if (file_exists($filePath)) {
-        @$fileHash = sha1_file($filePath);
-        if(!in_array($fileHash, $loaded)) {
-            $autoloader = true;
-            require $filePath;
+foreach ($autoloaders as $autoloader) {
+    if (file_exists($autoloader)) {
+        @$fileHash = sha1_file($autoloader);
+        echo $fileHash."\n";
+        if (!in_array($fileHash, $loaded)) {
+            require $autoloader;
             $loaded[] = $fileHash;
         }
     }
 }
 
-if (false === $autoloader) {
-    echo "Cannot find an autoload.php file, have you executed composer install command?\n";
+if (!sizeof($loaded)) {
+    echo "Cannot find an autoloader file, have you executed the composer install command?\n";
     exit(1);
 }
 

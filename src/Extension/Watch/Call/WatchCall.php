@@ -12,14 +12,18 @@
 namespace Bldr\Extension\Watch\Call;
 
 use Bldr\Call\AbstractCall;
+use Bldr\Call\Traits\FinderAwareTrait;
 use Bldr\Model\Task;
 use Bldr\Registry\TaskRegistry;
+use Symfony\Component\Finder\Finder;
 
 /**
  * @author Aaron Scherer <aaron@undergroundelephant.com>
  */
 class WatchCall extends AbstractCall
 {
+    use FinderAwareTrait;
+
     /**
      * @var TaskRegistry $tasks
      */
@@ -43,7 +47,7 @@ class WatchCall extends AbstractCall
     {
         $this->setName('watch')
             ->setDescription('Watches the filesystem for changes')
-            ->addOption('files', true, 'Files to watch')
+            ->addOption('src', true, 'Source to watch')
             ->addOption('profile', false, 'Profile to run on filesystem change')
             ->addOption('task', false, 'Task to run on filesystem change');
     }
@@ -61,21 +65,16 @@ class WatchCall extends AbstractCall
             throw new \Exception("Watch must have either a task, or a profile");
         }
 
-        $fileOption = $this->getOption('files');
-        if (is_array($fileOption)) {
-            $files = [];
-            foreach ($fileOption as $file) {
-                $files = array_merge($files, glob_recursive(getcwd() . '/' . $file));
-            }
-        } else {
-            $files = glob_recursive(getcwd() . '/' . $fileOption);
+        $source = $this->getOption('src');
+        if (!is_array($source)) {
+            throw new \Exception("`src` must be an array");
         }
 
-        $this->watchForChanges($files);
+        $this->watchForChanges($this->getFiles($source));
     }
 
     /**
-     * @param string[] $files
+     * @param \Symfony\Component\Finder\SplFileInfo[] $files
      */
     private function watchForChanges(array $files)
     {
@@ -84,11 +83,15 @@ class WatchCall extends AbstractCall
 
         $previously = [];
         while (true) {
-            foreach ($files as $name) {
-                if ($this->checkFile($name, $previously)) {
+            foreach ($files as $file) {
+                /** @var \Symfony\Component\Finder\SplFileInfo $file */
+                if ($this->checkFile($file->getRealPath(), $previously)) {
                     $this->getOutput()
                         ->writeln(
-                            sprintf("<info>>>>></info> <comment>The %s file changed.</comment>", $name)
+                            sprintf(
+                                "<info>>>>></info> <comment>The following file changed:</comment> <info>%s</info>",
+                                $file->getPathname()
+                            )
                         );
 
                     $this->getTasks();
@@ -147,12 +150,10 @@ class WatchCall extends AbstractCall
     public function buildTasks($names)
     {
         foreach ($names as $name) {
-            $taskInfo                = $this->config['tasks'][$name];
-            $taskInfo['failOnError'] = false;
-            $description             = isset($taskInfo['description']) ? $taskInfo['description'] : "";
+            $taskInfo    = $this->config['tasks'][$name];
+            $description = isset($taskInfo['description']) ? $taskInfo['description'] : "";
 
-            $task = new Task($name, $description, $taskInfo['calls']);
-            $this->tasks->addTask($task);
+            $this->tasks->addTask(new Task($name, $description, false, $taskInfo['calls']));
         }
     }
 }

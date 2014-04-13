@@ -11,6 +11,7 @@
 
 namespace Bldr\Extension\Execute\Call;
 
+use Bldr\Call\Traits\FinderAwareTrait;
 use Symfony\Component\Console\Helper\FormatterHelper;
 
 /**
@@ -18,16 +19,21 @@ use Symfony\Component\Console\Helper\FormatterHelper;
  */
 class ApplyCall extends ExecuteCall
 {
+    use FinderAwareTrait;
+
     /**
      * @var array $files
      */
     private $files;
 
+    /**
+     * {@inheritDoc}
+     */
     public function configure()
     {
         parent::configure();
         $this->setName('apply')
-            ->addOption('fileset', true, 'The fileset to run the executable on');
+            ->addOption('src', true, 'Source to run the apply on');
     }
 
     /**
@@ -35,37 +41,18 @@ class ApplyCall extends ExecuteCall
      */
     public function run()
     {
-        $this->setFileset($this->getOption('fileset'));
-
         /** @var FormatterHelper $formatter */
         $formatter = $this->getHelperSet()->get('formatter');
 
         $this->getOutput()->writeln($formatter->formatSection($this->getTask()->getName(), 'Starting'));
 
         $arguments = $this->getOption('arguments');
-        foreach ($this->files as $file) {
+        $files = $this->getFiles($this->getOption('src'));
+        foreach ($files as $file) {
             $args = $arguments;
             $args[] = $file;
             $this->setOption('arguments', $args);
             parent::run();
         }
-    }
-
-    /**
-     * @param string $fileset
-     */
-    public function setFileset($fileset)
-    {
-        $fileOption = $this->getOption('fileset');
-        if (is_array($fileOption)) {
-            $files = [];
-            foreach ($fileOption as $file) {
-                $files = array_merge($files, glob_recursive(getcwd() . '/' . $file));
-            }
-        } else {
-            $files = glob_recursive(getcwd() . '/' . $fileOption);
-        }
-
-        $this->files = $files;
     }
 }

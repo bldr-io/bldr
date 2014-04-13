@@ -38,7 +38,9 @@ This extension lets you run ``exec`` and ``apply`` tasks.
                 -
                     task: apply
                     executeable: php
-                    fileset: [src/*.php, src/*/*.php]
+                    output: /dev/null
+                    src:
+                        - { path: [src,tests], files: *.php, recursive: true } # Checks src and tests directories for *.php files recursively
                     arguments: [-l]
 
 `Filesystem Extension`_ (Official)
@@ -110,13 +112,17 @@ This extension lets you run the ``watch`` commands. It will let you watch the fi
             calls:
                 -
                     task: watch
-                    files: [src/*.php, src/**/*.php]
+                    src:
+                        - { path: [src,tests], files: *.php, recursive: true } # Checks src and tests directories for *.php files recursively
+                        - { path: vendor/, files: [*.php,*.yml], recursive: true } # Checks vendor/ directory for *.php and *.yml files recursively
                     profile: someProfile
         sample2:
             calls:
                 -
                     task: watch
-                    files: [src/*.php, src/**/*.php]
+                    src:
+                        - { path: [src,tests], files: *.php, recursive: true } # Checks src and tests directories for *.php files recursively
+                        - { files: *.yml } # Checks current directory, non-recursively
                     task: someTask
 
 
@@ -138,8 +144,8 @@ This extension lets you run symfony console commands quicker. Needs work... I wa
                     - cache:clear
 
 
-.. _Execute Extension: https://github.com/bldr-io/bldr/tree/master/src/Extension
-.. _Filesystem Extension: https://github.com/bldr-io/bldr/tree/master/src/Filesystem
-.. _Notify Extension: https://github.com/bldr-io/bldr/tree/master/src/Notify
-.. _Watch Extension: https://github.com/bldr-io/bldr/tree/master/src/Watch
+.. _Execute Extension: https://github.com/bldr-io/bldr/tree/master/src/Extension/Execute
+.. _Filesystem Extension: https://github.com/bldr-io/bldr/tree/master/src/Extension/Filesystem
+.. _Notify Extension: https://github.com/bldr-io/bldr/tree/master/src/Extension/Notify
+.. _Watch Extension: https://github.com/bldr-io/bldr/tree/master/src/Extension/Watch
 .. _Symfony Extension: https://www.github.com/bldr-io/bldr-symfony/
