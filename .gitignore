@@ -1,3 +1,6 @@
 /vendor/
-bin/phpcs
-bin/phpunit
+/bin/phpcs
+/bin/phpunit
+/bin/jsonlint
+/bin/validate-json
+/bin/box
