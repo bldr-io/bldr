@@ -19,7 +19,13 @@ in ``$PATH`` as shown here_.
 
 **Project Setup**
 
+It is suggested that you use the phar, as you can get conflicts with dependencies by including it in your project!
+
 .. code-block:: shell
+
+    $ curl -sS http://bldr.io/installer | php
+
+    # Or
 
     $ composer require bldr-io/bldr "~2.0.0"
 
