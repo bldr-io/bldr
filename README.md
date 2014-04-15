@@ -16,4 +16,4 @@ Documentation is over at [http://docs.bldr.io/en/latest/](http://docs.bldr.io/en
 
 * Scruitinizer: [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/bldr-io/bldr/badges/quality-score.png?s=fc2f6d8f68605e041a0cbf9965fe42bb42484ca4)](https://scrutinizer-ci.com/g/bldr-io/bldr/)
 
-* Waffle: [![Stories in Ready](https://badge.waffle.io/bldr-io/bldr.png?label=ready&title=Ready)](https://waffle.io/bldr-io/bldr)
+* [The Waffle Board](https://waffle.io/bldr-io/bldr)
