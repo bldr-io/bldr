@@ -3,8 +3,146 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "47bf544e24f47952e23bc29b922229b5",
+    "hash": "703fa9830d68e2ddd3c2d975d72212a4",
     "packages": [
+        {
+            "name": "composer/composer",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/composer/composer.git",
+                "reference": "3251f9f1aa997479fff78905841e22beacfbe37b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/composer/composer/zipball/3251f9f1aa997479fff78905841e22beacfbe37b",
+                "reference": "3251f9f1aa997479fff78905841e22beacfbe37b",
+                "shasum": ""
+            },
+            "require": {
+                "justinrainbow/json-schema": "~1.1",
+                "php": ">=5.3.2",
+                "seld/jsonlint": "1.*",
+                "symfony/console": "~2.3",
+                "symfony/finder": "~2.2",
+                "symfony/process": "~2.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~3.7.10"
+            },
+            "suggest": {
+                "ext-openssl": "Enabling the openssl extension allows you to access https URLs for repositories and packages",
+                "ext-zip": "Enabling the zip extension allows you to unzip archives, and allows gzip compression of all internet traffic"
+            },
+            "bin": [
+                "bin/composer"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Composer": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jordi Boggiano",
+                    "email": "j.boggiano@seld.be",
+                    "homepage": "http://seld.be",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Nils Adermann",
+                    "email": "naderman@naderman.de",
+                    "homepage": "http://www.naderman.de",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Composer helps you declare, manage and install dependencies of PHP projects, ensuring you have the right stack everywhere.",
+            "homepage": "http://getcomposer.org/",
+            "keywords": [
+                "autoload",
+                "dependency",
+                "package"
+            ],
+            "time": "2014-04-16 08:24:13"
+        },
+        {
+            "name": "dflydev/embedded-composer",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dflydev/dflydev-embedded-composer.git",
+                "reference": "5fac80c48b2128c982dbda6dc3bafd24f88f064f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dflydev/dflydev-embedded-composer/zipball/5fac80c48b2128c982dbda6dc3bafd24f88f064f",
+                "reference": "5fac80c48b2128c982dbda6dc3bafd24f88f064f",
+                "shasum": ""
+            },
+            "require": {
+                "composer/composer": "1.0.*@dev",
+                "php": ">=5.3.2",
+                "seld/jsonlint": "1.*"
+            },
+            "replace": {
+                "dflydev/embedded-composer-bundle": "self.version",
+                "dflydev/embedded-composer-console": "self.version",
+                "dflydev/embedded-composer-core": "self.version"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~3.7.10",
+                "symfony/console": "~2.3@dev",
+                "symfony/http-kernel": "~2.1"
+            },
+            "suggest": {
+                "symfony/console": "~2.3",
+                "symfony/http-kernel": "~2.1"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Dflydev\\EmbeddedComposer": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dragonfly Development Inc.",
+                    "email": "info@dflydev.com",
+                    "homepage": "http://dflydev.com"
+                },
+                {
+                    "name": "Beau Simensen",
+                    "email": "beau@dflydev.com",
+                    "homepage": "http://beausimensen.com"
+                }
+            ],
+            "description": "Embed Composer into another application",
+            "keywords": [
+                "composer",
+                "embedded",
+                "extensibility"
+            ],
+            "time": "2013-12-16 15:24:21"
+        },
         {
             "name": "doctrine/annotations",
             "version": "v1.1.2",
@@ -853,17 +991,17 @@
         },
         {
             "name": "symfony/config",
-            "version": "v2.4.2",
+            "version": "v2.4.3",
             "target-dir": "Symfony/Component/Config",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Config.git",
-                "reference": "d81bd01eac1514c10dcb3b11eaa9048d6b87dd1f"
+                "reference": "e98693981385224bd31667e56204f311d9e0f98e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Config/zipball/d81bd01eac1514c10dcb3b11eaa9048d6b87dd1f",
-                "reference": "d81bd01eac1514c10dcb3b11eaa9048d6b87dd1f",
+                "url": "https://api.github.com/repos/symfony/Config/zipball/e98693981385224bd31667e56204f311d9e0f98e",
+                "reference": "e98693981385224bd31667e56204f311d9e0f98e",
                 "shasum": ""
             },
             "require": {
@@ -899,21 +1037,21 @@
             ],
             "description": "Symfony Config Component",
             "homepage": "http://symfony.com",
-            "time": "2014-01-07 13:28:54"
+            "time": "2014-03-26 11:35:33"
         },
         {
             "name": "symfony/console",
-            "version": "v2.4.2",
+            "version": "v2.4.3",
             "target-dir": "Symfony/Component/Console",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console.git",
-                "reference": "940f217cbc3c8a33e5403e7c595495c4884400fe"
+                "reference": "ef20f1f58d7f693ee888353962bd2db336e3bbcb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/940f217cbc3c8a33e5403e7c595495c4884400fe",
-                "reference": "940f217cbc3c8a33e5403e7c595495c4884400fe",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/ef20f1f58d7f693ee888353962bd2db336e3bbcb",
+                "reference": "ef20f1f58d7f693ee888353962bd2db336e3bbcb",
                 "shasum": ""
             },
             "require": {
@@ -954,21 +1092,21 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "http://symfony.com",
-            "time": "2014-02-11 13:52:09"
+            "time": "2014-03-01 17:35:04"
         },
         {
             "name": "symfony/dependency-injection",
-            "version": "v2.4.2",
+            "version": "v2.4.3",
             "target-dir": "Symfony/Component/DependencyInjection",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/DependencyInjection.git",
-                "reference": "dde921399691bdb3b32a3c2557dcb2054db7593a"
+                "reference": "5f17442aaa47610fcff7daeb635c834be71df204"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/DependencyInjection/zipball/dde921399691bdb3b32a3c2557dcb2054db7593a",
-                "reference": "dde921399691bdb3b32a3c2557dcb2054db7593a",
+                "url": "https://api.github.com/repos/symfony/DependencyInjection/zipball/5f17442aaa47610fcff7daeb635c834be71df204",
+                "reference": "5f17442aaa47610fcff7daeb635c834be71df204",
                 "shasum": ""
             },
             "require": {
@@ -1013,11 +1151,11 @@
             ],
             "description": "Symfony DependencyInjection Component",
             "homepage": "http://symfony.com",
-            "time": "2014-02-11 13:52:09"
+            "time": "2014-03-27 14:53:17"
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v2.4.2",
+            "version": "v2.4.3",
             "target-dir": "Symfony/Component/EventDispatcher",
             "source": {
                 "type": "git",
@@ -1073,17 +1211,17 @@
         },
         {
             "name": "symfony/filesystem",
-            "version": "v2.4.2",
+            "version": "v2.4.3",
             "target-dir": "Symfony/Component/Filesystem",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Filesystem.git",
-                "reference": "7e65abb06d3b38f4be89266fe3fb4a759544e713"
+                "reference": "b717952487176a993e9b12a08b87beae25ae419c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Filesystem/zipball/7e65abb06d3b38f4be89266fe3fb4a759544e713",
-                "reference": "7e65abb06d3b38f4be89266fe3fb4a759544e713",
+                "url": "https://api.github.com/repos/symfony/Filesystem/zipball/b717952487176a993e9b12a08b87beae25ae419c",
+                "reference": "b717952487176a993e9b12a08b87beae25ae419c",
                 "shasum": ""
             },
             "require": {
@@ -1118,21 +1256,21 @@
             ],
             "description": "Symfony Filesystem Component",
             "homepage": "http://symfony.com",
-            "time": "2014-01-07 13:28:54"
+            "time": "2014-03-26 11:55:03"
         },
         {
             "name": "symfony/finder",
-            "version": "v2.4.2",
+            "version": "v2.4.3",
             "target-dir": "Symfony/Component/Finder",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Finder.git",
-                "reference": "b6735d1fc16da13c4c7dddfe78366a4a098cf011"
+                "reference": "ab301c7d21f536c34ab6c2c79dba8d465104c518"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Finder/zipball/b6735d1fc16da13c4c7dddfe78366a4a098cf011",
-                "reference": "b6735d1fc16da13c4c7dddfe78366a4a098cf011",
+                "url": "https://api.github.com/repos/symfony/Finder/zipball/ab301c7d21f536c34ab6c2c79dba8d465104c518",
+                "reference": "ab301c7d21f536c34ab6c2c79dba8d465104c518",
                 "shasum": ""
             },
             "require": {
@@ -1167,21 +1305,21 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "http://symfony.com",
-            "time": "2014-01-07 13:28:54"
+            "time": "2014-03-01 17:35:04"
         },
         {
             "name": "symfony/process",
-            "version": "v2.4.2",
+            "version": "v2.4.3",
             "target-dir": "Symfony/Component/Process",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Process.git",
-                "reference": "c175448bac997556f8ab972908a4e14c7291fb03"
+                "reference": "c09c3b08455c35688eee3e481fdfc85518ef01d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Process/zipball/c175448bac997556f8ab972908a4e14c7291fb03",
-                "reference": "c175448bac997556f8ab972908a4e14c7291fb03",
+                "url": "https://api.github.com/repos/symfony/Process/zipball/c09c3b08455c35688eee3e481fdfc85518ef01d7",
+                "reference": "c09c3b08455c35688eee3e481fdfc85518ef01d7",
                 "shasum": ""
             },
             "require": {
@@ -1216,21 +1354,21 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "http://symfony.com",
-            "time": "2014-02-11 13:52:09"
+            "time": "2014-03-26 11:35:33"
         },
         {
             "name": "symfony/yaml",
-            "version": "v2.4.2",
+            "version": "v2.4.3",
             "target-dir": "Symfony/Component/Yaml",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Yaml.git",
-                "reference": "bb6ddaf8956139d1b8c360b4b713ed0138e876b3"
+                "reference": "77a41c2835ab7cfe8bf6d15e25d3af8f3eb3bacd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Yaml/zipball/bb6ddaf8956139d1b8c360b4b713ed0138e876b3",
-                "reference": "bb6ddaf8956139d1b8c360b4b713ed0138e876b3",
+                "url": "https://api.github.com/repos/symfony/Yaml/zipball/77a41c2835ab7cfe8bf6d15e25d3af8f3eb3bacd",
+                "reference": "77a41c2835ab7cfe8bf6d15e25d3af8f3eb3bacd",
                 "shasum": ""
             },
             "require": {
@@ -1265,7 +1403,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "http://symfony.com",
-            "time": "2014-01-07 13:28:54"
+            "time": "2014-03-12 18:29:58"
         },
         {
             "name": "zendframework/zend-json",
@@ -1375,12 +1513,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/padraic/mockery.git",
-                "reference": "a32c6ad986c061b40636b7da4fe30adc2a7451b5"
+                "reference": "4eff32b268a0db52b9abe36725cb775658ad3f1f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/padraic/mockery/zipball/a32c6ad986c061b40636b7da4fe30adc2a7451b5",
-                "reference": "a32c6ad986c061b40636b7da4fe30adc2a7451b5",
+                "url": "https://api.github.com/repos/padraic/mockery/zipball/4eff32b268a0db52b9abe36725cb775658ad3f1f",
+                "reference": "4eff32b268a0db52b9abe36725cb775658ad3f1f",
                 "shasum": ""
             },
             "require": {
@@ -1433,20 +1571,20 @@
                 "test double",
                 "testing"
             ],
-            "time": "2014-03-05 22:17:02"
+            "time": "2014-04-09 22:16:37"
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "2.0.4",
+            "version": "2.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "a05618d03c60eb07b37432583aabf80ae5f5f447"
+                "reference": "3dcca2120451b98a98fe60221ca279a184ee64db"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/a05618d03c60eb07b37432583aabf80ae5f5f447",
-                "reference": "a05618d03c60eb07b37432583aabf80ae5f5f447",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/3dcca2120451b98a98fe60221ca279a184ee64db",
+                "reference": "3dcca2120451b98a98fe60221ca279a184ee64db",
                 "shasum": ""
             },
             "require": {
@@ -1497,7 +1635,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2014-03-20 16:12:25"
+            "time": "2014-03-28 10:54:55"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -1684,16 +1822,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "4.0.13",
+            "version": "4.0.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "fca5bc6a50d09b26db280c5cc3c84978c9cace3f"
+                "reference": "a80b77d92a6c7723d77c6728b4ae37e92a65ac1d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/fca5bc6a50d09b26db280c5cc3c84978c9cace3f",
-                "reference": "fca5bc6a50d09b26db280c5cc3c84978c9cace3f",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/a80b77d92a6c7723d77c6728b4ae37e92a65ac1d",
+                "reference": "a80b77d92a6c7723d77c6728b4ae37e92a65ac1d",
                 "shasum": ""
             },
             "require": {
@@ -1755,7 +1893,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2014-03-26 11:55:27"
+            "time": "2014-03-28 11:10:03"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -2092,6 +2230,8 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
+        "dflydev/embedded-composer": 20,
+        "composer/composer": 20,
         "mockery/mockery": 20
     },
     "platform": [

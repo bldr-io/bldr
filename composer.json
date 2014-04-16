@@ -2,6 +2,8 @@
     "name":         "bldr-io/bldr",
     "description":  "Simple Build System / Task Runner",
     "require":      {
+        "dflydev/embedded-composer":    "1.0.*@dev",
+        "composer/composer":            "1.0.*@dev",
         "symfony/console":              "~2.4",
         "symfony/config":               "~2.4",
         "symfony/dependency-injection": "~2.4",
@@ -10,7 +12,7 @@
         "symfony/yaml":                 "~2.4",
         "symfony/filesystem":           "~2.4",
         "zendframework/zend-json":      "2.3.*",
-        "kherge/box": "~2.4"
+        "kherge/box":                   "~2.4"
     },
     "suggest":      {
         "bldr-io/bldr-symfony": "Allows for shorter syntax with symfony commands (Not fully tested)"
@@ -36,6 +38,9 @@
         "psr-4": {
             "Bldr\\Test\\": "tests/"
         }
+    },
+    "scripts":      {
+        "post-autoload-dump": "Dflydev\\EmbeddedComposer\\Core\\Script::postAutoloadDump"
     },
     "config":       {
         "bin-dir": "bin"

@@ -15,6 +15,9 @@ use Bldr\Command as Commands;
 use Bldr\DependencyInjection\AbstractExtension;
 use Bldr\DependencyInjection\ContainerBuilder;
 use Bldr\Helper\DialogHelper;
+use Dflydev\EmbeddedComposer\Core\EmbeddedComposerAwareInterface;
+use Dflydev\EmbeddedComposer\Core\EmbeddedComposerInterface;
+use Dflydev\EmbeddedComposer\Console\Command as Composer;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -24,10 +27,8 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 
-class Application extends BaseApplication
+class Application extends BaseApplication implements EmbeddedComposerAwareInterface
 {
-    const MANIFEST_URL = 'http://bldr.io/manifest.json';
-
     /**
      * @var string $BUILD_NAME
      */
@@ -48,24 +49,32 @@ EOF;
     private $container;
 
     /**
+     * @var EmbeddedComposerInterface $embeddedComposer
+     */
+    private $embeddedComposer;
+
+    /**
      * @return Application
      */
-    public static function create()
+    public static function create(EmbeddedComposerInterface $embeddedComposer)
     {
-        return new static('Bldr', '@package_version@');
+        return new static($embeddedComposer);
     }
 
     /**
      * @param string $name
      * @param string $version
      */
-    public function __construct($name, $version)
+    public function __construct(EmbeddedComposerInterface $embeddedComposer)
     {
+        $this->embeddedComposer = $embeddedComposer;
+
+        $version = '@package_version@';
         if ($version === '@'.'package_version@') {
-            $version = `git rev-parse --verify HEAD`;
+            $version = $embeddedComposer->findPackage('bldr-io/bldr')->getPrettyVersion();
         }
 
-        parent::__construct($name, $version);
+        parent::__construct('Bldr', $version);
 
         $this->buildContainer();
 
@@ -84,6 +93,9 @@ EOF;
             new Commands\BuildCommand(),
             new Commands\Task\ListCommand(),
             new Commands\Task\InfoCommand(),
+            new Composer\DumpAutoloadCommand(''),
+            new Composer\InstallCommand(''),
+            new Composer\UpdateCommand(''),
         ];
 
         return $commands;
@@ -162,5 +174,13 @@ EOF;
         $helperSet->set(new DialogHelper());
 
         return $helperSet;
+    }
+
+    /**
+     * @return EmbeddedComposerInterface
+     */
+    public function getEmbeddedComposer()
+    {
+        return $this->embeddedComposer;
     }
 }
