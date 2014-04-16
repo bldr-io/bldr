@@ -18,13 +18,18 @@
     "require-dev":  {
         "phpunit/phpunit":           "4.0.*",
         "squizlabs/php_codesniffer": "~1.0",
-        "mockery/mockery":           "dev-master"
+        "mockery/mockery":           "dev-master",
+        "raulfraile/ladybug":        "dev-master@dev"
     },
     "license":      "MIT",
     "authors":      [
         {
             "name":  "Aaron Scherer",
             "email": "aequasi@gmail.com"
+        },
+        {
+            "name": "Luis Cordova",
+            "email": "cordoval@gmail.com"
         }
     ],
     "autoload":     {
