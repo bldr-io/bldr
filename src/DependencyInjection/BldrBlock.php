@@ -35,13 +35,12 @@ class BldrBlock extends AbstractBlock
     {
         $this->addCallOptions($config, $this->originalConfiguration);
 
+
         $this->setParameter('name', $config['name']);
         $this->setParameter('description', $config['description']);
         $this->setParameter('profiles', $config['profiles']);
         $this->setParameter('tasks', $config['tasks']);
 
-        $this->addService('input', 'Symfony\Component\Console\Input\ArgvInput');
-        $this->addService('output', 'Symfony\Component\Console\Output\ConsoleOutput');
         $this->addService('bldr.dispatcher', 'Symfony\Component\EventDispatcher\EventDispatcher');
         $this->addService('bldr.registry.task', 'Bldr\Registry\TaskRegistry');
     }

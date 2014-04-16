@@ -11,15 +11,16 @@
 
 namespace Bldr\DependencyInjection;
 
-use Bldr\Config;
 use Bldr\Block;
+use Bldr\Config;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder as BaseContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
-use Symfony\Component\Config\FileLocator;
-
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
@@ -27,11 +28,16 @@ use Symfony\Component\Config\FileLocator;
 class ContainerBuilder extends BaseContainerBuilder
 {
     /**
-     * @param ParameterBagInterface|null $parameterBag
+     * @param InputInterface  $input
+     * @param OutputInterface $output
      */
-    public function __construct(ParameterBagInterface $parameterBag = null)
+    public function __construct(InputInterface $input, OutputInterface $output)
     {
-        parent::__construct($parameterBag);
+        parent::__construct();
+
+        $this->set('input', $input);
+        $this->set('output', $output);
+
         $this->compile();
     }
 

@@ -12,16 +12,18 @@
 namespace Bldr;
 
 use Bldr\DependencyInjection\ContainerBuilder;
+use Bldr\DependencyInjection\Loader\IniFileLoader;
+use Bldr\DependencyInjection\Loader\JsonFileLoader;
+use Bldr\DependencyInjection\Loader\PhpFileLoader;
+use Bldr\DependencyInjection\Loader\XmlFileLoader;
+use Bldr\DependencyInjection\Loader\YamlFileLoader;
+use Bldr\Exception\ConfigurationFileNotFoundException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Loader\DelegatingLoader;
 use Symfony\Component\Config\Loader\LoaderResolver;
-use Bldr\DependencyInjection\Loader\YamlFileLoader;
-use Bldr\DependencyInjection\Loader\XmlFileLoader;
-use Bldr\DependencyInjection\Loader\PhpFileLoader;
-use Bldr\DependencyInjection\Loader\IniFileLoader;
-use Bldr\DependencyInjection\Loader\JsonFileLoader;
-use Symfony\Component\Yaml\Yaml;
-use Zend\Json\Json;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\DependencyInjection\Dumper\XmlDumper;
+use Symfony\Component\Yaml\Dumper as YamlDumper;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
@@ -45,12 +47,20 @@ class Config
 
     /**
      * @param ContainerBuilder $container
+     *
+     * @throws Exception\ConfigurationFileNotFoundException
      */
     public static function read(ContainerBuilder $container)
     {
-        list($file, $type) = static::getFile();
+        /** @var InputInterface $input */
+        $input = $container->get('input');
 
-        $locator  = new FileLocator([getcwd(), getcwd() . '/.bldr/']);
+        $locations = [getcwd(), getcwd().'/.bldr/'];
+        if ($input->hasParameterOption('--global')) {
+            $locations = array_merge($locations, [getenv('HOME'), getenv('HOME').'/.bldr/']);
+        }
+
+        $locator  = new FileLocator($locations);
         $resolver = new LoaderResolver(
             [
                 new YamlFileLoader($container, $locator),
@@ -61,37 +71,55 @@ class Config
             ]
         );
 
-        $loader = new DelegatingLoader($resolver);
-        $loader->load($file);
-    }
-
-    /**
-     * @return string
-     * @throws \Exception
-     */
-    public static function getFile()
-    {
-        $tried = [];
-        foreach ([getcwd(), getcwd().'/.bldr/'] as $dir) {
-            foreach (static::$TYPES as $type) {
-
-                $file = static::$NAME . '.' . $type;
-
-                if (file_exists($dir.'/'.$file)) {
-                    return [$file, $type];
-                }
-
-                $tried[] = $file;
-                $file .= ".dist";
-
-                if (file_exists($dir.'/'.$file)) {
-                    return [$file, $type];
-                }
-
-                $tried[] = $file;
+        $loader      = new DelegatingLoader($resolver);
+        $files       = static::findFiles($input);
+        $foundConfig = false;
+        foreach ($files as $file) {
+            try {
+                $loader->load($file);
+                $foundConfig = true;
+            } catch (\Exception $e) {
             }
         }
 
-        throw new \Exception("Couldn't find a config file. Tried: " . implode(', ', $tried));
+        if (!$foundConfig) {
+            throw new ConfigurationFileNotFoundException(
+                sprintf(
+                    "Either Couldn't find the configuration file, or couldnt read it. ".
+                    "Make sure the extension is valid (%s). Tried: %s",
+                    implode(', ', static::$TYPES),
+                    implode(', ', $files)
+                )
+            );
+        }
+    }
+
+    /**
+     * @param InputInterface $input
+     *
+     * @return string
+     * @throws \Exception
+     */
+    public static function findFiles(InputInterface $input)
+    {
+        if ($input->hasParameterOption('--config-file')) {
+            $file = $input->getParameterOption('--config-file');
+            if (file_exists($file)) {
+                return [$file];
+            }
+
+            throw new ConfigurationFileNotFoundException(
+                sprintf("Couldn't find the configuration file: %s", $file)
+            );
+        }
+
+        $format = $input->hasParameterOption('--config-format')
+            ? $input->getParameterOption('--config-format')
+            : static::$DEFAULT_TYPE;
+
+        return [
+            sprintf("%s.%s", static::$NAME, $format),
+            sprintf("%s.%s.dist", static::$NAME, $format),
+        ];
     }
 }

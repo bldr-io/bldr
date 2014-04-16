@@ -100,10 +100,13 @@ EOF
         if ([] === $tasks) {
             $profile = $this->container->getParameter('profiles')[$profileName];
 
-            $projectFormat = [
-                sprintf("Building the '%s' project", $this->container->getParameter('name'))
-            ];
-            if ($this->container->hasParameter('description')) {
+
+            $projectFormat = [];
+
+            if ($this->container->getParameter('name') !== '') {
+                $projectFormat[] = sprintf("Building the '%s' project", $this->container->getParameter('name'));
+            }
+            if ($this->container->getParameter('description') !== '') {
                 $projectFormat[] = sprintf(" - %s - ", $this->container->getParameter('description'));
             }
 
@@ -117,7 +120,7 @@ EOF
             $this->output->writeln(
                 [
                     "",
-                    $this->formatBlock($projectFormat, 'blue', 'black'),
+                    $projectFormat === [] ? '' : $this->formatBlock($projectFormat, 'blue', 'black'),
                     "",
                     $this->formatBlock($profileFormat, 'blue', 'black'),
                     ""
