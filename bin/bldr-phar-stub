@@ -1,0 +1,24 @@
+#!/usr/bin/env php
+<?php
+
+/**
+ * This file is part of Bldr.io.
+ *
+ * (c) Aaron Scherer <aequasi@gmail.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
+function includeIfExists($file)
+{
+    return file_exists($file) ? include $file : false;
+}
+
+if (!$classLoader = includeIfExists(__DIR__.'/../vendor/autoload.php')) {
+    echo 'There is something terribly wrong with your archive'.PHP_EOL.
+        'Try downloading again?'.PHP_EOL;
+    exit(1);
+}
+
+include 'bldr.php';

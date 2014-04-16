@@ -1,52 +1,42 @@
 {
     "alias": "bldr.phar",
     "chmod": "0755",
-    "directories": ["src", "bin"],
+    "compactors": [
+        "Herrera\\Box\\Compactor\\Json",
+        "Herrera\\Box\\Compactor\\Php"
+    ],
     "files": [
-        "LICENSE"
+        "LICENSE",
+        "vendor/composer/installed.json",
+        "vendor/dflydev/embedded-composer/.root_package.json"
     ],
     "finder": [
         {
-            "name": "*.php",
-            "exclude": [
-                "tests",
-                "behat",
-                "phpunit",
-                "raulfraile",
-                "*Test.php",
-                "test",
-                "Tests",
-                "Test",
-                "node_modules",
-                "*.lock"
+            "name": [
+                "LICENSE*",
+                "License*",
+                "*.php",
+                "*.xml",
+                "*.xsd",
+                "*.yaml",
+                "*.yml",
+                "*.json"
             ],
-            "in": "vendor"
-        },
-        {
-            "name": "*.yml",
-            "exclude": [
-                "tests",
-                "behat",
-                "phpunit",
-                "raulfraile",
-                "*Test.php",
-                "test",
-                "Tests",
-                "Test",
-                "node_modules",
-                "*.lock"
+            "notName": [
+                "composer.json"
             ],
-            "in": "vendor"
-        },
-        {
-            "name": "hiddeninput.exe",
-            "in": "vendor/symfony/console/Symfony/Component/Console/Resources/bin"
+            "exclude": [
+                "phpunit",
+                "Tests",
+                "tests"
+            ],
+            "in": ["bin", "src", "vendor"]
         }
     ],
     "extract": true,
     "git-commit": "git-commit",
     "git-version": "package_version",
-    "main": "bin/bldr",
+    "main": "bin/bldr-phar-stub",
     "output": "bldr.phar",
     "stub": true
 }

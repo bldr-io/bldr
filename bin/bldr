@@ -1,39 +1,28 @@
 #!/usr/bin/env php
 <?php
 
-error_reporting(-1);
-ini_set('display_errors', 1);
-
-
 /**
- * This file is part of Bldr.io.
+ * This file is part of Projects
  *
  * (c) Aaron Scherer <aequasi@gmail.com>
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * This source file is subject to the license that is bundled
+ * with this source code in the file LICENSE
  */
 
-$autoloaders = [
-    getcwd().'/vendor/autoload.php',
-    __DIR__.'/../vendor/autoload.php',
-    __DIR__.'/../../../autoload.php'
-];
-
-$loaded = [];
-foreach ($autoloaders as $autoloader) {
-    if (file_exists($autoloader)) {
-        @$fileHash = sha1_file($autoloader);
-        if (!in_array($fileHash, $loaded)) {
-            require $autoloader;
-            $loaded[] = $fileHash;
-        }
-    }
+function includeIfExists($file)
+{
+    return file_exists($file) ? include $file : false;
 }
 
-if (!sizeof($loaded)) {
-    echo "Cannot find an autoloader file, have you executed the composer install command?\n";
+if (
+    (!$classLoader = includeIfExists(__DIR__.'/../vendor/autoload.php')) &&
+    (!$classLoader = includeIfExists(__DIR__.'/../../../autoload.php'))
+) {
+    echo 'You must set up the project dependencies, run the following commands:'.PHP_EOL.
+        'curl -sS https://getcomposer.org/installer | php'.PHP_EOL.
+        'php composer.phar install'.PHP_EOL;
     exit(1);
 }
 
-Bldr\Application::create();
+include 'bldr.php';
