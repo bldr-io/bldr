@@ -12,7 +12,7 @@
 namespace Bldr\DependencyInjection;
 
 use Bldr\Config;
-use Bldr\Extension;
+use Bldr\Block;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\DependencyInjection\ContainerBuilder as BaseContainerBuilder;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
@@ -36,15 +36,15 @@ class ContainerBuilder extends BaseContainerBuilder
     }
 
     /**
-     *
+     * @todo Add logic to find other blocks
      */
     public function compile()
     {
         if (null !== $this->parameterBag) {
-            $extensions = $this->getCoreExtensions();
+            $blocks = $this->getCoreBlocks();
 
-            foreach ($extensions as $extension) {
-                $this->prepareExtension($extension);
+            foreach ($blocks as $block) {
+                $this->prepareBlock($block);
             }
         }
 
@@ -56,30 +56,28 @@ class ContainerBuilder extends BaseContainerBuilder
     /**
      * @return array
      */
-    private function getCoreExtensions()
+    private function getCoreBlocks()
     {
-        $extensions = [
-            new BldrExtension(),
-            new Extension\Execute\DependencyInjection\ExecuteExtension(),
-            new Extension\Filesystem\DependencyInjection\FilesystemExtension(),
-            new Extension\Notify\DependencyInjection\NotifyExtension(),
-            new Extension\Watch\DependencyInjection\WatchExtension(),
-            new Extension\Database\DependencyInjection\DatabaseExtension(),
-            new Extension\Database\DependencyInjection\MysqlExtension(),
-            new Extension\Miscellaneous\DependencyInjection\MiscellaneousExtension(),
+        return [
+            new BldrBlock(),
+            new Block\Execute\ExecuteBlock(),
+            new Block\Filesystem\FilesystemBlock(),
+            new Block\Notify\NotifyBlock(),
+            new Block\Watch\WatchBlock(),
+            new Block\Database\DatabaseBlock(),
+            new Block\Database\MysqlBlock(),
+            new Block\Miscellaneous\MiscellaneousBlock(),
         ];
-
-        return $extensions;
     }
 
     /**
      * @param AbstractExtension $extension
      */
-    private function prepareExtension(AbstractExtension $extension)
+    private function prepareBlock(AbstractBlock $block)
     {
-        $this->registerExtension($extension);
-        $this->loadFromExtension($extension->getAlias());
-        foreach ($extension->getCompilerPasses() as $pass) {
+        $this->registerExtension($block);
+        $this->loadFromExtension($block->getAlias());
+        foreach ($block->getCompilerPasses() as $pass) {
             $this->addCompilerPass($pass);
         }
     }

@@ -28,7 +28,7 @@ class WatchBlock extends AbstractBlock
     {
         $this->addCall(
             'bldr_watch.watch',
-            'Bldr\Extension\Watch\Call\WatchCall',
+            'Bldr\Block\Watch\Call\WatchCall',
             [
                 new Reference('bldr.registry.task'),
                 [

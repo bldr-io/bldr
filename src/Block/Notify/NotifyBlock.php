@@ -22,18 +22,19 @@ use Symfony\Component\DependencyInjection\Definition;
 class NotifyBlock extends AbstractBlock
 {
     /**
-     * Loads a specific configuration.
-     *
-     * @param array            $config    An array of configuration values
-     * @param ContainerBuilder $container A ContainerBuilder instance
-     *
-     * @throws \InvalidArgumentException When provided tag is not defined in this extension
-     *
-     * @api
+     * {@inheritDoc}
+     */
+    protected function getConfigurationClass()
+    {
+        return 'Bldr\Block\Notify\Configuration';
+    }
+
+    /**
+     * {@inheritDoc}
      */
     public function assemble(array $config, ContainerBuilder $container)
     {
-        $notify = $this->addCall('bldr_notify.notify', 'Bldr\Extension\Notify\Call\NotifyCall');
+        $notify = $this->addCall('bldr_notify.notify', 'Bldr\Block\Notify\Call\NotifyCall');
 
         if (isset($config['smtp'])) {
             $notify->addMethodCall('setSMTPInfo', [$config['smtp']]);

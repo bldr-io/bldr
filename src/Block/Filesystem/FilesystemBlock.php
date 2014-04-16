@@ -29,7 +29,7 @@ class FilesystemBlock extends AbstractBlock
     {
         $container->setDefinition(
             'bldr_filesystem.abstract',
-            new Definition('Bldr\Extension\Filesystem\Call\FilesystemCall')
+            new Definition('Bldr\Block\Filesystem\Call\FilesystemCall')
         )
             ->setAbstract(true);
 
@@ -42,7 +42,7 @@ class FilesystemBlock extends AbstractBlock
 
         foreach ($calls as $id => $class) {
             $container->setDefinition($id, new DefinitionDecorator('bldr_filesystem.abstract'))
-                ->setClass('Bldr\Extension\Filesystem\Call\\'.$class)
+                ->setClass('Bldr\Block\Filesystem\Call\\'.$class)
                 ->addTag('bldr');
         }
     }

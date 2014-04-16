@@ -18,40 +18,32 @@ use Symfony\Component\DependencyInjection\Definition;
 /**
  * @author Aaron Scherer <aaron@undergroundelephant.com>
  */
-class BldrExtension extends AbstractExtension
+class BldrBlock extends AbstractBlock
 {
     /**
      * {@inheritDoc}
      */
-    public function load(array $config, SymfonyContainerBuilder $container)
+    protected function getConfigurationClass()
     {
-        $configuration = (new Processor())->processConfiguration(new Configuration(), $config);
-        $this->addCallOptions($configuration, $config);
+        return 'Bldr\DependencyInjection\Configuration';
+    }
 
-        $container->setParameter('name', $configuration['name']);
-        $container->setParameter('description', $configuration['description']);
-        $container->setParameter('profiles', $configuration['profiles']);
-        $container->setParameter('tasks', $configuration['tasks']);
+    /**
+     * {@inheritDoc}
+     */
+    public function assemble(array $config, SymfonyContainerBuilder $container)
+    {
+        $this->addCallOptions($config, $this->originalConfiguration);
 
-        $container->setDefinition(
-            'input',
-            new Definition('Symfony\Component\Console\Input\ArgvInput')
-        );
+        $this->setParameter('name', $config['name']);
+        $this->setParameter('description', $config['description']);
+        $this->setParameter('profiles', $config['profiles']);
+        $this->setParameter('tasks', $config['tasks']);
 
-        $container->setDefinition(
-            'output',
-            new Definition('Symfony\Component\Console\Output\ConsoleOutput')
-        );
-
-        $container->setDefinition(
-            'bldr.dispatcher',
-            new Definition('Symfony\Component\EventDispatcher\EventDispatcher')
-        );
-
-        $container->setDefinition(
-            'bldr.registry.task',
-            new Definition('Bldr\Registry\TaskRegistry')
-        );
+        $this->addService('input', 'Symfony\Component\Console\Input\ArgvInput');
+        $this->addService('output', 'Symfony\Component\Console\Output\ConsoleOutput');
+        $this->addService('bldr.dispatcher', 'Symfony\Component\EventDispatcher\EventDispatcher');
+        $this->addService('bldr.registry.task', 'Bldr\Registry\TaskRegistry');
     }
 
     private function addCallOptions(array &$configuration, array $configs)

@@ -11,9 +11,12 @@
 
 namespace Bldr\DependencyInjection;
 
+use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerBuilder as SymfonyContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Exception\BadMethodCallException;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 
 /**
@@ -24,7 +27,7 @@ abstract class AbstractBlock extends Extension implements BlockInterface
     /**
      * @var array $config
      */
-    protected $config;
+    protected $config = [];
 
     /**
      * @var ContainerBuilder $container
@@ -32,10 +35,17 @@ abstract class AbstractBlock extends Extension implements BlockInterface
     protected $container;
 
     /**
+     * @var array $originalConfiguration
+     */
+    protected $originalConfiguration;
+
+    /**
      * {@inheritDoc}
      */
-    final public function load(array $config, ContainerBuilder $container)
+    final public function load(array $config, SymfonyContainerBuilder $container)
     {
+        $this->originalConfiguration = $config;
+
         $configClass = $this->getConfigurationClass();
         if ($configClass !== false) {
             $this->config = (new Processor())->processConfiguration(new $configClass(), $config);
@@ -60,7 +70,7 @@ abstract class AbstractBlock extends Extension implements BlockInterface
      *
      * @return mixed
      */
-    abstract protected function assemble(array $config, ContainerBuilder $container);
+    abstract protected function assemble(array $config, SymfonyContainerBuilder $container);
 
     /**
      * @return CompilerPassInterface[]
@@ -68,6 +78,22 @@ abstract class AbstractBlock extends Extension implements BlockInterface
     public function getCompilerPasses()
     {
         return [];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getAlias()
+    {
+        $className = get_class($this);
+        if (substr($className, -5) != 'Block') {
+            throw new BadMethodCallException(
+                'This extension does not follow the naming convention; you must overwrite the getAlias() method.'
+            );
+        }
+        $classBaseName = substr(strrchr($className, '\\'), 1, -5);
+
+        return Container::underscore($classBaseName);
     }
 
     /**
@@ -93,5 +119,10 @@ abstract class AbstractBlock extends Extension implements BlockInterface
     protected function addService($name, $class, array $arguments = [])
     {
         return $this->container->setDefinition($name, new Definition($class, $arguments));
+    }
+
+    protected function setParameter($name, $value)
+    {
+        $this->container->setParameter($name, $value);
     }
 }
