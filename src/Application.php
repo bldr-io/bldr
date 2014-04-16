@@ -58,22 +58,21 @@ EOF;
     /**
      * @return Application
      */
-    public static function create(EmbeddedComposerInterface $embeddedComposer)
+    public static function create(EmbeddedComposerInterface $embeddedComposer = null)
     {
-        $application = new static($embeddedComposer);
-        $application->run();
+        return new static($embeddedComposer);
     }
 
     /**
      * @param string $name
      * @param string $version
      */
-    public function __construct(EmbeddedComposerInterface $embeddedComposer)
+    public function __construct(EmbeddedComposerInterface $embeddedComposer = null)
     {
         $this->embeddedComposer = $embeddedComposer;
 
         $version = '@package_version@';
-        if ($version === '@'.'package_version@') {
+        if ($version === '@'.'package_version@' && $embeddedComposer !== null) {
             $version = $embeddedComposer->findPackage('bldr-io/bldr')->getPrettyVersion();
         }
 
@@ -174,6 +173,7 @@ EOF;
                             "bg=red;fg=white",
                             true
                         ),
+                        $e->getMessage(),
                         "\n\n"
                     ]
                 );

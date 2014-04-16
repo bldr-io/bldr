@@ -10,6 +10,7 @@ bldr:
         watch:
             description: "Watch Profile"
             tasks:
+                - test
                 - watch
         server:
             description: Starts a server and waits for a bit. Then kills it.

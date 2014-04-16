@@ -64,7 +64,7 @@ bldr:
             calls:
                 -
                     type: watch
-                    profile: default
+                    task: test
                     src:
                         - { path: [src, tests], files: *.php, recursive: true }
         prepare:
@@ -129,6 +129,9 @@ bldr:
         test:
             description: 'Runs the PHPUnit Tests'
             calls:
+                -
+                    type: exec
+                    executable: clear
                 -
                     type: exec
                     failOnError: false

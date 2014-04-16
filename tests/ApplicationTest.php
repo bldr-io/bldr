@@ -29,9 +29,9 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
      * @throws \PHPUnit_Framework_Exception
      * @return Application
      */
-    public function testConstructor()
+    public function testFactory()
     {
-        $application = new Application('test', 'test-version');
+        $application = Application::create();
 
         $this->assertInstanceOf(
             'Bldr\Application',
@@ -51,11 +51,20 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetBuildName()
     {
-        $app = new Application();
-        $config = ['name' => 'test-app'];
-        $app->setConfig(new Config($config));
+        $container = \Mockery::mock('Bldr\DependencyInjection\ContainerBuilder');
+        $container->shouldReceive('getParameter')
+            ->once()
+            ->withArgs(['name'])
+            ->andReturn('test-app');
 
-        $travis = getenv('TRAVIS');
+        $app = Application::create();
+
+        $ref      = new \ReflectionClass($app);
+        $property = $ref->getProperty('container');
+        $property->setAccessible(true);
+        $property->setValue($app, $container);
+
+        $travis          = getenv('TRAVIS');
         $travisJobNumber = getenv('TRAVIS_JOB_NUMBER');
         putenv('TRAVIS=true');
         putenv('TRAVIS_JOB_NUMBER=test');
@@ -71,33 +80,11 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     */
-    public function testSetConfig()
-    {
-        $app = new Application();
-        $app->setConfig(new Config(['name' => 'test-config']));
-
-        return $app;
-    }
-
-    /**
-     * @depends testSetConfig
-     */
-    public function testGetConfig(Application $app)
-    {
-        $this->assertEquals(
-            ['name' => 'test-config'],
-            $app->getConfig()
-                ->all()
-        );
-    }
-
-    /**
      *
      */
     public function testGetCommands()
     {
-        $app      = new Application();
+        $app      = Application::create();
         $commands = $app->getCommands();
         $this->assertNotEmpty($commands);
         foreach ($commands as $command) {
@@ -113,7 +100,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetDefaultHelperSet()
     {
-        $app    = new Application();
+        $app    = Application::create();
         $class  = new \ReflectionClass($app);
         $method = $class->getMethod('getDefaultHelperSet');
         $method->setAccessible(true);
@@ -132,7 +119,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
      */
     public function testDoRunCommand()
     {
-        $app = new Application();
+        $app = Application::create();
 
         $command = new MockCommand();
         $command->setApplication($app);
@@ -145,14 +132,16 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             ->andReturn(false);
         $input->shouldReceive('validate')
             ->andReturn(true);
+        $input->shouldReceive('hasParameterOption')
+            ->times(3)
+            ->andReturn(false);
         $output = \Mockery::mock('Symfony\Component\Console\Output\OutputInterface');
+        $output->shouldReceive('writeln')
+            ->withNoArgs();
 
         $class  = new \ReflectionClass($app);
         $method = $class->getMethod('doRunCommand');
         $method->setAccessible(true);
-
-        $config = ['name' => 'test-config'];
-        file_put_contents(getcwd() . '/.test.yml', Yaml::dump($config));
 
         $this->assertNull($method->invokeArgs($app, [$command, $input, $output]));
     }
@@ -160,53 +149,13 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     /**
      *
      */
-    public function testGetBuildContainer()
-    {
-        $app    = new Application();
-        $config = [
-            'profiles' => [
-                'test' => [
-                    'tasks' => [
-                        'test'
-                    ]
-                ]
-            ],
-            'tasks' => [
-                'test' => [
-                    'calls' => [
-
-                    ]
-                ]
-            ],
-            'extensions' => [
-                'Bldr\Test\Mock\DependencyInjection\MockExtension' => null
-            ]
-        ];
-        $app->setConfig(new Config($config));
-
-        $class  = new \ReflectionClass($app);
-        $method = $class->getMethod('buildContainer');
-        $method->setAccessible(true);
-
-        /** @var ContainerBuilder $container */
-        $container = $method->invoke($app);
-
-        $this->assertInstanceOf(
-            'Symfony\Component\DependencyInjection\ContainerBuilder',
-            $container
-        );
-    }
-
-    /**
-     *
-     */
     protected function tearDown()
     {
-        if (file_exists(getcwd() . '/.test.yml')) {
-            unlink(getcwd() . '/.test.yml');
+        if (file_exists(getcwd().'/.test.yml')) {
+            unlink(getcwd().'/.test.yml');
         }
-        if (file_exists(getcwd() . '/.test.yml.dist')) {
-            unlink(getcwd() . '/.test.yml.dist');
+        if (file_exists(getcwd().'/.test.yml.dist')) {
+            unlink(getcwd().'/.test.yml.dist');
         }
     }
 }
