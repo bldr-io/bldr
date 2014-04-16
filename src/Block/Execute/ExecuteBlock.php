@@ -9,7 +9,7 @@
  * with this source code in the file LICENSE
  */
 
-namespace Bldr\Block\Execute\DependencyInjection;
+namespace Bldr\Block\Execute;
 
 use Bldr\DependencyInjection\AbstractBlock;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

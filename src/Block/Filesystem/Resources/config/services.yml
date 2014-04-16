@@ -1,0 +1,20 @@
+services:
+
+    bldr_filesystem.abstract:
+        class: Bldr\Extension\Filesystem\Call\FilesystemCall
+        abstract: true
+
+    bldr_filesystem.remove:
+        class: Bldr\Extension\Filesystem\Call\RemoveCall
+        parent: bldr_filesystem.abstract
+        tags: [{name: bldr}]
+
+    bldr_filesystem.mkdir:
+        class: Bldr\Extension\Filesystem\Call\MkdirCall
+        parent: bldr_filesystem.abstract
+        tags: [{name: bldr}]
+
+    bldr_filesystem.touch:
+        class: Bldr\Extension\Filesystem\Call\TouchCall
+        parent: bldr_filesystem.abstract
+        tags: [{name: bldr}]
