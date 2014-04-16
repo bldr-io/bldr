@@ -1,0 +1,28 @@
+<?php
+
+/**
+ * This file is part of Bldr.io
+ *
+ * (c) Aaron Scherer <aequasi@gmail.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE
+ */
+
+namespace Bldr\Block\Database;
+
+use Bldr\DependencyInjection\AbstractBlock;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+
+/**
+ * @author Aaron Scherer <aequasi@gmail.com>
+ */
+class DatabaseBlock extends AbstractBlock
+{
+    /**
+     * {@inheritDoc}
+     */
+    public function assemble(array $config, ContainerBuilder $container)
+    {
+    }
+}
