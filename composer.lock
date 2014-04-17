@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "28387624334b9fbba5c6b74758797492",
+    "hash": "07d6b0e633ebbf0c2a73bbf14125e223",
     "packages": [
         {
             "name": "composer/composer",
@@ -181,7 +181,7 @@
             ],
             "authors": [
                 {
-                    "name": "Jonathan Wage",
+                    "name": "Jonathan H. Wage",
                     "email": "jonwage@gmail.com",
                     "homepage": "http://www.jwage.com/",
                     "role": "Creator"
@@ -202,7 +202,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "https://github.com/schmittjoh",
+                    "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -253,9 +253,9 @@
                     "email": "roman@code-factory.org"
                 },
                 {
-                    "name": "Johannes M. Schmitt",
+                    "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "https://github.com/schmittjoh",
+                    "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -308,7 +308,7 @@
                 {
                     "name": "Kevin Herrera",
                     "email": "kevin@herrera.io",
-                    "homepage": "http://kevin.herrera.io/",
+                    "homepage": "http://kevin.herrera.io",
                     "role": "Developer"
                 }
             ],
@@ -370,7 +370,7 @@
                 {
                     "name": "Kevin Herrera",
                     "email": "kevin@herrera.io",
-                    "homepage": "http://kevin.herrera.io/",
+                    "homepage": "http://kevin.herrera.io",
                     "role": "Developer"
                 }
             ],
@@ -428,7 +428,7 @@
                 {
                     "name": "Kevin Herrera",
                     "email": "kevin@herrera.io",
-                    "homepage": "http://kevin.herrera.io/",
+                    "homepage": "http://kevin.herrera.io",
                     "role": "Developer"
                 }
             ],
@@ -488,7 +488,7 @@
                 {
                     "name": "Kevin Herrera",
                     "email": "kevin@herrera.io",
-                    "homepage": "http://kevin.herrera.io/",
+                    "homepage": "http://kevin.herrera.io",
                     "role": "Developer"
                 }
             ],
@@ -540,7 +540,7 @@
                 {
                     "name": "Kevin Herrera",
                     "email": "kevin@herrera.io",
-                    "homepage": "http://kevin.herrera.io/",
+                    "homepage": "http://kevin.herrera.io",
                     "role": "Developer"
                 }
             ],
@@ -663,7 +663,7 @@
                 {
                     "name": "Kevin Herrera",
                     "email": "kevin@herrera.io",
-                    "homepage": "http://kevin.herrera.io/",
+                    "homepage": "http://kevin.herrera.io",
                     "role": "Developer"
                 }
             ],
@@ -733,7 +733,7 @@
                 {
                     "name": "Kevin Herrera",
                     "email": "kevin@herrera.io",
-                    "homepage": "http://kevin.herrera.io/",
+                    "homepage": "http://kevin.herrera.io",
                     "role": "Developer"
                 }
             ],
@@ -783,7 +783,7 @@
                 {
                     "name": "Kevin Herrera",
                     "email": "kevin@herrera.io",
-                    "homepage": "http://kevin.herrera.io/",
+                    "homepage": "http://kevin.herrera.io",
                     "role": "Developer"
                 }
             ],
@@ -834,7 +834,7 @@
                 {
                     "name": "Kevin Herrera",
                     "email": "kevin@herrera.io",
-                    "homepage": "http://kevin.herrera.io/",
+                    "homepage": "http://kevin.herrera.io",
                     "role": "Developer"
                 }
             ],
