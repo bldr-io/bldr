@@ -68,4 +68,4 @@ $embeddedComposer = $embeddedComposerBuilder
 
 $embeddedComposer->processAdditionalAutoloads();
 
-Bldr\Application::create($embeddedComposer);
+Bldr\Application::create($embeddedComposer)->run();

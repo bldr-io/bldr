@@ -31,10 +31,13 @@ class Configuration implements ConfigurationInterface
             ->addDefaultsIfNotSet()
             ->children()
                 ->scalarNode('name')
-                    ->isRequired()
+                    ->defaultValue('')
                 ->end()
                 ->scalarNode('description')
                     ->defaultValue('')
+                ->end()
+                ->arrayNode('block')
+                    ->prototype('scalar')->end()
                 ->end()
                 ->append($this->getProfilesNode())
                 ->append($this->getTasksNode())
@@ -49,7 +52,6 @@ class Configuration implements ConfigurationInterface
         $node        = $treeBuilder->root('profiles');
 
         $node
-            ->isRequired()
             ->requiresAtLeastOneElement()
             ->useAttributeAsKey('name')
             ->prototype('array')
@@ -74,7 +76,6 @@ class Configuration implements ConfigurationInterface
         $node        = $treeBuilder->root('tasks');
 
         $node
-            ->isRequired()
             ->useAttributeAsKey('name')
             ->prototype('array')
                 ->addDefaultsIfNotSet()

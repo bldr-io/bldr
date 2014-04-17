@@ -9,20 +9,17 @@
  * with this source code in the file LICENSE
  */
 
-namespace Bldr\Test;
+namespace Bldr\DependencyInjection;
 
-use Bldr\Config;
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
  */
-class ConfigTest extends \PHPUnit_Framework_TestCase
+interface BlockInterface
 {
     /**
-     *
+     * @return CompilerPassInterface[]
      */
-    public function testRead()
-    {
-        $this->markTestIncomplete();
-    }
+    public function getCompilerPasses();
 }

@@ -12,8 +12,8 @@
 namespace Bldr\Service;
 
 use Bldr\Call\CallInterface;
-use Bldr\Event as Events;
 use Bldr\Event;
+use Bldr\Event as Events;
 use Bldr\Model\Call;
 use Bldr\Model\Task;
 use Bldr\Registry\TaskRegistry;
@@ -57,8 +57,7 @@ class Builder
         InputInterface $input,
         OutputInterface $output,
         array $tasks = []
-    )
-    {
+    ) {
         $this->dispatcher = $dispatcher;
         $this->tasks      = $tasks;
     }
@@ -82,7 +81,7 @@ class Builder
      */
     public function runTasks(TaskRegistry $tasks)
     {
-        $failed = false;
+        $failed    = false;
         $exception = null;
 
         while ($tasks->count() > 0) {
@@ -95,7 +94,7 @@ class Builder
                 $this->runTask($task);
             } catch (\Exception $e) {
                 $exception = $e;
-                $failed = true;
+                $failed    = true;
             }
         }
 
@@ -117,7 +116,7 @@ class Builder
                 sprintf(
                     "<info>Running the %s task</info><comment>%s</comment>",
                     $task->getName(),
-                    $task->getDescription() !== '' ? "\n> " . $task->getDescription() : ''
+                    $task->getDescription() !== '' ? "\n> ".$task->getDescription() : ''
                 ),
                 ""
             ]

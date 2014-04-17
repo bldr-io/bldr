@@ -27,12 +27,12 @@ class Call
     private $options;
 
     /**
-     * @var Boolean $failOnError
+     * @var bool $failOnError
      */
     private $failOnError = false;
 
     /**
-     * @var integer[] $successCodes
+     * @var int[] $successCodes
      */
     private $successCodes = [0];
 
@@ -69,7 +69,7 @@ class Call
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getFailOnError()
     {
@@ -77,7 +77,7 @@ class Call
     }
 
     /**
-     * @param Boolean $failOnError
+     * @param bool $failOnError
      *
      * @return Call
      */
@@ -89,7 +89,7 @@ class Call
     }
 
     /**
-     * @return integer[]
+     * @return int[]
      */
     public function getSuccessCodes()
     {
@@ -97,7 +97,7 @@ class Call
     }
 
     /**
-     * @param integer[] $successCodes
+     * @param int[] $successCodes
      *
      * @return Call
      */

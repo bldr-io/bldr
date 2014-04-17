@@ -11,15 +11,16 @@
 
 namespace Bldr\DependencyInjection;
 
+use Bldr\Block;
 use Bldr\Config;
-use Bldr\Extension;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder as BaseContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
-use Symfony\Component\Config\FileLocator;
-
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
@@ -27,24 +28,29 @@ use Symfony\Component\Config\FileLocator;
 class ContainerBuilder extends BaseContainerBuilder
 {
     /**
-     * @param ParameterBagInterface|null $parameterBag
+     * @param InputInterface  $input
+     * @param OutputInterface $output
      */
-    public function __construct(ParameterBagInterface $parameterBag = null)
+    public function __construct(InputInterface $input, OutputInterface $output)
     {
-        parent::__construct($parameterBag);
+        parent::__construct();
+
+        $this->set('input', $input);
+        $this->set('output', $output);
+
         $this->compile();
     }
 
     /**
-     *
+     * @todo Add logic to find other blocks
      */
     public function compile()
     {
         if (null !== $this->parameterBag) {
-            $extensions = $this->getCoreExtensions();
+            $blocks = $this->getCoreBlocks();
 
-            foreach ($extensions as $extension) {
-                $this->prepareExtension($extension);
+            foreach ($blocks as $block) {
+                $this->prepareBlock($block);
             }
         }
 
@@ -56,30 +62,28 @@ class ContainerBuilder extends BaseContainerBuilder
     /**
      * @return array
      */
-    private function getCoreExtensions()
+    private function getCoreBlocks()
     {
-        $extensions = [
-            new BldrExtension(),
-            new Extension\Execute\DependencyInjection\ExecuteExtension(),
-            new Extension\Filesystem\DependencyInjection\FilesystemExtension(),
-            new Extension\Notify\DependencyInjection\NotifyExtension(),
-            new Extension\Watch\DependencyInjection\WatchExtension(),
-            new Extension\Database\DependencyInjection\DatabaseExtension(),
-            new Extension\Database\DependencyInjection\MysqlExtension(),
-            new Extension\Miscellaneous\DependencyInjection\MiscellaneousExtension(),
+        return [
+            new BldrBlock(),
+            new Block\Execute\ExecuteBlock(),
+            new Block\Filesystem\FilesystemBlock(),
+            new Block\Notify\NotifyBlock(),
+            new Block\Watch\WatchBlock(),
+            new Block\Database\DatabaseBlock(),
+            new Block\Database\MysqlBlock(),
+            new Block\Miscellaneous\MiscellaneousBlock(),
         ];
-
-        return $extensions;
     }
 
     /**
      * @param AbstractExtension $extension
      */
-    private function prepareExtension(AbstractExtension $extension)
+    private function prepareBlock(AbstractBlock $block)
     {
-        $this->registerExtension($extension);
-        $this->loadFromExtension($extension->getAlias());
-        foreach ($extension->getCompilerPasses() as $pass) {
+        $this->registerExtension($block);
+        $this->loadFromExtension($block->getAlias());
+        foreach ($block->getCompilerPasses() as $pass) {
             $this->addCompilerPass($pass);
         }
     }

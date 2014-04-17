@@ -9,20 +9,20 @@
  * with this source code in the file LICENSE
  */
 
-namespace Bldr\Test;
+namespace Bldr\Block\Database;
 
-use Bldr\Config;
+use Bldr\DependencyInjection\AbstractBlock;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
  */
-class ConfigTest extends \PHPUnit_Framework_TestCase
+class DatabaseBlock extends AbstractBlock
 {
     /**
-     *
+     * {@inheritDoc}
      */
-    public function testRead()
+    public function assemble(array $config, ContainerBuilder $container)
     {
-        $this->markTestIncomplete();
     }
 }

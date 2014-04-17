@@ -15,11 +15,13 @@ use Bldr\Command as Commands;
 use Bldr\DependencyInjection\AbstractExtension;
 use Bldr\DependencyInjection\ContainerBuilder;
 use Bldr\Helper\DialogHelper;
+use Dflydev\EmbeddedComposer\Console\Command as ComposerCmd;
 use Dflydev\EmbeddedComposer\Core\EmbeddedComposerAwareInterface;
 use Dflydev\EmbeddedComposer\Core\EmbeddedComposerInterface;
-use Dflydev\EmbeddedComposer\Console\Command as Composer;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\FormatterHelper;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -54,6 +56,8 @@ EOF;
     private $embeddedComposer;
 
     /**
+     * @param EmbeddedComposerInterface $embeddedComposer
+     *
      * @return Application
      */
     public static function create(EmbeddedComposerInterface $embeddedComposer)
@@ -62,8 +66,7 @@ EOF;
     }
 
     /**
-     * @param string $name
-     * @param string $version
+     * @param EmbeddedComposerInterface $embeddedComposer
      */
     public function __construct(EmbeddedComposerInterface $embeddedComposer)
     {
@@ -76,11 +79,7 @@ EOF;
 
         parent::__construct('Bldr', $version);
 
-        $this->buildContainer();
-
         $this->addCommands($this->getCommands());
-
-        $this->run($this->container->get('input'), $this->container->get('output'));
     }
 
     /**
@@ -89,13 +88,12 @@ EOF;
     public function getCommands()
     {
         $commands = [
-            new Commands\InitCommand(),
             new Commands\BuildCommand(),
             new Commands\Task\ListCommand(),
             new Commands\Task\InfoCommand(),
-            new Composer\DumpAutoloadCommand(''),
-            new Composer\InstallCommand(''),
-            new Composer\UpdateCommand(''),
+            new ComposerCmd\DumpAutoloadCommand(''),
+            new ComposerCmd\InstallCommand(''),
+            new ComposerCmd\UpdateCommand('')
         ];
 
         return $commands;
@@ -146,6 +144,35 @@ EOF;
     protected function doRunCommand(Command $command, InputInterface $input, OutputInterface $output)
     {
         if ($command instanceof ContainerAwareInterface) {
+
+            try {
+                $this->buildContainer($input, $output);
+            } catch (\Exception $e) {
+                $input = new ArrayInput(['command' => 'help']);
+
+                /** @var FormatterHelper $formatter */
+                $formatter = $this->getHelperSet()->get('formatter');
+                $output->writeln(
+                    [
+                        "\n\n",
+                        $formatter->formatBlock(
+                            [
+                                sprintf(
+                                    "Until you create a config file, bldr cant run the `%s` command.",
+                                    $command->getName()
+                                )
+                            ],
+                            "bg=red;fg=white",
+                            true
+                        ),
+                        $e->getMessage(),
+                        "\n\n"
+                    ]
+                );
+
+                return $this->doRun($input, $output);
+            }
+
             $command->setContainer($this->container);
         }
 
@@ -155,11 +182,16 @@ EOF;
     /**
      * Builds the container with extensions
      *
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     *
+     * @return ContainerBuilder
+     *
      * @throws InvalidArgumentException
      */
-    private function buildContainer()
+    private function buildContainer(InputInterface $input, OutputInterface $output)
     {
-        $this->container = new ContainerBuilder();
+        $this->container = new ContainerBuilder($input, $output);
 
         return $this->container;
     }
@@ -182,5 +214,24 @@ EOF;
     public function getEmbeddedComposer()
     {
         return $this->embeddedComposer;
+    }
+
+    protected function getDefaultInputDefinition()
+    {
+        $definition = parent::getDefaultInputDefinition();
+        $definition->addOptions(
+            [
+                new InputOption('config-file', null, InputOption::VALUE_REQUIRED, 'Config File to use'),
+                new InputOption(
+                    'config-format',
+                    null,
+                    InputOption::VALUE_REQUIRED,
+                    'Config Format to use: '.implode(', ', Config::$TYPES)
+                ),
+                new InputOption('global', null, InputOption::VALUE_NONE, 'Read the global config')
+            ]
+        );
+
+        return $definition;
     }
 }

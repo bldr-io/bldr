@@ -27,7 +27,7 @@ class Task
     private $description;
 
     /**
-     * @var Boolean #runOnFailure
+     * @var bool #runOnFailure
      */
     private $runOnFailure;
 
@@ -37,15 +37,15 @@ class Task
     private $calls = [];
 
     /**
-     * @param string  $name
-     * @param string  $description
-     * @param Boolean $runOnFailure
-     * @param Call[]  $calls
+     * @param string $name
+     * @param string $description
+     * @param bool   $runOnFailure
+     * @param Call[] $calls
      */
     public function __construct($name, $description = '', $runOnFailure = false, array $calls = [])
     {
-        $this->name = $name;
-        $this->description = $description;
+        $this->name         = $name;
+        $this->description  = $description;
         $this->runOnFailure = $runOnFailure;
         if (sizeof($calls) > 0) {
             foreach ($calls as $data) {
@@ -99,7 +99,7 @@ class Task
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isRunOnFailure()
     {

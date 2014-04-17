@@ -21,7 +21,7 @@ class TaskTest extends \PHPUnit_Framework_TestCase
 {
     public function testConstructor()
     {
-        $task = new Task('test', 'test-description', [['type' => 'test', 'foo' => 'bar']]);
+        $task = new Task('test', 'test-description', false, [['type' => 'test', 'foo' => 'bar']]);
 
         $this->assertInstanceOf(
             'Bldr\Model\Task',
