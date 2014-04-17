@@ -7,13 +7,13 @@ for ease of use.
 
 To add your own task types to Bldr, you will have to write your own `Bldr Block`. By default, there are a couple
 blocks that already come with Bldr, but it is easy enough to add your own. For a quick baseline on how to write one,
-check out the `Execute Block`_ code. When you want to use a third party block, its as simple as adding it to
+check out the `Execute Block`_ code. When you want to use a third party block, it is as simple as adding it to
 your ``.bldr.yml`` file:
 
 .. code-block:: yaml
 
     blocks:
-        Bldr\Block\Symfony\SymfonyBlock: ~ # Isn't up to spec yet...
+        Acme\Block\TestBlock: ~
         Acme\Block\DemoBlock:
             argument: value
 
@@ -53,7 +53,7 @@ The Filesystem Block (Included with Bldr)
 
 This extension lets you run filesystem commands.
 
-This one needs some work, as not all of the commands are there.
+This one needs some work, as not all of the commands are there (mkdir, remove, touch, and dumpFile are).
 
 Some examples:
 
@@ -111,7 +111,7 @@ The watch Block (Included with Bldr)
 
 This extension lets you run the ``watch`` commands. It will let you watch the filesystem for changes.
 
-This one needs some work. Right now, you can only have one watch.
+This one needs some work. Right now, you can only have one watch task.
 
 .. code-block:: yaml
 
@@ -135,13 +135,13 @@ This one needs some work. Right now, you can only have one watch.
 
 
 `Symfony Block`_ (Official) (Don't Use Yet)
-***************************
+*******************************************
 The Symfony Block
 
 This extension lets you run symfony console commands quicker. Needs work... I want to turn the following exec into
 ``symfony:cache:clear`` with no ``arguments``
 
-This one needs work. Not up to spec yet. Missing commands too
+This one needs work. It needs to be updated to the current version of Bldr.
 
 .. code-block:: yaml
 

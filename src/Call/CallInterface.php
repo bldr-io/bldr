@@ -96,12 +96,12 @@ interface CallInterface
     public function getHelperSet();
 
     /**
-     * @return Boolean
+     * @return bool
      */
     public function getFailOnError();
 
     /**
-     * @return integer[]
+     * @return int[]
      */
     public function getSuccessStatusCodes();
 }

@@ -15,7 +15,6 @@ use Bldr\Call\AbstractCall;
 use Bldr\Call\Traits\FinderAwareTrait;
 use Bldr\Model\Task;
 use Bldr\Registry\TaskRegistry;
-use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
 /**
@@ -35,6 +34,10 @@ class WatchCall extends AbstractCall
      */
     private $config;
 
+    /**
+     * @param TaskRegistry $tasks
+     * @param array        $config
+     */
     public function __construct(TaskRegistry $tasks, array $config)
     {
         $this->tasks  = $tasks;
@@ -109,7 +112,7 @@ class WatchCall extends AbstractCall
      * @param string $name
      * @param array  $previously
      *
-     * @return Boolean
+     * @return bool
      */
     private function checkFile($name, array &$previously)
     {

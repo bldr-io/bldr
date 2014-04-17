@@ -12,18 +12,12 @@
 namespace Bldr;
 
 use Bldr\DependencyInjection\ContainerBuilder;
-use Bldr\DependencyInjection\Loader\IniFileLoader;
-use Bldr\DependencyInjection\Loader\JsonFileLoader;
-use Bldr\DependencyInjection\Loader\PhpFileLoader;
-use Bldr\DependencyInjection\Loader\XmlFileLoader;
-use Bldr\DependencyInjection\Loader\YamlFileLoader;
+use Bldr\DependencyInjection\Loader;
 use Bldr\Exception\ConfigurationFileNotFoundException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Loader\DelegatingLoader;
 use Symfony\Component\Config\Loader\LoaderResolver;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\DependencyInjection\Dumper\XmlDumper;
-use Symfony\Component\Yaml\Dumper as YamlDumper;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
@@ -63,11 +57,11 @@ class Config
         $locator  = new FileLocator($locations);
         $resolver = new LoaderResolver(
             [
-                new YamlFileLoader($container, $locator),
-                new XmlFileLoader($container, $locator),
-                new PhpFileLoader($container, $locator),
-                new IniFileLoader($container, $locator),
-                new JsonFileLoader($container, $locator)
+                new Loader\YamlFileLoader($container, $locator),
+                new Loader\XmlFileLoader($container, $locator),
+                new Loader\PhpFileLoader($container, $locator),
+                new Loader\IniFileLoader($container, $locator),
+                new Loader\JsonFileLoader($container, $locator)
             ]
         );
 
@@ -85,7 +79,7 @@ class Config
         if (!$foundConfig) {
             throw new ConfigurationFileNotFoundException(
                 sprintf(
-                    "Either Couldn't find the configuration file, or couldnt read it. ".
+                    "Either Couldn't find the configuration file, or couldn't read it. ".
                     "Make sure the extension is valid (%s). Tried: %s",
                     implode(', ', static::$TYPES),
                     implode(', ', $files)
@@ -119,7 +113,7 @@ class Config
 
         return [
             sprintf("%s.%s", static::$NAME, $format),
-            sprintf("%s.%s.dist", static::$NAME, $format),
+            sprintf("%s.%s.dist", static::$NAME, $format)
         ];
     }
 }

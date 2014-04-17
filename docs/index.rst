@@ -6,11 +6,13 @@ you've probably seen some pretty complicated build files, and they were probably
 
 Well, here's one written for Bldr using yaml (json is also supported):
 
+**This is a sample configuration. Your project may not have the dependencies required to run this configuration.**
+
 .. code-block:: yaml
 
     bldr:
         name: bldr-io/bldr
-        description: 'Super Extensible and Awesome Task Runner'
+        description: Super Extensible and Awesome Task Runner
 
         profiles:
             default:
@@ -23,7 +25,7 @@ Well, here's one written for Bldr using yaml (json is also supported):
 
         tasks:
             prepare:
-                description: 'Cleans up old builds and prepares the new one'
+                description: Cleans up old builds and prepares the new one
                 calls:
                     -
                         type: filesystem:remove
@@ -39,17 +41,18 @@ Well, here's one written for Bldr using yaml (json is also supported):
                         executable: composer
                         arguments: [install, --prefer-dist]
             lint:
-                describe: 'Lints the files of the project'
+                describe: Lints the files of the project
                 calls:
                     -
                         type: apply
                         failOnError: true
-                        fileset: [src/*.php, src/**/*.php]
+                        src:
+                            - { path: [src, tests], files: *.php, recursive: true } # Checks src and tests directories for *.php files recursively
                         executable: php
                         arguments: [-l]
 
             phpcs:
-                description: 'Runs the PHP Code Sniffer'
+                description: Runs the PHP Code Sniffer
                 calls:
                     -
                         type: exec
@@ -62,7 +65,7 @@ Well, here's one written for Bldr using yaml (json is also supported):
                             - --report-file=build/logs/checkstyle.xml
                             - src/
             test:
-                description: 'Runs the PHPUnit Tests'
+                description: Runs the PHPUnit Tests
                 calls:
                     -
                         type: exec
@@ -73,7 +76,7 @@ Well, here's one written for Bldr using yaml (json is also supported):
                             - --testdox
                             - --coverage-text=php://stdout
 
-And heres the output:
+And here's the output:
 
 .. image:: demo1.png
 

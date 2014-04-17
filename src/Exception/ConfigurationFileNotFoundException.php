@@ -19,4 +19,3 @@ use Exception;
 class ConfigurationFileNotFoundException extends BldrException
 {
 }
- 

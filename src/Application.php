@@ -15,7 +15,7 @@ use Bldr\Command as Commands;
 use Bldr\DependencyInjection\AbstractExtension;
 use Bldr\DependencyInjection\ContainerBuilder;
 use Bldr\Helper\DialogHelper;
-use Dflydev\EmbeddedComposer\Console\Command as Composer;
+use Dflydev\EmbeddedComposer\Console\Command as ComposerCmd;
 use Dflydev\EmbeddedComposer\Core\EmbeddedComposerAwareInterface;
 use Dflydev\EmbeddedComposer\Core\EmbeddedComposerInterface;
 use Symfony\Component\Console\Application as BaseApplication;
@@ -56,23 +56,24 @@ EOF;
     private $embeddedComposer;
 
     /**
+     * @param EmbeddedComposerInterface $embeddedComposer
+     *
      * @return Application
      */
-    public static function create(EmbeddedComposerInterface $embeddedComposer = null)
+    public static function create(EmbeddedComposerInterface $embeddedComposer)
     {
         return new static($embeddedComposer);
     }
 
     /**
-     * @param string $name
-     * @param string $version
+     * @param EmbeddedComposerInterface $embeddedComposer
      */
-    public function __construct(EmbeddedComposerInterface $embeddedComposer = null)
+    public function __construct(EmbeddedComposerInterface $embeddedComposer)
     {
         $this->embeddedComposer = $embeddedComposer;
 
         $version = '@package_version@';
-        if ($version === '@'.'package_version@' && $embeddedComposer !== null) {
+        if ($version === '@'.'package_version@') {
             $version = $embeddedComposer->findPackage('bldr-io/bldr')->getPrettyVersion();
         }
 
@@ -90,9 +91,9 @@ EOF;
             new Commands\BuildCommand(),
             new Commands\Task\ListCommand(),
             new Commands\Task\InfoCommand(),
-            new Composer\DumpAutoloadCommand(''),
-            new Composer\InstallCommand(''),
-            new Composer\UpdateCommand(''),
+            new ComposerCmd\DumpAutoloadCommand(''),
+            new ComposerCmd\InstallCommand(''),
+            new ComposerCmd\UpdateCommand('')
         ];
 
         return $commands;
@@ -129,15 +130,6 @@ EOF;
     public function getHelp()
     {
         return "\n".self::$logo."\n\n".parent::getHelp();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function doRun(InputInterface $input, OutputInterface $output)
-    {
-
-        return parent::doRun($input, $output);
     }
 
     /**

@@ -23,6 +23,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testRead()
     {
-        throw new \PHPUnit_Framework_IncompleteTestError;
+        $this->markTestIncomplete();
     }
 }

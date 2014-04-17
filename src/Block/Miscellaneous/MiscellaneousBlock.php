@@ -27,7 +27,7 @@ class MiscellaneousBlock extends AbstractBlock
     {
         $services = [
             'bldr_miscellaneous.sleep' => 'Bldr\Block\Miscellaneous\Call\SleepCall',
-            'bldr_miscellaneous.service' => 'Bldr\Block\Miscellaneous\Call\ServiceCall',
+            'bldr_miscellaneous.service' => 'Bldr\Block\Miscellaneous\Call\ServiceCall'
         ];
 
         foreach ($services as $name => $class) {

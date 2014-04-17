@@ -176,10 +176,10 @@ abstract class AbstractCall implements CallInterface
     }
 
     /**
-     * @param string  $name
-     * @param Boolean $required
-     * @param string  $description
-     * @param mixed   $default
+     * @param string $name
+     * @param bool   $required
+     * @param string $description
+     * @param mixed  $default
      *
      * @return AbstractCall
      */
@@ -200,7 +200,7 @@ abstract class AbstractCall implements CallInterface
      * Removes the named option
      *
      * @param string $name
-     * 
+     *
      * @return AbstractCall
      */
     public function removeOption($name)
@@ -213,7 +213,7 @@ abstract class AbstractCall implements CallInterface
     /**
      * @param string $name
      *
-     * @return Boolean
+     * @return bool
      */
     public function hasOption($name)
     {
@@ -251,7 +251,7 @@ abstract class AbstractCall implements CallInterface
     }
 
     /**
-     * @return Boolean
+     * @return bool
      */
     public function getFailOnError()
     {
@@ -268,7 +268,7 @@ abstract class AbstractCall implements CallInterface
     }
 
     /**
-     * @return integer[]
+     * @return int[]
      */
     public function getSuccessStatusCodes()
     {
@@ -279,13 +279,13 @@ abstract class AbstractCall implements CallInterface
     /**
      * @param string $name
      *
-     * @return string|integer
+     * @return string|int
      * @throws \RuntimeException
      */
     protected function getOption($name)
     {
         if (!array_key_exists($name, $this->options)) {
-            throw new \RuntimeException($name . ' is not a valid option.');
+            throw new \RuntimeException($name.' is not a valid option.');
         }
 
         $this->replaceTokens($this->options[$name]['value']);
@@ -326,15 +326,15 @@ abstract class AbstractCall implements CallInterface
     }
 
     /**
-     * @param string         $name
-     * @param string|integer $value
+     * @param string     $name
+     * @param string|int $value
      *
      * @throws \RuntimeException
      */
     protected function setOption($name, $value)
     {
         if (!array_key_exists($name, $this->options)) {
-            throw new \RuntimeException($name . ' is not a valid option.');
+            throw new \RuntimeException($name.' is not a valid option.');
         }
 
         $this->options[$name]['value'] = $value;

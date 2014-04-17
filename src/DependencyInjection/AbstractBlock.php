@@ -57,7 +57,7 @@ abstract class AbstractBlock extends Extension implements BlockInterface
     }
 
     /**
-     * @return string|Boolean
+     * @return string|bool
      */
     protected function getConfigurationClass()
     {
@@ -121,6 +121,10 @@ abstract class AbstractBlock extends Extension implements BlockInterface
         return $this->container->setDefinition($name, new Definition($class, $arguments));
     }
 
+    /**
+     * @param string $name
+     * @param mixed $value
+     */
     protected function setParameter($name, $value)
     {
         $this->container->setParameter($name, $value);

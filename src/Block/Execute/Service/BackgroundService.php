@@ -24,7 +24,7 @@ class BackgroundService
     private $processes = [];
 
     /**
-     * @param string $name
+     * @param string  $name
      * @param Process $process
      */
     public function addProcess($name, Process $process)
@@ -35,7 +35,7 @@ class BackgroundService
     /**
      * @param string $name
      *
-     * @return Boolean
+     * @return bool
      */
     public function hasProcess($name)
     {

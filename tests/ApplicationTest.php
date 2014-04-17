@@ -12,11 +12,8 @@
 namespace Bldr\Test;
 
 use Bldr\Application;
-use Bldr\Config;
 use Bldr\Test\Mock\Command\MockCommand;
 use Symfony\Component\Console\Helper\HelperSet;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
@@ -31,7 +28,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
      */
     public function testFactory()
     {
-        $application = Application::create();
+        $application = Application::create(\Mockery::mock('Dflydev\EmbeddedComposer\Core\EmbeddedComposerInterface'));
 
         $this->assertInstanceOf(
             'Bldr\Application',
@@ -57,8 +54,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             ->withArgs(['name'])
             ->andReturn('test-app');
 
-        $app = Application::create();
-
+        $app      = Application::create(\Mockery::mock('Dflydev\EmbeddedComposer\Core\EmbeddedComposerInterface'));
         $ref      = new \ReflectionClass($app);
         $property = $ref->getProperty('container');
         $property->setAccessible(true);
@@ -84,7 +80,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCommands()
     {
-        $app      = Application::create();
+        $app      = Application::create(\Mockery::mock('Dflydev\EmbeddedComposer\Core\EmbeddedComposerInterface'));
         $commands = $app->getCommands();
         $this->assertNotEmpty($commands);
         foreach ($commands as $command) {
@@ -100,7 +96,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetDefaultHelperSet()
     {
-        $app    = Application::create();
+        $app    = Application::create(\Mockery::mock('Dflydev\EmbeddedComposer\Core\EmbeddedComposerInterface'));
         $class  = new \ReflectionClass($app);
         $method = $class->getMethod('getDefaultHelperSet');
         $method->setAccessible(true);
@@ -119,7 +115,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
      */
     public function testDoRunCommand()
     {
-        $app = Application::create();
+        $app = Application::create(\Mockery::mock('Dflydev\EmbeddedComposer\Core\EmbeddedComposerInterface'));
 
         $command = new MockCommand();
         $command->setApplication($app);
