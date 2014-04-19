@@ -65,7 +65,8 @@ class ContainerBuilder extends BaseContainerBuilder
     private function getCoreBlocks()
     {
         return [
-            new BldrBlock(),
+            new Block\Core\BldrBlock(),
+            new Block\Blocks\BlocksBlock(),
             new Block\Execute\ExecuteBlock(),
             new Block\Filesystem\FilesystemBlock(),
             new Block\Notify\NotifyBlock(),
@@ -77,7 +78,7 @@ class ContainerBuilder extends BaseContainerBuilder
     }
 
     /**
-     * @param AbstractExtension $extension
+     * @param AbstractBlock $block
      */
     private function prepareBlock(AbstractBlock $block)
     {

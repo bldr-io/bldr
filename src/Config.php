@@ -73,6 +73,9 @@ class Config
                 $loader->load($file);
                 $foundConfig = true;
             } catch (\Exception $e) {
+                if (get_class($e) !== 'InvalidArgumentException') {
+                    throw $e;
+                }
             }
         }
 

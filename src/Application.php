@@ -139,6 +139,7 @@ EOF;
      * @param InputInterface  $input
      * @param OutputInterface $output
      *
+     * @throws \Exception
      * @return int|void
      */
     protected function doRunCommand(Command $command, InputInterface $input, OutputInterface $output)
@@ -152,31 +153,24 @@ EOF;
 
                 /** @var FormatterHelper $formatter */
                 $formatter = $this->getHelperSet()->get('formatter');
-                $output->writeln(
+                $output->write(
                     [
                         "\n\n",
                         $formatter->formatBlock(
-                            [
-                                sprintf(
-                                    "Until you create a config file, bldr cant run the `%s` command.",
-                                    $command->getName()
-                                )
-                            ],
+                            "Either you have no config file, or the config file was valid.",
                             "bg=red;fg=white",
                             true
-                        ),
-                        $e->getMessage(),
-                        "\n\n"
+                        )
                     ]
                 );
 
-                return $this->doRun($input, $output);
+                throw $e;
             }
 
             $command->setContainer($this->container);
         }
 
-        parent::doRunCommand($command, $input, $output);
+        return parent::doRunCommand($command, $input, $output);
     }
 
     /**
