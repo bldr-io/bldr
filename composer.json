@@ -2,8 +2,8 @@
     "name":         "bldr-io/bldr",
     "description":  "Simple Build System / Task Runner",
     "require":      {
-        "dflydev/embedded-composer":    "1.0.*@dev",
-        "composer/composer":            "1.0.*@dev",
+        "dflydev/embedded-composer":    "dev-master",
+        "composer/composer":            "dev-master",
         "symfony/console":              "~2.4",
         "symfony/config":               "~2.4",
         "symfony/dependency-injection": "~2.4",
