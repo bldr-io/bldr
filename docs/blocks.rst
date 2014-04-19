@@ -12,10 +12,13 @@ your ``.bldr.yml`` file:
 
 .. code-block:: yaml
 
+    bldr: ~
+
     blocks:
-        Acme\Block\TestBlock: ~
-        Acme\Block\DemoBlock:
-            argument: value
+        - Acme\Block\DemoBlock
+
+    acme_demo:
+        some_setting: some_value
 
 
 ------------------------

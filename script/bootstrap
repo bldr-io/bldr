@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+composer=$(which composer)
+
+if [ -x "$composer" ] ; then
+    $composer install
+else
+    if [ ! -f ./composer.phar ]; then
+        curl -sS https://getcomposer.org/installer | php
+    fi
+
+    ./composer.phar install
+fi

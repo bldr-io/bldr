@@ -4,4 +4,7 @@ imports:
 
 bldr:
     name: bldr-io/bldr
-    description: 'Build System with YAML in mind'
+    description: The PHP Task Runner you've been waiting for
+
+#blocks:
+#    - Bldr\Block\Watch\WatchBlock

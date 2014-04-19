@@ -9,7 +9,7 @@
  * with this source code in the file LICENSE
  */
 
-namespace Bldr\DependencyInjection;
+namespace Bldr\Block\Core;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -35,9 +35,6 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->scalarNode('description')
                     ->defaultValue('')
-                ->end()
-                ->arrayNode('block')
-                    ->prototype('scalar')->end()
                 ->end()
                 ->append($this->getProfilesNode())
                 ->append($this->getTasksNode())

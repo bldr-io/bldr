@@ -7,10 +7,11 @@ bldr:
                 - lint
                 - phpcs
                 - test
+                - build
         watch:
             description: "Watch Profile"
             tasks:
-                - test
+                - testDev
                 - watch
         server:
             description: Starts a server and waits for a bit. Then kills it.

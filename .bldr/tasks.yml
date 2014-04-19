@@ -72,7 +72,7 @@ bldr:
             calls:
                 -
                     type: sleep
-                    seconds: 5
+                    seconds: 1
                 -
                     type: filesystem:remove
                     files: [build/coverage, build/logs]
@@ -131,14 +131,22 @@ bldr:
             calls:
                 -
                     type: exec
+                    failOnError: true
+                    executable: php
+                    arguments:
+                        - bin/phpunit
+                        - --coverage-text=php://stdout
+        testDev:
+            description: 'Runs the PHPUnit Tests'
+            calls:
+                -
+                    type: exec
                     executable: clear
                 -
                     type: exec
                     failOnError: false
                     executable: php
-                    arguments:
-                        - bin/phpunit
-                        - --coverage-text=php://stdout
+                    arguments: [bin/phpunit]
         build:
             description: Builds the Box
             calls:

@@ -9,8 +9,9 @@
  * with this source code in the file LICENSE
  */
 
-namespace Bldr\DependencyInjection;
+namespace Bldr\Block\Core;
 
+use Bldr\DependencyInjection\AbstractBlock;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder as SymfonyContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -25,7 +26,7 @@ class BldrBlock extends AbstractBlock
      */
     protected function getConfigurationClass()
     {
-        return 'Bldr\DependencyInjection\Configuration';
+        return 'Bldr\Block\Core\Configuration';
     }
 
     /**
@@ -34,7 +35,6 @@ class BldrBlock extends AbstractBlock
     public function assemble(array $config, SymfonyContainerBuilder $container)
     {
         $this->addCallOptions($config, $this->originalConfiguration);
-
 
         $this->setParameter('name', $config['name']);
         $this->setParameter('description', $config['description']);
@@ -63,6 +63,9 @@ class BldrBlock extends AbstractBlock
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getCompilerPasses()
     {
         return [new CompilerPass\BuilderCompilerPass];
