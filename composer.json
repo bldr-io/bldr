@@ -2,17 +2,14 @@
     "name":         "bldr-io/bldr",
     "description":  "Simple Build System / Task Runner",
     "require":      {
+        "php":                          ">=5.4",
         "dflydev/embedded-composer":    "dev-master",
         "composer/composer":            "dev-master",
         "symfony/console":              "~2.4",
-        "symfony/config":               "~2.4",
         "symfony/dependency-injection": "~2.4",
         "symfony/event-dispatcher":     "~2.4",
         "symfony/process":              ">=2.4.3,<3.0",
-        "symfony/yaml":                 "~2.4",
-        "symfony/filesystem":           "~2.4",
-        "zendframework/zend-json":      "2.3.*",
-        "kherge/box":                   "~2.4"
+        "zendframework/zend-json":      "2.3.*"
     },
     "suggest":      {
         "bldr-io/bldr-symfony": "Allows for shorter syntax with symfony commands (Not fully tested)"
@@ -21,7 +18,8 @@
         "phpunit/phpunit":           "4.0.*",
         "squizlabs/php_codesniffer": "~1.0",
         "mockery/mockery":           "dev-master",
-        "raulfraile/ladybug":        "dev-master"
+        "raulfraile/ladybug":        "dev-master",
+        "kherge/box":                "~2.4"
     },
     "license":      "MIT",
     "authors":      [

@@ -33,7 +33,8 @@ class ExecuteCall extends AbstractCall
             ->addOption('cwd', false, 'Sets the working directory for the executable')
             ->addOption('output', false, 'Sets the location to output to')
             ->addOption('append', false, 'If output is set, should it append?', false)
-            ->addOption('dry_run', true, 'If set, will not run command', false);
+            ->addOption('dry_run', true, 'If set, will not run command', false)
+            ->addOption('timeout', true, 'Timeout for the command', null);
     }
 
     /**
@@ -47,6 +48,7 @@ class ExecuteCall extends AbstractCall
         $formatter = $this->getHelperSet()->get('formatter');
 
         $builder = new ProcessBuilder($arguments);
+        $builder->setTimeout($this->getOption('timeout'));
 
         if ($this->hasOption('cwd')) {
             $builder->setWorkingDirectory($this->getOption('cwd'));
