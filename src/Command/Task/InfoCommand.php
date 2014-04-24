@@ -55,7 +55,7 @@ EOF
             [
                 "",
                 '<fg=green>Task Name</fg=green>: ' . $service->getName(),
-                '<fg=green>Task Description</fg=green>: ' . $service->getDescription(),
+                '<fg=green>Task Description</fg=green>: ' . $service->getDescription() !== '' ?: 'No Description',
                 "",
                 "<fg=green>Options:</fg=green>"
             ]
@@ -82,7 +82,7 @@ EOF
             $tableHelper->addRow(
                 [
                     $option['name'],
-                    $option['description'],
+                    $option['description'] !== '' ?: 'No Description',
                     $option['required'] ? 'Yes' : 'No',
                     $default
                 ]

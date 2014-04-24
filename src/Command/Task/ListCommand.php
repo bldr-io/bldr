@@ -13,9 +13,9 @@ namespace Bldr\Command\Task;
 
 use Bldr\Call\CallInterface;
 use Bldr\Command\AbstractCommand;
+use Symfony\Component\Console\Helper\TableHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Helper\TableHelper;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
@@ -59,7 +59,12 @@ EOF
             /** @var CallInterface $service */
             $service = $this->container->get($id);
             $service->configure();
-            $tableHelper->addRow([$service->getName(), $service->getDescription()]);
+            $tableHelper->addRow(
+                [
+                    $service->getName(),
+                    $service->getDescription() !== '' ?: 'No Description'
+                ]
+            );
         }
 
         $tableHelper->render($output);
