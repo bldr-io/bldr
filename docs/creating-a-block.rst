@@ -44,6 +44,8 @@ With that, create your directory structure and your Block class:
 
 All blocks must extend the `Bldr\DependencyInjection\AbstractBlock`_, so your class, empty, will look something like this:
 
+*src/AcmeDemoBlock.php*
+
 .. code-block:: php
 
     <?php
@@ -87,6 +89,9 @@ Lets make the `src/Call` directory, and create the new Call:
     mkdir src/Call && vim src/Call/OutputRandomNumberCall.php
 
 Then, let's build the call class! Extending the AbstractCall, requires that we implement two methods: `configure`_ and `run`_
+
+*src/Call/OutputRandomNumberCall.php*
+
 .. code-block:: php
 
     <?php
@@ -130,7 +135,8 @@ Then, let's build the call class! Extending the AbstractCall, requires that we i
 
 Next, we need to add the call to the container, so we can use it in .bldr.yml files:
 
-Back in the src/AcmeDemoBlock.php
+*src/AcmeDemoBlock.php*
+
 .. code-block:: php
 
     <?php
@@ -202,7 +208,8 @@ And run it!
 
 There's some more advanced stuff, like being able to specify configuration:
 
-src/AcmeDemoBlock.php
+*src/AcmeDemoBlock.php*
+
 .. code-block:: php
 
     <?php
@@ -237,7 +244,8 @@ src/AcmeDemoBlock.php
 
 Then make a Configuration.php file. This config is the config from symfony. You can read their docs for more information
 
-src/Configuration.php
+*src/Configuration.php*
+
 .. code-block:: php
 
     <?php
