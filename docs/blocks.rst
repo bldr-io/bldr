@@ -182,6 +182,6 @@ This one needs some work. Right now, you can only have one watch task.
 
 
 .. toctree::
-:maxdepth: 4
+    :maxdepth: 4
 
-        creating-a-block
+    creating-a-block
