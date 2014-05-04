@@ -95,4 +95,3 @@ Content
     usage
     commands
     blocks
-        creating-a-block
