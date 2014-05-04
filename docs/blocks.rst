@@ -179,3 +179,9 @@ This one needs some work. Right now, you can only have one watch task.
 .. _Watch Block: https://github.com/bldr-io/bldr/tree/master/src/Block/Watch
 
 .. _Gush: http://github.com/gushphp/gush
+
+
+.. toctree::
+:maxdepth: 4
+
+        creating-a-block
