@@ -24,6 +24,10 @@ interface CallInterface
 {
     /**
      * Configures the Task
+     *
+     * This method must call CallInterface->setName($name).
+     * This method should call CallInterface->setDescription($description).
+     * This method may also call AbstractCall->addOption($name, $required, $description, $default)
      */
     public function configure();
 

@@ -2,35 +2,37 @@ Usage
 ^^^^^
 
 
-To start, you are going to want to generate a ``.bldr.yml`` file for your project. This can be kick-started with a
-simple console command:
+To start, you are going to want to generate a ``.bldr.yml`` file for your project. This (for now) has to be done manually, but
+it's pretty simple.
 
-*All commands assume you installed Bldr globally*
+Create a .bldr.yml(.dist) file
+.. code-block:: yaml
+
+    bldr:
+        name: some/name
+        description:  A description about the project // (Not Required)
+        profiles: // A list of profiles that can be ran with `./bldr.phar build`
+            default:
+                description: Gets ran when `./bldr.phar build` has no `-p` defined // (Not Required)
+                tasks:
+                    - default
+        tasks:
+            default:
+                description: Default task // (Not Required)
+                calls:
+                    -
+                        type: exec
+                        executable: echo
+                        arguments: [Hello World]
+
+To view a list of avaible call types, run:
 
 .. code-block:: shell
 
-    bldr init
+    ./bldr.phar task:list
 
-This will interactively guide you through creating a ``.bldr.yml`` file, but here's the gist of it:
+And to get more information on a particular type, run:
 
-1. Basic Info
-*************
-You will be asked to enter a name for the project, and a short description of the project.
+.. code-block:: shell
 
-2. Profiles
-***********
-After filling out the basic info, you will be asked if you want to define your profiles. In Bldr, profiles are the main
-containers that get ran, ``bldr build --profile travis`` for example
-
-It will ask you for a profile name and description. e.g. ``travis`` and ``Profile for running on Travis-CI``.
-After those, it will ask you for a list of tasks to run. Right now, you are just defining the names of the tasks.
-You will manually define whats in these tasks later.
-
-3. Manual Configuration
-***********************
-When you are done, just enter through the defaults, and it will build the yaml, and show you what it looks like.
-
-
-------------------------
-
-From here, you will have to manually define what your tasks do!
+    ./bldr.phar task:info <task name>
