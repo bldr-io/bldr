@@ -88,10 +88,10 @@ Content
 ========
 
 .. toctree::
-    :maxdepth: 4
+    :maxdepth: 2
 
     installation
     configuration
     usage
-    commands
     blocks
+    creating-a-block

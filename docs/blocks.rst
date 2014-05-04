@@ -57,7 +57,7 @@ Then, add it to your ``.bldr.yml`` file:
 Below is some minor documentation on the core blocks.
 
 `Execute Block`_ (Official)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+===========================
 The Execute Block (Included with Bldr)
 
 This extension lets you run ``exec`` and ``apply`` tasks.
@@ -80,7 +80,7 @@ This extension lets you run ``exec`` and ``apply`` tasks.
                     arguments: [-l]
 
 `Filesystem Block`_ (Official)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+==============================
 The Filesystem Block (Included with Bldr)
 
 This extension lets you run filesystem commands.
@@ -107,7 +107,7 @@ Some examples:
 
 
 `Notify Block`_ (Official)
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+==========================
 The Notify Block (Included with Bldr)
 
 This extension lets you run the ``notify`` commands. It will either print to the screen, or email a message.
@@ -140,7 +140,7 @@ When adding this extension, you can specify `smtp` connections:
             password: is4wesome
 
 `Watch Block`_ (Official)
-^^^^^^^^^^^^^^^^^^^^^^^^^
+=========================
 The watch Block (Included with Bldr)
 
 This extension lets you run the ``watch`` commands. It will let you watch the filesystem for changes.
@@ -179,12 +179,3 @@ This one needs some work. Right now, you can only have one watch task.
 .. _Watch Block: https://github.com/bldr-io/bldr/tree/master/src/Block/Watch
 
 .. _Gush: http://github.com/gushphp/gush
-
-
-Content
-=======
-
-.. toctree::
-    :maxdepth: 4
-
-    creating-a-block
