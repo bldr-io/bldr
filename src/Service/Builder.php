@@ -167,7 +167,7 @@ class Builder
         }
 
         if (sizeof($services) > 1) {
-            throw new \Exception("Multiple calls exist with the 'exec' tag.");
+            throw new \Exception("Multiple calls exist with the '{$call->getType()}' tag.");
         }
         if (sizeof($services) === 0) {
             throw new \Exception("No task type found for {$call->getType()}.");

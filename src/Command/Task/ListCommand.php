@@ -36,7 +36,7 @@ The <info>%command.name%</info> lists all the available tasks for Bldr.
 
 To use:
 
-    <info>$ bldr %command.full_name%</info>
+    <info>$ bldr %command.name%</info>
 
 EOF
             );

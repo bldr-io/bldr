@@ -55,17 +55,17 @@ The <info>%command.name%</info> builds the current project, using the config fil
 
 To use:
 
-    <info>$ bldr %command.full_name% </info>
+    <info>$ bldr %command.name% </info>
 
 To specify a profile:
 
-    <info>$ bldr %command.full_name% profile_name</info>
+    <info>$ bldr %command.name% profile_name</info>
 
 To specify tasks to run:
 
-    <info>$ bldr %command.full_name% --tasks=task_name</info>
-    <info>$ bldr %command.full_name% --tasks=task_name -t second_task</info>
-    <info>$ bldr %command.full_name% --tasks=task_name,second_task</info>
+    <info>$ bldr %command.name% --tasks=task_name</info>
+    <info>$ bldr %command.name% --tasks=task_name -t second_task</info>
+    <info>$ bldr %command.name% --tasks=task_name,second_task</info>
 
 EOF
             );

@@ -11,6 +11,7 @@
 
 namespace Bldr\DependencyInjection;
 
+use Bldr\Application;
 use Bldr\Block;
 use Bldr\Config;
 use Symfony\Component\Config\FileLocator;
@@ -28,13 +29,15 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 class ContainerBuilder extends BaseContainerBuilder
 {
     /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
+     * @param Application $application
+     * @param InputInterface    $input
+     * @param OutputInterface   $output
      */
-    public function __construct(InputInterface $input, OutputInterface $output)
+    public function __construct(Application $application, InputInterface $input, OutputInterface $output)
     {
         parent::__construct();
 
+        $this->set('application', $application);
         $this->set('input', $input);
         $this->set('output', $output);
 

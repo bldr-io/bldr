@@ -15,6 +15,7 @@ use Bldr\DependencyInjection\AbstractBlock;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder as SymfonyContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * @author Aaron Scherer <aaron@undergroundelephant.com>
@@ -68,6 +69,9 @@ class BldrBlock extends AbstractBlock
      */
     public function getCompilerPasses()
     {
-        return [new CompilerPass\BuilderCompilerPass];
+        return [
+            new CompilerPass\BuilderCompilerPass,
+            new CompilerPass\CommandCompilerPass
+        ];
     }
 }
