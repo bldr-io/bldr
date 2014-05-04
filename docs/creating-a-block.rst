@@ -4,12 +4,12 @@ Creating A Block
 Creating a `Bldr Block` for `Bldr` is fairly similar to creating a Bundle for Symfony2. Here's a quick guide:
 
 1. Create a repo
-****************
+^^^^^^^^^^^^^^^^
 
-Try and stay with the naming convention used by the other blocks: *****-block
+Try and stay with the naming convention used by the other blocks: <name>-block
 
 2. Initialize composer in the repo
-**********************************
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: shell
 
@@ -17,7 +17,7 @@ Try and stay with the naming convention used by the other blocks: *****-block
 
 
 3. Add Bldr as a dev dependency
-*******************************
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In your composer.json file, you will want to add `bldr-io/bldr` as a `require-dev` dependency. For right now,
 until i can figure out why, you will need to add composer, and embedded composer as well.
@@ -33,7 +33,7 @@ until i can figure out why, you will need to add composer, and embedded composer
     }
 
 4. Create a Block class
-***********************
+^^^^^^^^^^^^^^^^^^^^^^^
 
 All of bldr, and the official extensions follow `PSR-4`_ (as well as all the other PSR's, and most, if not all, of the bylaws).
 With that, create your directory structure and your Block class:
@@ -74,11 +74,11 @@ The assemble function is where the magic happens. If you take a look at the Abst
 in there to make it easier to add new calls, services, and parameters to the Container.
 
 5. Create your Call
-*******************
+^^^^^^^^^^^^^^^^^^^
 
 As a demo, let's say we want to make a call that will output a random number to the user when running the call.
 
-First, lets create the call. Directory structure doesn't really matter, but the core structure is normally `src/Call/****Call.php`.
+First, lets create the call. Directory structure doesn't really matter, but the core structure is normally `src/Call/<Name>Call.php`.
 Similar to blocks, all calls must extend `Bldr\Call\AbstractCall`_.
 
 Lets make the `src/Call` directory, and create the new Call:
@@ -264,6 +264,8 @@ src/Configuration.php
             return $treeBuilder;
         }
     }
+
+
 
 .. _PSR-4: http://www.php-fig.org/psr/psr-4/
 .. _BldrDependencyInjectionAbstractBlock: https://github.com/bldr-io/bldr/blob/master/src/DependencyInjection/AbstractBlock.php

@@ -18,7 +18,7 @@ just use the list below. If I missed anything, you can find it here: https://www
 
 To add your own task types to Bldr, you will have to write your own `Bldr Block`. By default, there are a couple
 blocks that already come with Bldr, but it is easy enough to add your own. For a quick baseline on how to write one,
-check out the `documentation <creating-a-block.rst>`_.
+check out the `documentation <creating-a-block.html>`_.
 
 Adding third party blocks is a three step process. First, you need to create a `bldr.json` file (if you don't have one):
 
