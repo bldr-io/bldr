@@ -17,7 +17,6 @@ use Bldr\Model\Task;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\ArgvInput;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
@@ -44,7 +43,8 @@ To pass arguments:
 
 EOF
             )
-            ->ignoreValidationErrors();
+            ->ignoreValidationErrors()
+        ;
     }
 
     /**
@@ -54,12 +54,13 @@ EOF
     {
         $service = $this->findCall($input->getArgument('name'));
 
-        $options = $this->getOptions((string)$input);
+        $options = $this->getOptions((string) $input);
 
         $task = new Task('no-task', '', false, [array_merge(['type' => $input->getArgument('name')], $options)]);
         $call = $task->getCalls()[0];
 
         $service->initialize($input, $output, $this->getHelperSet(), $task, $call);
+
         return $service->run();
     }
 
@@ -123,7 +124,7 @@ EOF
             list($name, $value) = explode('=', $piece, 2);
 
             if (strpos($value, "'[") === 0 && strpos($value, "]'") === (strlen($value) - 2)) {
-                $csv = trim(str_replace(['[', ']'], '', $value), "'");
+                $csv   = trim(str_replace(['[', ']'], '', $value), "'");
                 $value = str_getcsv($csv, ',');
             }
 

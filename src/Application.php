@@ -150,7 +150,7 @@ EOF;
                 [
                     "\n\n",
                     $this->getHelperSet()->get('formatter')->formatBlock(
-                        "Either you have no config file, or the config file was valid.",
+                        "Either you have no config file, or the config file is invalid.",
                         "bg=red;fg=white",
                         true
                     )
