@@ -18,4 +18,12 @@ If you have an idea for a new feature you would like to see added to Bldr, you m
 
 ## Coding Guidelines
 
-Bldr follows all of the [PHP-FIG coding standards](https://github.com/php-fig/fig-standards/tree/master/accepted) coding standards. In addition to these standards, Bldr also follows the [naming conventions](https://github.com/php-fig/fig-standards/blob/master/bylaws/002-psr-naming-conventions.md#naming-conventions-for-code-released-by-php-fig) for PHP-FIG.
+Bldr follows all of the [PHP-FIG coding standards](https://github.com/php-fig/fig-standards/tree/master/accepted) coding standards. 
+
+In addition to these standards, Bldr also follows the [naming conventions](https://github.com/php-fig/fig-standards/blob/master/bylaws/002-psr-naming-conventions.md#naming-conventions-for-code-released-by-php-fig) for PHP-FIG, minus the PSR specific naming.
+
+Bldr also follows the following standards:
+
+* Array's will follow the short syntax, and will not have a trailing slash
+* Align variable values, when variables are grouped, including array values
+* No spaces around concatenation periods
