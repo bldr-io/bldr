@@ -29,6 +29,9 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 
+/**
+ * @author Aaron Scherer <aequasi@gmail.com>
+ */
 class Application extends BaseApplication implements EmbeddedComposerAwareInterface
 {
     /**
@@ -36,6 +39,9 @@ class Application extends BaseApplication implements EmbeddedComposerAwareInterf
      */
     public static $BUILD_NAME;
 
+    /**
+     * @var string $logo
+     */
     public static $logo = <<<EOF
   ______    __       _______   ______
  |   _  \  |  |     |       \ |   _  \
@@ -62,7 +68,7 @@ EOF;
      */
     public static function create(EmbeddedComposerInterface $embeddedComposer)
     {
-        return new static($embeddedComposer);
+        return new Application($embeddedComposer);
     }
 
     /**
@@ -133,44 +139,28 @@ EOF;
     }
 
     /**
-     * Loads the config for the necessary commands, and sets the container for classes that need it.
-     *
-     * @param Command         $command
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @throws \Exception
-     * @return int|void
+     * {@inheritDoc}
      */
-    protected function doRunCommand(Command $command, InputInterface $input, OutputInterface $output)
+    public function doRun(InputInterface $input, OutputInterface $output)
     {
-        if ($command instanceof ContainerAwareInterface) {
+        try {
+            $this->buildContainer($input, $output);
+        } catch (\Exception $e) {
+            $output->write(
+                [
+                    "\n\n",
+                    $this->getHelperSet()->get('formatter')->formatBlock(
+                        "Either you have no config file, or the config file is invalid.",
+                        "bg=red;fg=white",
+                        true
+                    )
+                ]
+            );
 
-            try {
-                $this->buildContainer($input, $output);
-            } catch (\Exception $e) {
-                $input = new ArrayInput(['command' => 'help']);
-
-                /** @var FormatterHelper $formatter */
-                $formatter = $this->getHelperSet()->get('formatter');
-                $output->write(
-                    [
-                        "\n\n",
-                        $formatter->formatBlock(
-                            "Either you have no config file, or the config file was valid.",
-                            "bg=red;fg=white",
-                            true
-                        )
-                    ]
-                );
-
-                throw $e;
-            }
-
-            $command->setContainer($this->container);
+            throw $e;
         }
 
-        return parent::doRunCommand($command, $input, $output);
+        return parent::doRun($input, $output);
     }
 
     /**
@@ -185,7 +175,7 @@ EOF;
      */
     private function buildContainer(InputInterface $input, OutputInterface $output)
     {
-        $this->container = new ContainerBuilder($input, $output);
+        $this->container = new ContainerBuilder($this, $input, $output);
 
         return $this->container;
     }
@@ -210,6 +200,9 @@ EOF;
         return $this->embeddedComposer;
     }
 
+    /**
+     * @return \Symfony\Component\Console\Input\InputDefinition
+     */
     protected function getDefaultInputDefinition()
     {
         $definition = parent::getDefaultInputDefinition();
@@ -227,5 +220,19 @@ EOF;
         );
 
         return $definition;
+    }
+
+    /**
+     * Adds a container to Container Aware Commands
+     *
+     * {@inheritDoc}
+     */
+    protected function doRunCommand(Command $command, InputInterface $input, OutputInterface $output)
+    {
+        if ($command instanceof ContainerAwareInterface) {
+            $command->setContainer($this->container);
+        }
+
+        return parent::doRunCommand($command, $input, $output);
     }
 }

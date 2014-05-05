@@ -38,7 +38,7 @@ The <info>%command.name%</info> lists all the options for a specified task.
 
 To use:
 
-    <info>$ bldr %command.full_name% <task_name></info>
+    <info>$ bldr %command.name% <task_name></info>
 
 EOF
             );
