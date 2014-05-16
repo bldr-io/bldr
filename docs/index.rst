@@ -41,7 +41,7 @@ Well, here's one written for Bldr using yaml (json is also supported):
                         executable: composer
                         arguments: [install, --prefer-dist]
             lint:
-                describe: Lints the files of the project
+                description: Lints the files of the project
                 calls:
                     -
                         type: apply
