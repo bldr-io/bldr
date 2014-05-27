@@ -13,13 +13,26 @@ namespace Bldr\Test;
 
 use Bldr\Application;
 use Bldr\Test\Mock\Command\MockCommand;
-use Symfony\Component\Console\Helper\HelperSet;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
  */
 class ApplicationTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @return Application
+     */
+    public static function createApplication()
+    {
+        $package = \Mockery::mock('Composer\Package\PackageInterface');
+        $package->shouldReceive('getPrettyVersion')->andReturn('test');
+
+        $embeddedComposer = \Mockery::mock('Dflydev\EmbeddedComposer\Core\EmbeddedComposerInterface');
+        $embeddedComposer->shouldReceive('findPackage')->once()->andReturn($package);
+
+        return Application::create($embeddedComposer);
+    }
+
     /**
      * Tests the Application::__construct($name, $version) method
      *
@@ -28,7 +41,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
      */
     public function testFactory()
     {
-        $application = Application::create(\Mockery::mock('Dflydev\EmbeddedComposer\Core\EmbeddedComposerInterface'));
+        $application = self::createApplication();
 
         $this->assertInstanceOf(
             'Bldr\Application',
@@ -54,7 +67,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             ->withArgs(['name'])
             ->andReturn('test-app');
 
-        $app      = Application::create(\Mockery::mock('Dflydev\EmbeddedComposer\Core\EmbeddedComposerInterface'));
+        $app      = self::createApplication();
         $ref      = new \ReflectionClass($app);
         $property = $ref->getProperty('container');
         $property->setAccessible(true);
@@ -80,7 +93,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCommands()
     {
-        $app      = Application::create(\Mockery::mock('Dflydev\EmbeddedComposer\Core\EmbeddedComposerInterface'));
+        $app      = self::createApplication();
         $commands = $app->getCommands();
         $this->assertNotEmpty($commands);
         foreach ($commands as $command) {
@@ -96,7 +109,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetDefaultHelperSet()
     {
-        $app    = Application::create(\Mockery::mock('Dflydev\EmbeddedComposer\Core\EmbeddedComposerInterface'));
+        $app    = self::createApplication();
         $class  = new \ReflectionClass($app);
         $method = $class->getMethod('getDefaultHelperSet');
         $method->setAccessible(true);
@@ -108,38 +121,6 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
             'Bldr\Helper\DialogHelper',
             $helperSet->get('dialog')
         );
-    }
-
-    /**
-     *
-     */
-    public function testDoRunCommand()
-    {
-        $app = Application::create(\Mockery::mock('Dflydev\EmbeddedComposer\Core\EmbeddedComposerInterface'));
-
-        $command = new MockCommand();
-        $command->setApplication($app);
-        $command->setHelperSet($app->getHelperSet());
-
-        $input = \Mockery::mock('Symfony\Component\Console\Input\InputInterface');
-        $input->shouldReceive('bind')
-            ->andReturn(true);
-        $input->shouldReceive('isInteractive')
-            ->andReturn(false);
-        $input->shouldReceive('validate')
-            ->andReturn(true);
-        $input->shouldReceive('hasParameterOption')
-            ->times(3)
-            ->andReturn(false);
-        $output = \Mockery::mock('Symfony\Component\Console\Output\OutputInterface');
-        $output->shouldReceive('writeln')
-            ->withNoArgs();
-
-        $class  = new \ReflectionClass($app);
-        $method = $class->getMethod('doRunCommand');
-        $method->setAccessible(true);
-
-        $this->assertNull($method->invokeArgs($app, [$command, $input, $output]));
     }
 
     /**

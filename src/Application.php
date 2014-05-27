@@ -78,14 +78,23 @@ EOF;
     {
         $this->embeddedComposer = $embeddedComposer;
 
-        $version = '@package_version@';
-        if ($version === '@'.'package_version@') {
-            $version = $embeddedComposer->findPackage('bldr-io/bldr')->getPrettyVersion();
-        }
-
-        parent::__construct('Bldr', $version);
+        parent::__construct('Bldr', $this->getBldrVersion());
 
         $this->addCommands($this->getCommands());
+    }
+
+    /**
+     * @return string
+     */
+    private function getBldrVersion()
+    {
+        $version = '@package_version@';
+        if ($version === '@'.'package_version@') {
+            $package = $this->embeddedComposer->findPackage('bldr-io/bldr');
+            $version = $package->getPrettyVersion();
+        }
+
+        return $version;
     }
 
     /**
