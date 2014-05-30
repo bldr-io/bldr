@@ -321,7 +321,7 @@ abstract class AbstractCall implements CallInterface
         }
 
         foreach ($matches as $match) {
-            $option = str_replace($match[0], Application::$$match[1], $option);
+            $option = str_replace($match[0], getenv($match[1]), $option);
         }
     }
 

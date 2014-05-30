@@ -81,6 +81,15 @@ EOF;
         parent::__construct('Bldr', $this->getBldrVersion());
 
         $this->addCommands($this->getCommands());
+        $this->setEnvironmentVariables();
+    }
+
+    /**
+     * Sets Environment Variables
+     */
+    private function setEnvironmentVariables()
+    {
+        putenv('WORK_DIR='.__DIR__);
     }
 
     /**
@@ -134,6 +143,7 @@ EOF;
             );
         }
 
+        putenv('BUILD_NAME='.$name);
         static::$BUILD_NAME = $name;
     }
 
