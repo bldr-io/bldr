@@ -43,7 +43,7 @@ class CreateUserService extends AbstractMysqlService
 
         $arguments = [
             '--user=' . $this->getOption('username'),
-            '--password=' . $this->getOption('password'),
+            '--password=' . $this->getOption('password')
         ];
 
         if ($this->hasOption('database')) {
