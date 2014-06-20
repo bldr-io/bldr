@@ -41,6 +41,8 @@ class CreateUserService extends AbstractMysqlService
     {
         $file = sys_get_temp_dir() . '/bldr_mysql_' . microtime(true) . '.sql';
 
+        $database = $this->hasOption('database') ? '--database=' . $this->getOption('database') : '';
+
         $arguments = [
             '--user=' . $this->getOption('username'),
             '--password=' . $this->getOption('password')
