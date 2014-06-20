@@ -15,6 +15,7 @@
         "bldr-io/bldr-symfony": "Allows for shorter syntax with symfony commands (Not fully tested)"
     },
     "require-dev":  {
+        "matthiasnoback/symfony-service-definition-validator": "~1.1.0",
         "phpunit/phpunit":           "4.0.*",
         "squizlabs/php_codesniffer": "~1.0",
         "mockery/mockery":           "dev-master",
