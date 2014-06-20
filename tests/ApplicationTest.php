@@ -12,7 +12,6 @@
 namespace Bldr\Test;
 
 use Bldr\Application;
-use Bldr\Test\Mock\Command\MockCommand;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
@@ -56,9 +55,6 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         return $application;
     }
 
-    /**
-     *
-     */
     public function testSetBuildName()
     {
         $container = \Mockery::mock('Bldr\DependencyInjection\ContainerBuilder');
@@ -88,9 +84,6 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         putenv("TRAVIS_JOB_NUMBER={$travisJobNumber}");
     }
 
-    /**
-     *
-     */
     public function testGetCommands()
     {
         $app      = self::createApplication();
@@ -104,9 +97,6 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    /**
-     *
-     */
     public function testGetDefaultHelperSet()
     {
         $app    = self::createApplication();
@@ -123,9 +113,6 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     *
-     */
     protected function tearDown()
     {
         if (file_exists(getcwd().'/.test.yml')) {

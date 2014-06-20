@@ -26,6 +26,10 @@
         {
             "name":  "Aaron Scherer",
             "email": "aequasi@gmail.com"
+        },
+        {
+            "name":  "Luis Cordova",
+            "email": "cordoval@gmail.com"
         }
     ],
     "autoload":     {

@@ -172,6 +172,7 @@ EOF
     /**
      * @param string[] $names
      *
+     * @throws \Exception
      * @return array
      */
     public function buildTasks($names)
@@ -195,20 +196,17 @@ EOF
         }
     }
 
-    /**
-     *
-     */
     public function runTasks()
     {
         $this->container->get('bldr.builder')->runTasks($this->tasks);
     }
 
     /**
-     * @return Integer
+     * @return int
      */
     public function succeedBuild()
     {
-        $this->output->writeln(["", $this->formatBlock('Build Success!', 'green', 'white'), ""]);
+        $this->output->writeln(['', $this->formatBlock('Build Success!', 'green', 'white'), '']);
 
         return 0;
     }

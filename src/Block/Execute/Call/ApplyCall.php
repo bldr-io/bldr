@@ -22,11 +22,6 @@ class ApplyCall extends ExecuteCall
     use FinderAwareTrait;
 
     /**
-     * @var array $files
-     */
-    private $files;
-
-    /**
      * {@inheritDoc}
      */
     public function configure()

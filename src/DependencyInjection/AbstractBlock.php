@@ -14,7 +14,7 @@ namespace Bldr\DependencyInjection;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\DependencyInjection\ContainerBuilder as SymfonyContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Exception\BadMethodCallException;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -42,7 +42,7 @@ abstract class AbstractBlock extends Extension implements BlockInterface
     /**
      * {@inheritDoc}
      */
-    final public function load(array $config, SymfonyContainerBuilder $container)
+    final public function load(array $config, ContainerBuilder $container)
     {
         $this->originalConfiguration = $config;
 
@@ -70,7 +70,7 @@ abstract class AbstractBlock extends Extension implements BlockInterface
      *
      * @return mixed
      */
-    abstract protected function assemble(array $config, SymfonyContainerBuilder $container);
+    abstract protected function assemble(array $config, ContainerBuilder $container);
 
     /**
      * @return CompilerPassInterface[]
