@@ -326,7 +326,7 @@ abstract class AbstractCall implements CallInterface
     }
 
     /**
-     * @param string $name
+     * @param string     $name
      * @param string|int $value
      *
      * @return AbstractCall
