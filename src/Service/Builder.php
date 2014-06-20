@@ -122,13 +122,9 @@ class Builder
             ]
         );
 
-        //$this->addEvent(Event::PRE_TASK, new Events\TaskEvent($this, $task, true));
         foreach ($task->getCalls() as $call) {
-            //$this->addEvent(Event::PRE_CALL, new Events\CallEvent($this, $task, $call, true));
             $this->runCall($task, $call);
-            //$this->addEvent(Event::POST_CALL, new Events\CallEvent($this, $task, $call, false));
         }
-        //$this->addEvent(Event::POST_TASK, new Events\TaskEvent($this, $task, false));
 
         $this->output->writeln("");
     }
@@ -142,9 +138,7 @@ class Builder
         $service = $this->fetchServiceForCall($task, $call);
         $service->initialize($this->input, $this->output, $this->helperSet, $task, $call);
 
-        //$this->addEvent(Event::PRE_SERVICE, new Events\ServiceEvent($this, $task, $call, $service, true));
         $service->run();
-        //$this->addEvent(Event::POST_SERVICE, new Events\ServiceEvent($this, $task, $call, $service, false));
         $this->output->writeln("");
     }
 

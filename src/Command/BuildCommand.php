@@ -90,12 +90,10 @@ EOF
         $this->builder->initialize($input, $output, $this->getHelperSet());
 
         $this->output->writeln(["\n", Application::$logo, "\n"]);
-        //$this->addEvent(Event::START, new Events\BuildEvent($this->tasks, $this->getConfig(), true));
 
         $this->doExecute($this->input->getOption('profile'), $this->input->getOption('tasks'));
 
         $this->succeedBuild();
-        //$this->addEvent(Event::START, new Events\BuildEvent($this->tasks, $this->getConfig(), false));
 
         return 0;
     }
