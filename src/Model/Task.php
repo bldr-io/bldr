@@ -27,7 +27,7 @@ class Task
     private $description;
 
     /**
-     * @var bool #runOnFailure
+     * @var bool $runOnFailure
      */
     private $runOnFailure;
 
