@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader as FileLoader;
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
  */
-class YmlFileLoader extends FileLoader
+class YamlFileLoader extends FileLoader
 {
     use SupportsTrait;
 }

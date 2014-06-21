@@ -30,6 +30,12 @@ trait SupportsTrait
 
     protected function getFileExtension()
     {
-        return strtolower(str_replace('FileLoader', '', explode('\\', __CLASS__)[3]));
+        $extension = strtolower(str_replace('FileLoader', '', explode('\\', __CLASS__)[3]));
+
+        if ($extension === 'yaml') {
+            $extension = 'yml';
+        }
+
+        return $extension;
     }
 }

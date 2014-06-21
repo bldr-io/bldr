@@ -17,7 +17,7 @@ use Zend\Json\Json;
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
  */
-class JsonFileLoader extends YmlFileLoader
+class JsonFileLoader extends YamlFileLoader
 {
     use SupportsTrait;
 
