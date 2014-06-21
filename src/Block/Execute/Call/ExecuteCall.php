@@ -103,6 +103,8 @@ class ExecuteCall extends AbstractCall
                 );
             }
         }
+
+        return true;
     }
 
     /**

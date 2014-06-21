@@ -57,10 +57,12 @@ class BackgroundCall extends AbstractCall
         if ($this->getOption('kill') === false) {
             $this->startProcess();
 
-            return;
+            return true;
         }
 
         $this->endProcess();
+
+        return true;
     }
 
     /**

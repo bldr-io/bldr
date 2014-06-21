@@ -49,5 +49,7 @@ class ApplyCall extends ExecuteCall
             $this->setOption('arguments', $args);
             parent::run();
         }
+
+        return true;
     }
 }
