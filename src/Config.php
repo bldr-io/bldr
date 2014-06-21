@@ -43,6 +43,7 @@ class Config
      * @param ContainerBuilder $container
      *
      * @throws Exception\ConfigurationFileNotFoundException
+     * @throws \Exception
      */
     public static function read(ContainerBuilder $container)
     {
@@ -57,7 +58,7 @@ class Config
         $locator  = new FileLocator($locations);
         $resolver = new LoaderResolver(
             [
-                new Loader\YamlFileLoader($container, $locator),
+                new Loader\YmlFileLoader($container, $locator),
                 new Loader\XmlFileLoader($container, $locator),
                 new Loader\PhpFileLoader($container, $locator),
                 new Loader\IniFileLoader($container, $locator),

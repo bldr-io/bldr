@@ -11,12 +11,12 @@
 
 namespace Bldr\DependencyInjection\Loader;
 
-use Symfony\Component\DependencyInjection\Loader\PhpFileLoader as FileLoader;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader as FileLoader;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
  */
-class PhpFileLoader extends FileLoader
+class YmlFileLoader extends FileLoader
 {
     use SupportsTrait;
 }

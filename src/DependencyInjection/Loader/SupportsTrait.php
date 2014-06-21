@@ -11,12 +11,10 @@
 
 namespace Bldr\DependencyInjection\Loader;
 
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader as FileLoader;
-
 /**
- * @author Aaron Scherer <aequasi@gmail.com>
+ * @author Luis Cordova <cordoval@gmail.com>
  */
-class YamlFileLoader extends FileLoader
+trait SupportsTrait
 {
     /**
      * {@inheritDoc}
@@ -27,6 +25,11 @@ class YamlFileLoader extends FileLoader
             return $this->supports(str_replace('.dist', '', $resource), $type);
         }
 
-        return is_string($resource) && 'yml' === pathinfo($resource, PATHINFO_EXTENSION);
+        return is_string($resource) && $this->getFileExtension() === pathinfo($resource, PATHINFO_EXTENSION);
+    }
+
+    protected function getFileExtension()
+    {
+        return strtolower(str_replace('FileLoader', '', explode('\\', __CLASS__)[3]));
     }
 }
