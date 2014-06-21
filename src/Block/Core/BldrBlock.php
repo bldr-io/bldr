@@ -56,7 +56,7 @@ class BldrBlock extends AbstractBlock
 
                 foreach ($task['calls'] as $index => $call) {
                     if (isset($config['tasks'][$name], $config['tasks'][$name]['calls'][$index])) {
-                        $options                                        = $config['tasks'][$name]['calls'][$index];
+                        $options = $config['tasks'][$name]['calls'][$index];
                         $configuration['tasks'][$name]['calls'][$index] = array_merge($call, $options);
                     }
                 }
