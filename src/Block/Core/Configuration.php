@@ -38,7 +38,8 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->append($this->getProfilesNode())
                 ->append($this->getTasksNode())
-            ->end();
+            ->end()
+        ;
 
         return $treeBuilder;
     }
