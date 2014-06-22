@@ -18,15 +18,5 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader as FileLoader;
  */
 class YamlFileLoader extends FileLoader
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function supports($resource, $type = null)
-    {
-        if (is_string($resource) && 'dist' === pathinfo($resource, PATHINFO_EXTENSION)) {
-            return $this->supports(str_replace('.dist', '', $resource), $type);
-        }
-
-        return is_string($resource) && 'yml' === pathinfo($resource, PATHINFO_EXTENSION);
-    }
+    use SupportsTrait;
 }

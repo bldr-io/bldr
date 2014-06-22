@@ -22,11 +22,6 @@ class ApplyCall extends ExecuteCall
     use FinderAwareTrait;
 
     /**
-     * @var array $files
-     */
-    private $files;
-
-    /**
      * {@inheritDoc}
      */
     public function configure()
@@ -54,5 +49,7 @@ class ApplyCall extends ExecuteCall
             $this->setOption('arguments', $args);
             parent::run();
         }
+
+        return true;
     }
 }

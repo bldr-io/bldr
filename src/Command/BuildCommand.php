@@ -90,12 +90,10 @@ EOF
         $this->builder->initialize($input, $output, $this->getHelperSet());
 
         $this->output->writeln(["\n", Application::$logo, "\n"]);
-        //$this->addEvent(Event::START, new Events\BuildEvent($this->tasks, $this->getConfig(), true));
 
         $this->doExecute($this->input->getOption('profile'), $this->input->getOption('tasks'));
 
         $this->succeedBuild();
-        //$this->addEvent(Event::START, new Events\BuildEvent($this->tasks, $this->getConfig(), false));
 
         return 0;
     }
@@ -172,6 +170,7 @@ EOF
     /**
      * @param string[] $names
      *
+     * @throws \Exception
      * @return array
      */
     public function buildTasks($names)
@@ -195,20 +194,17 @@ EOF
         }
     }
 
-    /**
-     *
-     */
     public function runTasks()
     {
         $this->container->get('bldr.builder')->runTasks($this->tasks);
     }
 
     /**
-     * @return Integer
+     * @return int
      */
     public function succeedBuild()
     {
-        $this->output->writeln(["", $this->formatBlock('Build Success!', 'green', 'white'), ""]);
+        $this->output->writeln(['', $this->formatBlock('Build Success!', 'green', 'white'), '']);
 
         return 0;
     }

@@ -11,8 +11,6 @@
 
 namespace Bldr\Exception;
 
-use Exception;
-
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
  */

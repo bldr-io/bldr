@@ -28,7 +28,6 @@ class ExecuteBlock extends AbstractBlock
     {
         $this->addCall('bldr_execute.execute', 'Bldr\Block\Execute\Call\ExecuteCall');
         $this->addCall('bldr_execute.apply', 'Bldr\Block\Execute\Call\ApplyCall');
-        $this->addCall('bldr_execute.apply', 'Bldr\Block\Execute\Call\ApplyCall');
 
         $this->addService('bldr_execute.service.background', 'Bldr\Block\Execute\Service\BackgroundService')
             ->setPublic(false);

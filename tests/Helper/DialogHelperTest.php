@@ -18,7 +18,6 @@ use Bldr\Helper\DialogHelper;
  */
 class DialogHelperTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testGetQuestion()
     {
         $helper = new DialogHelper();

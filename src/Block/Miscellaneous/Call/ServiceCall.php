@@ -39,7 +39,8 @@ class ServiceCall extends ExecuteCall
             ->addOption('service', true, 'Service to manage')
             ->addOption('method', true, 'Method to run on the service manager. <restart>', 'restart')
             ->addOption('sudo', true, 'Run as sudo?', false)
-            ->addOption('dry_run', true, 'If set, will not run command', false);
+            ->addOption('dry_run', true, 'If set, will not run command', false)
+        ;
     }
 
     /**

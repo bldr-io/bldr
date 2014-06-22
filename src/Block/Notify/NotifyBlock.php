@@ -24,14 +24,6 @@ class NotifyBlock extends AbstractBlock
     /**
      * {@inheritDoc}
      */
-    protected function getConfigurationClass()
-    {
-        return 'Bldr\Block\Notify\Configuration';
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function assemble(array $config, ContainerBuilder $container)
     {
         $notify = $this->addCall('bldr_notify.notify', 'Bldr\Block\Notify\Call\NotifyCall');
@@ -39,5 +31,13 @@ class NotifyBlock extends AbstractBlock
         if (isset($config['smtp'])) {
             $notify->addMethodCall('setSMTPInfo', [$config['smtp']]);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getConfigurationClass()
+    {
+        return 'Bldr\Block\Notify\Configuration';
     }
 }

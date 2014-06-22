@@ -41,13 +41,7 @@ class AbstractCommand extends Command implements ContainerAwareInterface
     protected $output;
 
     /**
-     * Sets the Container.
-     *
-     * @param ContainerInterface|null $container A ContainerInterface instance or null
-     *
-     * @return $this
-     *
-     * @api
+     * {@inheritdoc}
      */
     public function setContainer(ContainerInterface $container = null)
     {

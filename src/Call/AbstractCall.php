@@ -329,6 +329,7 @@ abstract class AbstractCall implements CallInterface
      * @param string     $name
      * @param string|int $value
      *
+     * @return AbstractCall
      * @throws \RuntimeException
      */
     protected function setOption($name, $value)
@@ -338,5 +339,7 @@ abstract class AbstractCall implements CallInterface
         }
 
         $this->options[$name]['value'] = $value;
+
+        return $this;
     }
 }
