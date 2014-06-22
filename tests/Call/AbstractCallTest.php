@@ -22,9 +22,6 @@ use Mockery\MockInterface;
  */
 class AbstractCallTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     *
-     */
     public function testInitialize()
     {
         /** @var MockInterface[] $properties */

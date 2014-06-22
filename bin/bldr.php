@@ -64,7 +64,8 @@ $embeddedComposerBuilder = new EmbeddedComposerBuilder($classLoader);
 $embeddedComposer = $embeddedComposerBuilder
     ->setComposerFilename('bldr.json')
     ->setVendorDirectory('.bldr/vendor/')
-    ->build();
+    ->build()
+;
 
 $embeddedComposer->processAdditionalAutoloads();
 

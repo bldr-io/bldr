@@ -12,7 +12,6 @@
 namespace Bldr;
 
 use Bldr\Command as Commands;
-use Bldr\DependencyInjection\AbstractExtension;
 use Bldr\DependencyInjection\ContainerBuilder;
 use Bldr\Helper\DialogHelper;
 use Dflydev\EmbeddedComposer\Console\Command as ComposerCmd;
@@ -111,7 +110,7 @@ EOF;
      */
     public function getCommands()
     {
-        $commands = [
+        return [
             new Commands\BuildCommand(),
             new Commands\Task\ListCommand(),
             new Commands\Task\InfoCommand(),
@@ -119,8 +118,6 @@ EOF;
             new ComposerCmd\InstallCommand(''),
             new ComposerCmd\UpdateCommand('')
         ];
-
-        return $commands;
     }
 
     /**
@@ -194,9 +191,7 @@ EOF;
      */
     private function buildContainer(InputInterface $input, OutputInterface $output)
     {
-        $this->container = new ContainerBuilder($this, $input, $output);
-
-        return $this->container;
+        return $this->container = new ContainerBuilder($this, $input, $output);
     }
 
     /**

@@ -11,7 +11,6 @@
 
 namespace Bldr\Test\Mock\DependencyInjection;
 
-use Bldr\DependencyInjection\AbstractExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**

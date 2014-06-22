@@ -33,6 +33,7 @@ class DialogHelper extends BaseDialogHelper
     {
         return $default !== null ?
             sprintf('<info>%s</info> [<comment>%s</comment>]%s ', $question, $default, $sep) :
-            sprintf('<info>%s</info>%s ', $question, $sep);
+            sprintf('<info>%s</info>%s ', $question, $sep)
+        ;
     }
 }

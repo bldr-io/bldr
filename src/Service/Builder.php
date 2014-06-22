@@ -135,7 +135,7 @@ class Builder
      */
     private function runCall(Task $task, Call $call)
     {
-        $service = $this->fetchServiceForCall($task, $call);
+        $service = $this->fetchServiceForCall($call);
         $service->initialize($this->input, $this->output, $this->helperSet, $task, $call);
 
         $service->run();
@@ -143,13 +143,12 @@ class Builder
     }
 
     /**
-     * @param Task $task
      * @param Call $call
      *
      * @throws \Exception
      * @return CallInterface
      */
-    private function fetchServiceForCall(Task $task, Call $call)
+    private function fetchServiceForCall(Call $call)
     {
         $services = [];
         foreach ($this->tasks as $service) {
@@ -168,10 +167,5 @@ class Builder
         }
 
         return $services[0];
-    }
-
-    private function addEvent($eventName, Event\EventInterface $event)
-    {
-        $this->dispatcher->dispatch($eventName, $event);
     }
 }
