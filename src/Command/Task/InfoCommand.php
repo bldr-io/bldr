@@ -54,8 +54,8 @@ EOF
         $output->writeln(
             [
                 "",
-                '<fg=green>Task Name</fg=green>: ' . $service->getName(),
-                '<fg=green>Task Description</fg=green>: ' . $service->getDescription() !== '' ?: 'No Description',
+                '<fg=green>Task Name</fg=green>: '.$service->getName(),
+                '<fg=green>Task Description</fg=green>: '.$service->getDescription() !== '' ?: 'No Description',
                 "",
                 "<fg=green>Options:</fg=green>"
             ]

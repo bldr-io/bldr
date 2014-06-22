@@ -99,7 +99,7 @@ class ExecuteCall extends AbstractCall
         if ($this->getFailOnError()) {
             if (!in_array($process->getExitCode(), $this->getSuccessStatusCodes())) {
                 throw new \Exception(
-                    "Failed on the {$this->getTask()->getName()} task.\n" . $process->getErrorOutput()
+                    "Failed on the {$this->getTask()->getName()} task.\n".$process->getErrorOutput()
                 );
             }
         }

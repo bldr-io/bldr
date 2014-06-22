@@ -31,9 +31,9 @@ class FilesystemBlock extends AbstractBlock
             ->setAbstract(true);
 
         $namespace = 'Bldr\Block\Filesystem\Call\\';
-        $this->addDecoratedCall('bldr_filesystem.remove', $namespace . 'RemoveCall', 'bldr_filesystem.abstract');
-        $this->addDecoratedCall('bldr_filesystem.mkdir', $namespace . 'MkdirCall', 'bldr_filesystem.abstract');
-        $this->addDecoratedCall('bldr_filesystem.touch', $namespace . 'TouchCall', 'bldr_filesystem.abstract');
-        $this->addDecoratedCall('bldr_filesystem.dump', $namespace . 'DumpCall', 'bldr_filesystem.abstract');
+        $this->addDecoratedCall('bldr_filesystem.remove', $namespace.'RemoveCall', 'bldr_filesystem.abstract');
+        $this->addDecoratedCall('bldr_filesystem.mkdir', $namespace.'MkdirCall', 'bldr_filesystem.abstract');
+        $this->addDecoratedCall('bldr_filesystem.touch', $namespace.'TouchCall', 'bldr_filesystem.abstract');
+        $this->addDecoratedCall('bldr_filesystem.dump', $namespace.'DumpCall', 'bldr_filesystem.abstract');
     }
 }
