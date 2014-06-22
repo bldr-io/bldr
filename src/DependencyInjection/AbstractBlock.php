@@ -16,6 +16,7 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder as SymfonyContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Exception\BadMethodCallException;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 
@@ -106,7 +107,8 @@ abstract class AbstractBlock extends Extension implements BlockInterface
     protected function addCall($name, $class, array $arguments = [])
     {
         return $this->addService($name, $class, $arguments)
-            ->addTag('bldr');
+            ->addTag('bldr')
+        ;
     }
 
     /**
@@ -119,6 +121,23 @@ abstract class AbstractBlock extends Extension implements BlockInterface
     protected function addService($name, $class, array $arguments = [])
     {
         return $this->container->setDefinition($name, new Definition($class, $arguments));
+    }
+
+    /**
+     * @param $name
+     * @param $class
+     * @param $parentName
+     * @param array $arguments
+     *
+     * @return Definition
+     */
+    protected function addDecoratedCall($name, $class, $parentName, array $arguments = [])
+    {
+        return $this->container->setDefinition($name, new DefinitionDecorator($parentName))
+            ->setClass($class)
+            ->setArguments($arguments)
+            ->addTag('bldr')
+        ;
     }
 
     /**
