@@ -75,7 +75,9 @@ class WatchCall extends AbstractCall
             throw new \Exception("`src` must be an array");
         }
 
-        return $this->watchForChanges($this->getFiles($source));
+        $this->watchForChanges($this->getFiles($source));
+
+        return true;
     }
 
     /**
