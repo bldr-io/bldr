@@ -25,13 +25,7 @@ class MiscellaneousBlock extends AbstractBlock
      */
     public function assemble(array $config, ContainerBuilder $container)
     {
-        $services = [
-            'bldr_miscellaneous.sleep' => 'Bldr\Block\Miscellaneous\Call\SleepCall',
-            'bldr_miscellaneous.service' => 'Bldr\Block\Miscellaneous\Call\ServiceCall'
-        ];
-
-        foreach ($services as $name => $class) {
-            $this->addCall($name, $class);
-        }
+        $this->addCall('bldr_miscellaneous.sleep', 'Bldr\Block\Miscellaneous\Call\SleepCall');
+        $this->addCall('bldr_miscellaneous.service', 'Bldr\Block\Miscellaneous\Call\ServiceCall');
     }
 }
