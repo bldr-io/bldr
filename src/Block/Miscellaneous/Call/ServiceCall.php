@@ -83,7 +83,7 @@ class ServiceCall extends ExecuteCall
                 break;
             default:
                 throw new \Exception(
-                    $manager.' is not a valid manager for services. Feel free to ' .
+                    $manager.' is not a valid manager for services. Feel free to '.
                     'create a pull request, if you think it should be.'
                 );
         }
