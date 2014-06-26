@@ -5,7 +5,8 @@ Usage
 To start, you are going to want to generate a ``.bldr.yml`` file for your project. This (for now) has to be done manually, but
 it's pretty simple.
 
-Create a .bldr.yml(.dist) file
+Create a ``.bldr.yml(.dist)`` file:
+
 .. code-block:: yaml
 
     bldr:
