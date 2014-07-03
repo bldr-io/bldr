@@ -28,7 +28,8 @@ class FilesystemBlock extends AbstractBlock
     public function assemble(array $config, ContainerBuilder $container)
     {
         $this->addService('bldr_filesystem.abstract', 'Bldr\Block\Filesystem\Call\FilesystemCall')
-            ->setAbstract(true);
+            ->setAbstract(true)
+        ;
 
         $namespace = 'Bldr\Block\Filesystem\Call\\';
         $this->addDecoratedCall('bldr_filesystem.remove', $namespace.'RemoveCall', 'bldr_filesystem.abstract');

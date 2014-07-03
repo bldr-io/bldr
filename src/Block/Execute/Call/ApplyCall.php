@@ -28,7 +28,8 @@ class ApplyCall extends ExecuteCall
     {
         parent::configure();
         $this->setName('apply')
-            ->addOption('src', true, 'Source to run the apply on');
+            ->addOption('src', true, 'Source to run the apply on')
+        ;
     }
 
     /**

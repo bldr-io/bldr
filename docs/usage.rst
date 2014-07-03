@@ -26,7 +26,7 @@ Create a ``.bldr.yml(.dist)`` file:
                         executable: echo
                         arguments: [Hello World]
 
-To view a list of avaible call types, run:
+To view a list of available call types, run:
 
 .. code-block:: shell
 

@@ -25,7 +25,8 @@ class MkdirCall extends FilesystemCall
     {
         parent::configure();
         $this->setName('mkdir')
-            ->setDescription('Makes all the directories provided in `files`');
+            ->setDescription('Makes all the directories provided in `files`')
+        ;
     }
 
     /**
