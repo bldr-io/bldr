@@ -10,6 +10,9 @@
  */
 
 namespace Bldr\Test\Registry;
+
+use Bldr\Model\Call;
+use Bldr\Model\Task;
 use Bldr\Registry\TaskRegistry;
 
 /**
@@ -17,21 +20,28 @@ use Bldr\Registry\TaskRegistry;
  */
 class TaskRegistryTest extends \PHPUnit_Framework_TestCase
 {
-    public function testConstructor()
+    /**
+     * @test
+     */
+    public function it_stores_tasks_shifts_them_out_and_count_them()
     {
+        $firstCall = new Call('type 1');
+        $secondCall = new Call('type 2');
+        $firstTask = new Task('task 1');
+        $firstTask->addCall($firstCall);
+        $firstTask->addCall($secondCall);
+
+        $secondTask = new Task('task 2');
+        $secondTask->addCall($firstCall);
+        $secondTask->addCall($secondCall);
+
         $tasks = new TaskRegistry();
+        $tasks->addTask($firstTask);
+        $tasks->addTask($secondTask);
 
-        while ($tasks->count() > 0) {
-            $task = $tasks->getNewTask();
-
-            foreach ($task->getCalls() as $call) {
-                $this->runCall($task, $call);
-
-                $service = $this->fetchServiceForCall($call);
-                $service->initialize($this->input, $this->output, $this->helperSet, $task, $call);
-
-                $service->run();
-            }
-        }
+        $this->assertEquals(2, $tasks->count());
+        $this->assertEquals($firstTask, $tasks->getNewTask());
+        $this->assertEquals($secondTask, $tasks->getNewTask());
+        $this->assertContainsOnlyInstancesOf('Bldr\Model\Task', $tasks->getTasks());
     }
 }
