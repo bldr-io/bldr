@@ -5,6 +5,25 @@ Simplified Build System/Task Runner
 
 Uses Yaml, JSON, XML, PHP, or INI for configs
 
+### Quick Usage
+
+Plug this ```dev``` script and chmod +x it and run ./dev to start your favourite profile (local in this case):
+
+```sh
+#!/usr/bin/env bash
+
+bldr=$(which bldr)
+
+if [ -x "$bldr" ] ; then
+    $bldr build -p local
+else
+    if [ ! -f ./bldr.phar ]; then
+        curl -sS http://bldr.io/installer | php
+    fi
+
+    ./bldr.phar build -p local
+fi
+```
 
 ### Documentation
 
