@@ -12,7 +12,7 @@
 namespace Bldr\Call\Traits;
 
 use Symfony\Component\Finder\Finder;
-use \Symfony\Component\Finder\SplFileInfo;
+use Symfony\Component\Finder\SplFileInfo;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
