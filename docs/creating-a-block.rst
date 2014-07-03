@@ -122,7 +122,6 @@ Then, let's build the call class! Extending the AbstractCall, requires that we i
             ;
         }
 
-
         /**
          * {@inheritDoc}
          */
@@ -170,7 +169,8 @@ Next, we need to add the call to the container, so we can use it in .bldr.yml fi
             // If you need dependencies, you could do the following:
             // $call->setArgument(0, new Reference('some_service'));
             // or
-            // $call->addMethodCall('someMethodName', array $arguments);
+            // $arguments = array(new Reference('some_service'));
+            // $call->addMethodCall('someMethodName', $arguments);
 
             // If you want to add a service, that isn't a call, you can also use:
             // $this->addService($name, $class);
@@ -191,10 +191,10 @@ With this, you should be able to add it to a .bldr.yml file:
         profile:
             default:
                 tasks:
-                    - default
+                    - randomize
 
         tasks:
-            default:
+            randomize:
                 calls:
                     -
                         type: acme_demo:output_random_number
