@@ -46,7 +46,8 @@ class BackgroundCall extends AbstractCall
             ->addOption('cwd', false, 'Sets the working directory for the executable')
             ->addOption('output', false, 'Sets the location to output to')
             ->addOption('append', false, 'If output is set, should it append?', false)
-            ->addOption('kill', false, 'Are we killing the task?', false);
+            ->addOption('kill', false, 'Are we killing the task?', false)
+        ;
     }
 
     /**
