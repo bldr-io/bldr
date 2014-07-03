@@ -20,10 +20,7 @@ use Bldr\Registry\TaskRegistry;
  */
 class TaskRegistryTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @test
-     */
-    public function it_stores_tasks_shifts_them_out_and_count_them()
+    public function testItStoresTasksAndShiftsThemOutAndCountThem()
     {
         $firstCall = new Call('type 1');
         $secondCall = new Call('type 2');
