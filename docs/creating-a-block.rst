@@ -244,7 +244,7 @@ There's some more advanced stuff, like being able to specify configuration:
 6. Advanced Config
 ------------------
 
-Then make a Configuration.php file. This config is the config from symfony. You can read their docs for more information
+Then make a Configuration.php file. This config is the config from symfony. You can read their docs for more information.
 
 *src/Configuration.php*
 
@@ -273,6 +273,8 @@ Then make a Configuration.php file. This config is the config from symfony. You 
         {
             $treeBuilder = new TreeBuilder();
             $rootNode    = $treeBuilder->root('acme_demo');
+
+            // here you will build the configuration tree
 
             return $treeBuilder;
         }

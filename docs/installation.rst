@@ -9,7 +9,7 @@ in ``$PATH`` as shown here_.
 
 .. code-block:: shell
 
-    $ composer global require bldr-io/bldr "~2.0.0"
+    $ composer global require bldr-io/bldr=~4.2.0 dflydev/embedded-composer=dev-master@dev composer/composer=dev-master@dev
 
     # Or
 
@@ -19,7 +19,7 @@ in ``$PATH`` as shown here_.
 
 **Project Setup**
 
-It is suggested that you use the phar, as you can get conflicts with dependencies by including it in your project!
+It is suggested that you use the phar, as you can get conflicts with dependencies by including it in your project or globally!
 
 .. code-block:: shell
 
@@ -27,13 +27,10 @@ It is suggested that you use the phar, as you can get conflicts with dependencie
 
     # Or
 
-    $ composer require bldr-io/bldr "~2.0.0"
+    $ composer require bldr-io/bldr "~4.2.0"
 
 
-
-
-
-And that's it! From here, you should be able to run ``bldr`` if you set it up globally, or ``./bin/bldr`` if you set
+And that's it! From here, you should be able to run ``bldr`` if you set it up globally, or ``./bin/bldr`` or ``php ./vendor/bin/bldr`` if you set
 it up in your project.
 
 
