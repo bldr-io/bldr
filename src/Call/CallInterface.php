@@ -16,7 +16,7 @@ use Bldr\Model\Task;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
  */
@@ -58,15 +58,17 @@ interface CallInterface
     public function run();
 
     /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     * @param HelperSet       $helperSet
-     * @param Task            $task
-     * @param Call            $call
+     * @param EventDispatcherInterface $dispatcher
+     * @param InputInterface           $input
+     * @param OutputInterface          $output
+     * @param HelperSet                $helperSet
+     * @param Task                     $task
+     * @param Call                     $call
      *
      * @return CallInterface
      */
     public function initialize(
+        EventDispatcherInterface $dispatcher,
         InputInterface $input,
         OutputInterface $output,
         HelperSet $helperSet,

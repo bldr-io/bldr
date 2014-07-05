@@ -25,9 +25,9 @@ class PreCallEvent extends AbstractEvent {
     private $call;
 
     /**
-     * @param Task         $task
-     * @param Call         $call
-     * @param Boolean      $running
+     * @param Task    $task
+     * @param Call    $call
+     * @param Boolean $running
      */
     public function __construct(Task $task, Call $call, $running = false)
     {

@@ -143,7 +143,7 @@ class Builder
     private function runCall(Task $task, Call $call)
     {
         $service = $this->fetchServiceForCall($call);
-        $service->initialize($this->input, $this->output, $this->helperSet, $task, $call);
+        $service->initialize($this->dispatcher, $this->input, $this->output, $this->helperSet, $task, $call);
 
         $service->run();
         $this->output->writeln("");
