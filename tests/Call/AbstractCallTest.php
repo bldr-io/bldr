@@ -26,6 +26,7 @@ class AbstractCallTest extends \PHPUnit_Framework_TestCase
     {
         /** @var MockInterface[] $properties */
         $properties = [
+            'dispatcher' => \Mockery::mock('Symfony\Component\EventDispatcher\EventDispatcher'),
             'input'     => \Mockery::mock('Symfony\Component\Console\Input\InputInterface'),
             'output'    => \Mockery::mock('Symfony\Component\Console\Output\OutputInterface'),
             'helperSet' => \Mockery::mock('Symfony\Component\Console\Helper\HelperSet'),
@@ -40,6 +41,7 @@ class AbstractCallTest extends \PHPUnit_Framework_TestCase
         $call = new MockCall();
 
         $result = $call->initialize(
+            $properties['dispatcher'],
             $properties['input'],
             $properties['output'],
             $properties['helperSet'],
