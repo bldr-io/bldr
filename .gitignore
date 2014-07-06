@@ -1,4 +1,5 @@
 /vendor/
+/build
 /bin/phpcs
 /bin/phpunit
 /bin/jsonlint

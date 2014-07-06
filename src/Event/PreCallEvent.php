@@ -2,7 +2,7 @@
 /**
  * This file is part of Bldr.io
  *
- * (c) Mauricio Walters <nvitius@gmail.com>
+ * (c) Aaron Scherer <aequasi@gmail.com>
  *
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE
@@ -13,7 +13,11 @@ namespace Bldr\Event;
 use Bldr\Model\Call;
 use Bldr\Model\Task;
 
-class PreCallEvent extends AbstractEvent {
+/**
+ * @author Mauricio Walters <nvitius@gmail.com>
+ */
+class PreCallEvent extends AbstractEvent
+{
     /**
      * @var Task $task
      */
@@ -25,9 +29,9 @@ class PreCallEvent extends AbstractEvent {
     private $call;
 
     /**
-     * @param Task    $task
-     * @param Call    $call
-     * @param Boolean $running
+     * @param Task $task
+     * @param Call $call
+     * @param bool $running
      */
     public function __construct(Task $task, Call $call, $running = false)
     {

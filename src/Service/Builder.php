@@ -13,7 +13,7 @@ namespace Bldr\Service;
 
 use Bldr\Call\CallInterface;
 use Bldr\Event\PreCallEvent;
-use Bldr\Event as Events;
+use Bldr\Event;
 use Bldr\Model\Call;
 use Bldr\Model\Task;
 use Bldr\Registry\TaskRegistry;
@@ -124,7 +124,7 @@ class Builder
 
         foreach ($task->getCalls() as $call) {
             $preCallEvent = new PreCallEvent($task, $call);
-            $this->dispatcher->dispatch(Events::PRE_CALL, $preCallEvent);
+            $this->dispatcher->dispatch(Event::PRE_CALL, $preCallEvent);
 
             if ($preCallEvent->isPropagationStopped()) {
                 continue;

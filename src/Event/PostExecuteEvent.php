@@ -2,7 +2,7 @@
 /**
  * This file is part of Bldr.io
  *
- * (c) Mauricio Walters <nvitius@gmail.com>
+ * (c) Aaron Scherer <aequasi@gmail.com>
  *
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE
@@ -13,32 +13,40 @@ namespace Bldr\Event;
 use Bldr\Call\AbstractCall;
 use Symfony\Component\Process\Process;
 
-class PostExecuteEvent extends AbstractEvent {
+/**
+ * @author Mauricio Walters <nvitius@gmail.com>
+ */
+class PostExecuteEvent extends AbstractEvent
+{
     /**
      * @var AbstractCall
      */
     private $call;
+
     /**
      * @var Process
      */
-    private $builder;
+    private $process;
 
     /**
      * @param AbstractCall $call
-     * @param Process      $builder
+     * @param Process      $process
      * @param bool         $running
      */
-    public function __construct(AbstractCall $call, Process $builder, $running = false) {
+    public function __construct(AbstractCall $call, Process $process, $running = false)
+    {
         parent::__construct($running);
         $this->call = $call;
-        $this->builder = $builder;
+        $this->builder = $process;
     }
 
-    public function getCall() {
+    public function getCall()
+    {
         return $this->call;
     }
 
-    public function getProcessBuilder() {
+    public function getProcessBuilder()
+    {
         return $this->builder;
     }
 }
