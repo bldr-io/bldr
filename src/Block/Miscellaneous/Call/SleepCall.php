@@ -1,11 +1,11 @@
 <?php
 
 /**
- * This file is part of bldr
+ * This file is part of Bldr.io
  *
  * (c) Aaron Scherer <aequasi@gmail.com>
  *
- * This source file is subject to the license that is bundled
+ * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE
  */
 
@@ -25,7 +25,8 @@ class SleepCall extends AbstractCall
     {
         $this->setName('sleep')
             ->setDescription('Sleep for the given amount of time')
-            ->addOption('seconds', true, 'Milliseconds to sleep for.');
+            ->addOption('seconds', true, 'Milliseconds to sleep for.')
+        ;
     }
 
     /**
@@ -34,5 +35,7 @@ class SleepCall extends AbstractCall
     public function run()
     {
         sleep($this->getOption('seconds'));
+
+        return true;
     }
 }

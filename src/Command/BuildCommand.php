@@ -91,17 +91,15 @@ EOF
         $this->builder->initialize($input, $output, $this->getHelperSet());
 
         $this->output->writeln(["\n", Application::$logo, "\n"]);
-        //$this->addEvent(Event::START, new Events\BuildEvent($this->tasks, $this->getConfig(), true));
 
         $this->doExecute($this->input->getOption('profile'), $this->input->getOption('tasks'));
 
         $this->succeedBuild();
-        //$this->addEvent(Event::START, new Events\BuildEvent($this->tasks, $this->getConfig(), false));
 
         return 0;
     }
 
-    public function doExecute($profileName = null, array $tasks = [])
+    private function doExecute($profileName = null, array $tasks = [])
     {
         if ([] === $tasks) {
             $profile = $this->getProfile($profileName);
@@ -163,7 +161,7 @@ EOF
     /**
      * @param string $profileName
      */
-    public function fetchTasks($profileName)
+    private function fetchTasks($profileName)
     {
         $profile = $this->container->getParameter('profiles')[$profileName];
         $this->buildTasks($profile['tasks']);
@@ -175,7 +173,7 @@ EOF
      * @throws \Exception
      * @return array
      */
-    public function buildTasks($names)
+    private function buildTasks($names)
     {
         $tasks = $this->container->getParameter('tasks');
         foreach ($names as $name) {
@@ -222,17 +220,17 @@ EOF
     /**
      *
      */
-    public function runTasks()
+    private function runTasks()
     {
         $this->container->get('bldr.builder')->runTasks($this->tasks);
     }
 
     /**
-     * @return Integer
+     * @return int
      */
-    public function succeedBuild()
+    private function succeedBuild()
     {
-        $this->output->writeln(["", $this->formatBlock('Build Success!', 'green', 'white'), ""]);
+        $this->output->writeln(['', $this->formatBlock('Build Success!', 'green', 'white'), '']);
 
         return 0;
     }

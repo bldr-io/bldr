@@ -1,11 +1,11 @@
 <?php
 
 /**
- * This file is part of bldr
+ * This file is part of Bldr.io
  *
  * (c) Aaron Scherer <aequasi@gmail.com>
  *
- * This source file is subject to the license that is bundled
+ * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE
  */
 
@@ -39,7 +39,8 @@ class ServiceCall extends ExecuteCall
             ->addOption('service', true, 'Service to manage')
             ->addOption('method', true, 'Method to run on the service manager. <restart>', 'restart')
             ->addOption('sudo', true, 'Run as sudo?', false)
-            ->addOption('dry_run', true, 'If set, will not run command', false);
+            ->addOption('dry_run', true, 'If set, will not run command', false)
+        ;
     }
 
     /**

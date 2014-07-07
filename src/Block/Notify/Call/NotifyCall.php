@@ -31,7 +31,8 @@ class NotifyCall extends AbstractCall
         $this->setName('notify')
             ->setDescription('Sends a notification to the screen, or to an email')
             ->addOption('message', true, 'Message to show/send')
-            ->addOption('email', false, 'Email to send to');
+            ->addOption('email', false, 'Email to send to')
+        ;
     }
 
     /**
@@ -41,9 +42,7 @@ class NotifyCall extends AbstractCall
     {
         $message = $this->getOption('message');
 
-        $formatter =
-            $this->getHelperSet()
-                ->get('formatter');
+        $formatter = $this->getHelperSet()->get('formatter');
         if (!$this->hasOption('email')) {
             return $this->getOutput()
                 ->writeln($formatter->formatSection('notify', $message));
@@ -53,12 +52,19 @@ class NotifyCall extends AbstractCall
     }
 
     /**
+     * @param array $smtp
+     */
+    public function setSMTPInfo(array $smtp)
+    {
+        $this->smtp = $smtp;
+    }
+
+    /**
      * Sends an email with the given message
      */
     private function sendEmail($content)
     {
-        $this->getOutput()
-            ->writeln("Sending an email");
+        $this->getOutput()->writeln("Sending an email");
         $transport = $this->getTransport();
         $mailer    = \Swift_Mailer::newInstance($transport);
 
@@ -69,7 +75,8 @@ class NotifyCall extends AbstractCall
                 "<p>Bldr has a new message for you from the most recent build</p>\n<br /><pre>{$content}</pre>\n",
                 "text/html"
             )
-            ->addPart($content, 'text/plain');
+            ->addPart($content, 'text/plain')
+        ;
 
         $result = $mailer->send($message);
 
@@ -87,7 +94,8 @@ class NotifyCall extends AbstractCall
 
         return \Swift_SmtpTransport::newInstance($this->smtp['host'], $this->smtp['port'], $this->smtp['security'])
             ->setUsername($this->smtp['username'])
-            ->setPassword($this->smtp['password']);
+            ->setPassword($this->smtp['password'])
+        ;
     }
 
     /**
@@ -100,13 +108,5 @@ class NotifyCall extends AbstractCall
         }
 
         return $this->getOption('email');
-    }
-
-    /**
-     * @param array $smtp
-     */
-    public function setSMTPInfo(array $smtp)
-    {
-        $this->smtp = $smtp;
     }
 }

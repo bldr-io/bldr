@@ -5,11 +5,13 @@ Simplified Build System/Task Runner
 
 Uses Yaml, JSON, XML, PHP, or INI for configs
 
+### Quick Usage
+
+To develop, run ./script/bootstrap, and then ./script/test to run the tests.
 
 ### Documentation
 
 Documentation is over at [http://docs.bldr.io/en/latest/](http://docs.bldr.io/en/latest/)
-
 
 ### Badges
 

@@ -34,7 +34,8 @@ class ExecuteCall extends AbstractCall
             ->addOption('output', false, 'Sets the location to output to')
             ->addOption('append', false, 'If output is set, should it append?', false)
             ->addOption('dry_run', true, 'If set, will not run command', false)
-            ->addOption('timeout', true, 'Timeout for the command', 0);
+            ->addOption('timeout', true, 'Timeout for the command', 0)
+        ;
     }
 
     /**
@@ -99,10 +100,12 @@ class ExecuteCall extends AbstractCall
         if ($this->getFailOnError()) {
             if (!in_array($process->getExitCode(), $this->getSuccessStatusCodes())) {
                 throw new \Exception(
-                    "Failed on the {$this->getTask()->getName()} task.\n" . $process->getErrorOutput()
+                    "Failed on the {$this->getTask()->getName()} task.\n".$process->getErrorOutput()
                 );
             }
         }
+
+        return true;
     }
 
     /**

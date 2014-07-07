@@ -62,10 +62,14 @@ class Call
 
     /**
      * @param array $options
+     *
+     * @return Call
      */
     public function setOptions($options)
     {
         $this->options = $options;
+
+        return $this;
     }
 
     /**

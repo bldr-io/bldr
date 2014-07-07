@@ -19,16 +19,17 @@ Try and stay with the naming convention used by the other blocks: <name>-block
 3. Add Bldr as a dev dependency
 -------------------------------
 
-In your composer.json file, you will want to add `bldr-io/bldr` as a `require-dev` dependency. For right now,
-until i can figure out why, you will need to add composer, and embedded composer as well.
+In your composer.json file, you will want to add `bldr-io/bldr` as a `require-dev` dependency.
+Because embedded composer and composer are unstable packages by definition or they do not have a
+stable release you will have to add them too into your composer.json as below:
 
 .. code-block:: json
 
     {
         "require-dev": {
-            "bldr-io/bldr":              "~4.1",
-            "dflydev/embedded-composer": "dev-master",
-            "composer/composer":         "dev-master"
+            "bldr-io/bldr":              "~4.2.0",
+            "dflydev/embedded-composer": "dev-master@dev",
+            "composer/composer":         "dev-master@dev"
         }
     }
 
@@ -117,9 +118,9 @@ Then, let's build the call class! Extending the AbstractCall, requires that we i
             $this->setName('acme_demo:output_random_number')
                 ->setDescription('This call outputs a random number. If min and max are specified, it will use those as the range')
                 ->addOption('min', true, 'Minimum number in range', 0)
-                ->addOption('max', true, 'Maximum number in range', 100);
+                ->addOption('max', true, 'Maximum number in range', 100)
+            ;
         }
-
 
         /**
          * {@inheritDoc}
@@ -127,7 +128,7 @@ Then, let's build the call class! Extending the AbstractCall, requires that we i
         public function run()
         {
             $random = rand($this->getOption('min'), $this->getOption('max'));
-            $this->output->writeln(["", "Random Number: " . $random, ""]);
+            $this->output->writeln(['', 'Random Number: '.$random, '']);
 
             return true;
         }
@@ -168,7 +169,8 @@ Next, we need to add the call to the container, so we can use it in .bldr.yml fi
             // If you need dependencies, you could do the following:
             // $call->setArgument(0, new Reference('some_service'));
             // or
-            // $call->addMethodCall('someMethodName', array $arguments);
+            // $arguments = array(new Reference('some_service'));
+            // $call->addMethodCall('someMethodName', $arguments);
 
             // If you want to add a service, that isn't a call, you can also use:
             // $this->addService($name, $class);
@@ -189,10 +191,10 @@ With this, you should be able to add it to a .bldr.yml file:
         profile:
             default:
                 tasks:
-                    - default
+                    - randomize
 
         tasks:
-            default:
+            randomize:
                 calls:
                     -
                         type: acme_demo:output_random_number
@@ -242,7 +244,7 @@ There's some more advanced stuff, like being able to specify configuration:
 6. Advanced Config
 ------------------
 
-Then make a Configuration.php file. This config is the config from symfony. You can read their docs for more information
+Then make a Configuration.php file. This config is the config from symfony. You can read their docs for more information.
 
 *src/Configuration.php*
 
@@ -271,6 +273,8 @@ Then make a Configuration.php file. This config is the config from symfony. You 
         {
             $treeBuilder = new TreeBuilder();
             $rootNode    = $treeBuilder->root('acme_demo');
+
+            // here you will build the configuration tree
 
             return $treeBuilder;
         }

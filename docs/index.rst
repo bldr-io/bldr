@@ -16,7 +16,7 @@ Well, here's one written for Bldr using yaml (json is also supported):
 
         profiles:
             default:
-                description: 'Development Profile'
+                description: Development Profile
                 tasks:
                     - prepare
                     - lint
@@ -82,7 +82,7 @@ And here's the output:
 
 .. image:: demo2.png
 
-For now (while im still working on the documentation), this will hopefully serve as ample documentation.
+For now (while we are still working on the documentation), this will hopefully serve as ample documentation.
 
 Content
 ========

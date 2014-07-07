@@ -43,6 +43,7 @@ class Config
      * @param ContainerBuilder $container
      *
      * @throws Exception\ConfigurationFileNotFoundException
+     * @throws \Exception
      */
     public static function read(ContainerBuilder $container)
     {
@@ -112,7 +113,8 @@ class Config
 
         $format = $input->hasParameterOption('--config-format')
             ? $input->getParameterOption('--config-format')
-            : static::$DEFAULT_TYPE;
+            : static::$DEFAULT_TYPE
+        ;
 
         return [
             sprintf("%s.%s", static::$NAME, $format),

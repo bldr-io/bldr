@@ -19,6 +19,8 @@ use Zend\Json\Json;
  */
 class JsonFileLoader extends YamlFileLoader
 {
+    use SupportsTrait;
+
     private $jsonParser;
 
     /**
@@ -32,7 +34,6 @@ class JsonFileLoader extends YamlFileLoader
      */
     protected function loadFile($file)
     {
-
         if (!stream_is_local($file)) {
             throw new InvalidArgumentException(sprintf('This is not a local file "%s".', $file));
         }
@@ -60,7 +61,6 @@ class JsonFileLoader extends YamlFileLoader
      */
     private function validate($content, $file)
     {
-
         if (null === $content) {
             return $content;
         }
@@ -97,17 +97,5 @@ class JsonFileLoader extends YamlFileLoader
         }
 
         return $content;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function supports($resource, $type = null)
-    {
-        if (is_string($resource) && 'dist' === pathinfo($resource, PATHINFO_EXTENSION)) {
-            return $this->supports(str_replace('.dist', '', $resource), $type);
-        }
-
-        return is_string($resource) && 'json' === pathinfo($resource, PATHINFO_EXTENSION);
     }
 }

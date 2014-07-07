@@ -87,36 +87,7 @@ abstract class AbstractCall implements CallInterface
     }
 
     /**
-     * @param Call $call
-     *
-     * @throws \RuntimeException
-     */
-    protected function setOptionValues(Call $call)
-    {
-        foreach ($call->getOptions() as $key => $value) {
-            $this->options[$key]['value'] = $value;
-        }
-
-        foreach ($this->options as &$option) {
-            if ($option['value'] === null && $option['default'] !== null) {
-                $option['value'] = $option['default'];
-            }
-
-            if (isset($option['required']) && $option['required'] && $option['value'] === null) {
-                throw new \RuntimeException(
-                    sprintf(
-                        "Running the %s task failed. The %s option requires a value.",
-                        $this->getTask()
-                            ->getName(),
-                        $option['name']
-                    )
-                );
-            }
-        }
-    }
-
-    /**
-     * @return Task
+     * {@inheritdoc}
      */
     public function getTask()
     {
@@ -277,6 +248,35 @@ abstract class AbstractCall implements CallInterface
     }
 
     /**
+     * @param Call $call
+     *
+     * @throws \RuntimeException
+     */
+    protected function setOptionValues(Call $call)
+    {
+        foreach ($call->getOptions() as $key => $value) {
+            $this->options[$key]['value'] = $value;
+        }
+
+        foreach ($this->options as &$option) {
+            if ($option['value'] === null && $option['default'] !== null) {
+                $option['value'] = $option['default'];
+            }
+
+            if (isset($option['required']) && $option['required'] && $option['value'] === null) {
+                throw new \RuntimeException(
+                    sprintf(
+                        "Running the %s task failed. The %s option requires a value.",
+                        $this->getTask()
+                            ->getName(),
+                        $option['name']
+                    )
+                );
+            }
+        }
+    }
+
+    /**
      * @param string $name
      *
      * @return string|int
@@ -329,6 +329,7 @@ abstract class AbstractCall implements CallInterface
      * @param string     $name
      * @param string|int $value
      *
+     * @return AbstractCall
      * @throws \RuntimeException
      */
     protected function setOption($name, $value)
@@ -338,5 +339,7 @@ abstract class AbstractCall implements CallInterface
         }
 
         $this->options[$name]['value'] = $value;
+
+        return $this;
     }
 }

@@ -36,10 +36,7 @@ class TouchCall extends FilesystemCall
      */
     public function run()
     {
-        $files = $this->resolveFiles();
-
-        foreach ($files as $file) {
-
+        foreach ($this->resolveFiles() as $file) {
             $this->fileSystem->touch([$file]);
 
             /** @var FormatterHelper $formatter */

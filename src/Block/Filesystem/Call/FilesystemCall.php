@@ -45,7 +45,7 @@ abstract class FilesystemCall extends AbstractCall
      */
     public function getName()
     {
-        return 'filesystem:' . parent::getName();
+        return 'filesystem:'.parent::getName();
     }
 
     /**

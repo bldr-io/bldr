@@ -25,13 +25,13 @@ abstract class AbstractEvent extends Event implements EventInterface
     protected $command;
 
     /**
-     * @var Boolean $running
+     * @var bool $running
      */
     protected $running;
 
     /**
      * @param BuildCommand $command
-     * @param Boolean      $running
+     * @param bool      $running
      */
     public function __construct(BuildCommand $command, $running = true)
     {
@@ -48,7 +48,7 @@ abstract class AbstractEvent extends Event implements EventInterface
     }
 
     /**
-     * @return Boolean
+     * @return bool
      */
     public function isRunning()
     {

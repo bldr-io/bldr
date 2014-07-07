@@ -53,7 +53,8 @@ class WatchCall extends AbstractCall
             ->setDescription('Watches the filesystem for changes')
             ->addOption('src', true, 'Source to watch')
             ->addOption('profile', false, 'Profile to run on filesystem change')
-            ->addOption('task', false, 'Task to run on filesystem change');
+            ->addOption('task', false, 'Task to run on filesystem change')
+        ;
     }
 
     /**
@@ -75,37 +76,41 @@ class WatchCall extends AbstractCall
         }
 
         $this->watchForChanges($this->getFiles($source));
+
+        return true;
     }
 
     /**
      * @param SplFileInfo[] $files
+     *
+     * @return bool
      */
     private function watchForChanges(array $files)
     {
-        $this->getOutput()
-            ->writeln("Watching for changes");
+        $this->getOutput()->writeln("Watching for changes");
 
         $previously = [];
         while (true) {
             foreach ($files as $file) {
                 /** @var SplFileInfo $file */
                 if ($this->checkFile($file->getRealPath(), $previously)) {
-                    $this->getOutput()
-                        ->writeln(
-                            sprintf(
-                                "<info>>>>></info> <comment>The following file changed:</comment> <info>%s</info>",
-                                $file->getPathname()
-                            )
-                        );
+                    $this->getOutput()->writeln(
+                        sprintf(
+                            "<info>>>>></info> <comment>The following file changed:</comment> <info>%s</info>",
+                            $file->getPathname()
+                        )
+                    );
 
                     $this->getTasks();
                     $this->tasks->addTask($this->getTask());
 
-                    return;
+                    return true;
                 }
             }
             sleep(1);
         }
+
+        return true;
     }
 
     /**

@@ -25,14 +25,6 @@ class BldrBlock extends AbstractBlock
     /**
      * {@inheritDoc}
      */
-    protected function getConfigurationClass()
-    {
-        return 'Bldr\Block\Core\Configuration';
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function assemble(array $config, SymfonyContainerBuilder $container)
     {
         $this->addCallOptions($config, $this->originalConfiguration);
@@ -46,6 +38,25 @@ class BldrBlock extends AbstractBlock
         $this->addService('bldr.registry.task', 'Bldr\Registry\TaskRegistry');
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function getCompilerPasses()
+    {
+        return [
+            new CompilerPass\BuilderCompilerPass,
+            new CompilerPass\CommandCompilerPass
+        ];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getConfigurationClass()
+    {
+        return 'Bldr\Block\Core\Configuration';
+    }
+
     private function addCallOptions(array &$configuration, array $configs)
     {
         foreach ($configs as $config) {
@@ -56,22 +67,11 @@ class BldrBlock extends AbstractBlock
 
                 foreach ($task['calls'] as $index => $call) {
                     if (isset($config['tasks'][$name], $config['tasks'][$name]['calls'][$index])) {
-                        $options                                        = $config['tasks'][$name]['calls'][$index];
+                        $options = $config['tasks'][$name]['calls'][$index];
                         $configuration['tasks'][$name]['calls'][$index] = array_merge($call, $options);
                     }
                 }
             }
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getCompilerPasses()
-    {
-        return [
-            new CompilerPass\BuilderCompilerPass,
-            new CompilerPass\CommandCompilerPass
-        ];
     }
 }

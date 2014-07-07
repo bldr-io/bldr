@@ -1,22 +1,21 @@
 language: php
 
 php:
-  - 5.4
-  - 5.5
-  - 5.6
-  - hhvm
-  
+    - 5.4
+    - 5.5
+    - 5.6
+    - hhvm
+
 matrix:
-  allow_failures:
-    - php: hhvm
+    allow_failures:
+        - php: hhvm
 
 before_script:
-  - composer self-update
-  - composer install
-  - composer require satooshi/php-coveralls:dev-master --dev --no-progress --prefer-source
+    - composer install
+    - composer require satooshi/php-coveralls:dev-master --no-progress --prefer-source
 
 script:
-  - ./bin/bldr build
+    - ./bin/bldr build
 
 after_script:
-   - php bin/coveralls -v
+    - php bin/coveralls -v

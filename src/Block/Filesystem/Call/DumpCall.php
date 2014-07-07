@@ -41,12 +41,12 @@ class DumpCall extends FilesystemCall
     {
         $file = $this->getOption('file');
         if (strpos($file, '/') !== 0) {
-            $file = getcwd() . '/' . ltrim($file, '/');
+            $file = getcwd().'/'.ltrim($file, '/');
         }
 
         $content = $this->getOption('content');
         if ($this->getOption('append')) {
-            $content = file_get_contents($file) . $this->getOption('character') . $content;
+            $content = file_get_contents($file).$this->getOption('character').$content;
         }
 
         $this->fileSystem->dumpFile($file, $content);

@@ -122,13 +122,9 @@ class Builder
             ]
         );
 
-        //$this->addEvent(Event::PRE_TASK, new Events\TaskEvent($this, $task, true));
         foreach ($task->getCalls() as $call) {
-            //$this->addEvent(Event::PRE_CALL, new Events\CallEvent($this, $task, $call, true));
             $this->runCall($task, $call);
-            //$this->addEvent(Event::POST_CALL, new Events\CallEvent($this, $task, $call, false));
         }
-        //$this->addEvent(Event::POST_TASK, new Events\TaskEvent($this, $task, false));
 
         $this->output->writeln("");
     }
@@ -139,23 +135,20 @@ class Builder
      */
     private function runCall(Task $task, Call $call)
     {
-        $service = $this->fetchServiceForCall($task, $call);
+        $service = $this->fetchServiceForCall($call);
         $service->initialize($this->input, $this->output, $this->helperSet, $task, $call);
 
-        //$this->addEvent(Event::PRE_SERVICE, new Events\ServiceEvent($this, $task, $call, $service, true));
         $service->run();
-        //$this->addEvent(Event::POST_SERVICE, new Events\ServiceEvent($this, $task, $call, $service, false));
         $this->output->writeln("");
     }
 
     /**
-     * @param Task $task
      * @param Call $call
      *
      * @throws \Exception
      * @return CallInterface
      */
-    private function fetchServiceForCall(Task $task, Call $call)
+    private function fetchServiceForCall(Call $call)
     {
         $services = [];
         foreach ($this->tasks as $service) {
@@ -174,10 +167,5 @@ class Builder
         }
 
         return $services[0];
-    }
-
-    private function addEvent($eventName, Event\EventInterface $event)
-    {
-        $this->dispatcher->dispatch($eventName, $event);
     }
 }

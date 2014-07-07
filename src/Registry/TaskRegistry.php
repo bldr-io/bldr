@@ -14,7 +14,7 @@ namespace Bldr\Registry;
 use Bldr\Model\Task;
 
 /**
- * @author Aaron Scherer <aequasi@gmail..com>
+ * @author Aaron Scherer <aequasi@gmail.com>
  */
 class TaskRegistry
 {

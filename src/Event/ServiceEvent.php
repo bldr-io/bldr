@@ -41,7 +41,7 @@ class ServiceEvent extends AbstractEvent
      * @param Task          $task
      * @param Call          $call
      * @param CallInterface $service
-     * @param Boolean       $running
+     * @param bool       $running
      */
     public function __construct(BuildCommand $command, Task $task, Call $call, CallInterface $service, $running = true)
     {

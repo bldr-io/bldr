@@ -1,12 +1,12 @@
 <?php
 
 /**
- * This file is part of Bldr.io.
+ * This file is part of Bldr.io
  *
  * (c) Aaron Scherer <aequasi@gmail.com>
  *
  * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * with this source code in the file LICENSE
  */
 
 set_time_limit(0);
@@ -17,7 +17,7 @@ if (function_exists('ini_set')) {
     $memoryInBytes = function ($value) {
         $unit = strtolower(substr($value, -1, 1));
         $value = (int) $value;
-        switch($unit) {
+        switch ($unit) {
             case 'g':
                 $value *= 1024;
             // no break (cumulative multiplier)
@@ -64,7 +64,8 @@ $embeddedComposerBuilder = new EmbeddedComposerBuilder($classLoader);
 $embeddedComposer = $embeddedComposerBuilder
     ->setComposerFilename('bldr.json')
     ->setVendorDirectory('.bldr/vendor/')
-    ->build();
+    ->build()
+;
 
 $embeddedComposer->processAdditionalAutoloads();
 

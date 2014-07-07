@@ -36,9 +36,7 @@ class RemoveCall extends FilesystemCall
      */
     public function run()
     {
-        $files = $this->resolveFiles();
-
-        foreach ($files as $file) {
+        foreach ($this->resolveFiles() as $file) {
             if (!$this->fileSystem->exists($file)) {
                 if ($this->getFailOnError()) {
                     throw new \Exception("File `$file` does not exist.");

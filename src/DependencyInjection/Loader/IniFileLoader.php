@@ -18,15 +18,5 @@ use Symfony\Component\DependencyInjection\Loader\IniFileLoader as FileLoader;
  */
 class IniFileLoader extends FileLoader
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function supports($resource, $type = null)
-    {
-        if (is_string($resource) && 'dist' === pathinfo($resource, PATHINFO_EXTENSION)) {
-            return $this->supports(str_replace('.dist', '', $resource), $type);
-        }
-
-        return is_string($resource) && 'ini' === pathinfo($resource, PATHINFO_EXTENSION);
-    }
+    use SupportsTrait;
 }

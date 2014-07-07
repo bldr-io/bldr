@@ -25,7 +25,8 @@ class MkdirCall extends FilesystemCall
     {
         parent::configure();
         $this->setName('mkdir')
-            ->setDescription('Makes all the directories provided in `files`');
+            ->setDescription('Makes all the directories provided in `files`')
+        ;
     }
 
     /**
@@ -36,9 +37,7 @@ class MkdirCall extends FilesystemCall
      */
     public function run()
     {
-        $files = $this->resolveFiles();
-
-        foreach ($files as $file) {
+        foreach ($this->resolveFiles() as $file) {
             if ($this->fileSystem->exists($file)) {
                 if ($this->getFailOnError()) {
                     throw new \Exception("File `$file` already exist.");

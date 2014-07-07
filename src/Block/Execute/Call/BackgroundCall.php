@@ -46,7 +46,8 @@ class BackgroundCall extends AbstractCall
             ->addOption('cwd', false, 'Sets the working directory for the executable')
             ->addOption('output', false, 'Sets the location to output to')
             ->addOption('append', false, 'If output is set, should it append?', false)
-            ->addOption('kill', false, 'Are we killing the task?', false);
+            ->addOption('kill', false, 'Are we killing the task?', false)
+        ;
     }
 
     /**
@@ -57,10 +58,12 @@ class BackgroundCall extends AbstractCall
         if ($this->getOption('kill') === false) {
             $this->startProcess();
 
-            return;
+            return true;
         }
 
         $this->endProcess();
+
+        return true;
     }
 
     /**
@@ -107,7 +110,7 @@ class BackgroundCall extends AbstractCall
         if ($this->getFailOnError()) {
             if (!in_array($process->getExitCode(), $this->getSuccessStatusCodes())) {
                 throw new \Exception(
-                    "Failed on the {$this->getTask()->getName()} task.\n" . $process->getErrorOutput()
+                    "Failed on the {$this->getTask()->getName()} task.\n".$process->getErrorOutput()
                 );
             }
         }
