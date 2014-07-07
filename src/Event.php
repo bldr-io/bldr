@@ -44,6 +44,16 @@ class Event
     const PRE_SERVICE = 'bldr.event.service.before';
 
     /**
+     * Called before executing a process
+     */
+    const PRE_EXECUTE = 'bldr.event.execute.before';
+
+    /**
+     * Called after executing a process
+     */
+    const POST_EXECUTE = 'bldr.event.execute.after';
+
+    /**
      * Called after running the service
      */
     const POST_SERVICE = 'bldr.event.service.after';

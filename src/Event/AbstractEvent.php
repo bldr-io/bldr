@@ -20,31 +20,16 @@ use Symfony\Component\EventDispatcher\Event;
 abstract class AbstractEvent extends Event implements EventInterface
 {
     /**
-     * @var BuildCommand $command
-     */
-    protected $command;
-
-    /**
      * @var bool $running
      */
     protected $running;
 
     /**
-     * @param BuildCommand $command
-     * @param bool      $running
+     * @param bool $running
      */
-    public function __construct(BuildCommand $command, $running = true)
+    public function __construct($running = true)
     {
-        $this->command = $command;
         $this->running = $running;
-    }
-
-    /**
-     * @return BuildCommand
-     */
-    public function getCommand()
-    {
-        return $this->command;
     }
 
     /**
