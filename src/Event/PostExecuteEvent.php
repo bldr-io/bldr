@@ -45,7 +45,7 @@ class PostExecuteEvent extends AbstractEvent
         return $this->call;
     }
 
-    public function getProcessBuilder()
+    public function getProcess()
     {
         return $this->process;
     }
