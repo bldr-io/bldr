@@ -37,7 +37,7 @@ class PostExecuteEvent extends AbstractEvent
     {
         parent::__construct($running);
         $this->call = $call;
-        $this->builder = $process;
+        $this->process = $process;
     }
 
     public function getCall()
@@ -47,6 +47,6 @@ class PostExecuteEvent extends AbstractEvent
 
     public function getProcessBuilder()
     {
-        return $this->builder;
+        return $this->process;
     }
 }
