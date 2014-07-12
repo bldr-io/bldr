@@ -20,7 +20,8 @@
         "squizlabs/php_codesniffer": "~1.5.3",
         "mockery/mockery":           "dev-master@dev",
         "raulfraile/ladybug":        "dev-master@dev",
-        "kherge/box":                "~2.4.4"
+        "kherge/box":                "~2.4.4",
+        "phpspec/prophecy":          "~1.1.2"
     },
     "license":      "MIT",
     "authors":      [
