@@ -64,7 +64,7 @@ bldr:
             calls:
                 -
                     type: watch
-                    task: test
+                    task: testDev
                     src:
                         - { path: [src, tests], files: *.php, recursive: true }
         prepare:

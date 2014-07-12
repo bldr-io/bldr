@@ -11,39 +11,26 @@
 
 namespace Bldr\Test\Registry;
 
-use Bldr\Model\Call;
-use Bldr\Model\Task;
 use Bldr\Registry\TaskRegistry;
-use Prophecy\Prophet;
+use Bldr\Test\BaseProphecy;
 
 /**
  * @author Luis Cordova <cordoval@gmail.com>
  */
-class TaskRegistryTest extends \PHPUnit_Framework_TestCase
+class TaskRegistryTest extends BaseProphecy
 {
     public function testItStoresTasksAndShiftsThemOutAndCountThem()
     {
-//        $firstCall = new Call('type 1');
-//        $secondCall = new Call('type 2');
-//        $firstTask = new Task('task 1');
-//        $firstTask->addCall($firstCall);
-//        $firstTask->addCall($secondCall);
-//
-//        $secondTask = new Task('task 2');
-//        $secondTask->addCall($firstCall);
-//        $secondTask->addCall($secondCall);
-
-        $prophet = new Prophet();
-        $firstTask = $prophet->prophesize('Bldr\Model\Task');
-        $secondTask = $prophet->prophesize('Bldr\Model\Task');
+        $firstTask = $this->prophesy('Bldr\Model\Task');
+        $secondTask = $this->prophesy('Bldr\Model\Task');
 
         $tasks = new TaskRegistry();
         $tasks->addTask($firstTask->reveal());
         $tasks->addTask($secondTask->reveal());
 
         $this->assertEquals(2, $tasks->count());
-        $this->assertEquals($firstTask, $tasks->getNewTask());
-        $this->assertEquals($secondTask, $tasks->getNewTask());
+        $this->assertEquals($firstTask->reveal(), $tasks->getNewTask());
+        $this->assertEquals($secondTask->reveal(), $tasks->getNewTask());
         $this->assertContainsOnlyInstancesOf('Bldr\Model\Task', $tasks->getTasks());
     }
 }
