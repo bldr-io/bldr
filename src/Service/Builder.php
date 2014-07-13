@@ -12,8 +12,8 @@
 namespace Bldr\Service;
 
 use Bldr\Call\CallInterface;
+use Bldr\Event\PreCallEvent;
 use Bldr\Event;
-use Bldr\Event as Events;
 use Bldr\Model\Call;
 use Bldr\Model\Task;
 use Bldr\Registry\TaskRegistry;
@@ -123,6 +123,13 @@ class Builder
         );
 
         foreach ($task->getCalls() as $call) {
+            $preCallEvent = new PreCallEvent($task, $call);
+            $this->dispatcher->dispatch(Event::PRE_CALL, $preCallEvent);
+
+            if ($preCallEvent->isPropagationStopped()) {
+                continue;
+            }
+
             $this->runCall($task, $call);
         }
 
@@ -136,7 +143,7 @@ class Builder
     private function runCall(Task $task, Call $call)
     {
         $service = $this->fetchServiceForCall($call);
-        $service->initialize($this->input, $this->output, $this->helperSet, $task, $call);
+        $service->initialize($this->dispatcher, $this->input, $this->output, $this->helperSet, $task, $call);
 
         $service->run();
         $this->output->writeln("");

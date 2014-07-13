@@ -17,6 +17,7 @@ use Bldr\Model\Task;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class AbstractCall
@@ -34,6 +35,11 @@ abstract class AbstractCall implements CallInterface
      * @var string $description
      */
     private $description;
+
+    /**
+     * @var EventDispatcherInterface $dispatcher
+     */
+    private $dispatcher;
 
     /**
      * @var array $options
@@ -69,17 +75,19 @@ abstract class AbstractCall implements CallInterface
      * {@inheritDoc}
      */
     public function initialize(
+        EventDispatcherInterface $dispatcher,
         InputInterface $input,
         OutputInterface $output,
         HelperSet $helperSet,
         Task $task,
         Call $call
     ) {
-        $this->input     = $input;
-        $this->output    = $output;
-        $this->helperSet = $helperSet;
-        $this->task      = $task;
-        $this->call      = $call;
+        $this->dispatcher = $dispatcher;
+        $this->input      = $input;
+        $this->output     = $output;
+        $this->helperSet  = $helperSet;
+        $this->task       = $task;
+        $this->call       = $call;
 
         $this->setOptionValues($call);
 
@@ -136,6 +144,14 @@ abstract class AbstractCall implements CallInterface
         $this->description = $description;
 
         return $this;
+    }
+
+    /**
+     * @return EventDispatcherInterface
+     */
+    public function getDispatcher()
+    {
+        return $this->dispatcher;
     }
 
     /**

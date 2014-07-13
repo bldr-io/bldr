@@ -12,6 +12,9 @@
 namespace Bldr\Block\Execute\Call;
 
 use Bldr\Call\AbstractCall;
+use Bldr\Event;
+use Bldr\Event\PreExecuteEvent;
+use Bldr\Event\PostExecuteEvent;
 use Symfony\Component\Console\Helper\FormatterHelper;
 use Symfony\Component\Console\Output\StreamOutput;
 use Symfony\Component\Process\ProcessBuilder;
@@ -49,6 +52,14 @@ class ExecuteCall extends AbstractCall
         $formatter = $this->getHelperSet()->get('formatter');
 
         $builder = new ProcessBuilder($arguments);
+
+        $preExecuteEvent = new PreExecuteEvent($this, $builder);
+        $this->getDispatcher()->dispatch(Event::PRE_EXECUTE, $preExecuteEvent);
+
+        if ($preExecuteEvent->isPropagationStopped()) {
+            return true;
+        }
+
         if ($this->getOutput()->isVerbose()) {
             $this->getOutput()->writeln(
                 sprintf(
@@ -96,6 +107,9 @@ class ExecuteCall extends AbstractCall
                 $output->write($buffer);
             }
         );
+
+        $postExecuteEvent = new PostExecuteEvent($this, $process);
+        $this->getDispatcher()->dispatch(Event::POST_EXECUTE, $postExecuteEvent);
 
         if ($this->getFailOnError()) {
             if (!in_array($process->getExitCode(), $this->getSuccessStatusCodes())) {

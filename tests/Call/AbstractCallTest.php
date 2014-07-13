@@ -26,11 +26,12 @@ class AbstractCallTest extends \PHPUnit_Framework_TestCase
     {
         /** @var MockInterface[] $properties */
         $properties = [
-            'input'     => \Mockery::mock('Symfony\Component\Console\Input\InputInterface'),
-            'output'    => \Mockery::mock('Symfony\Component\Console\Output\OutputInterface'),
-            'helperSet' => \Mockery::mock('Symfony\Component\Console\Helper\HelperSet'),
-            'task'      => \Mockery::mock('Bldr\Model\Task'),
-            'call'      => \Mockery::mock('Bldr\Model\Call'),
+            'dispatcher' => \Mockery::mock('Symfony\Component\EventDispatcher\EventDispatcher'),
+            'input'      => \Mockery::mock('Symfony\Component\Console\Input\InputInterface'),
+            'output'     => \Mockery::mock('Symfony\Component\Console\Output\OutputInterface'),
+            'helperSet'  => \Mockery::mock('Symfony\Component\Console\Helper\HelperSet'),
+            'task'       => \Mockery::mock('Bldr\Model\Task'),
+            'call'       => \Mockery::mock('Bldr\Model\Call'),
         ];
 
         $properties['call']->shouldReceive('getOptions')
@@ -40,6 +41,7 @@ class AbstractCallTest extends \PHPUnit_Framework_TestCase
         $call = new MockCall();
 
         $result = $call->initialize(
+            $properties['dispatcher'],
             $properties['input'],
             $properties['output'],
             $properties['helperSet'],
