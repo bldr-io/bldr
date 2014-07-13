@@ -193,10 +193,10 @@ EOF;
     {
         $nonContainerCommands = ['NULL', 'install', 'update', 'dumpautoload'];
 
-        if (in_array($input->getFirstArgument(), $nonContainerCommands)){
+        if (in_array($input->getFirstArgument(), $nonContainerCommands)) {
             return false;
         }
-        
+
         $this->container = new ContainerBuilder($this, $input, $output);
     }
 
