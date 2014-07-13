@@ -99,6 +99,9 @@ EOF
         return 0;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     private function doExecute($profileName = null, array $tasks = [])
     {
         if ([] === $tasks) {
@@ -136,7 +139,7 @@ EOF
             $this->buildTasks($tasks);
         }
 
-        $this->runTasks();
+        $this->container->get('bldr.builder')->runTasks($this->tasks);
 
         if ([] === $tasks) {
             $this->addEvent(Event::POST_PROFILE, new Events\ProfileEvent($this, false));
@@ -214,15 +217,6 @@ EOF
         }
 
         return $profiles[$name];
-
-    }
-
-    /**
-     *
-     */
-    private function runTasks()
-    {
-        $this->container->get('bldr.builder')->runTasks($this->tasks);
     }
 
     /**
