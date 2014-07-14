@@ -19,6 +19,7 @@ use Bldr\Model\Task;
 use Bldr\Registry\TaskRegistry;
 use Bldr\Service\Builder;
 use Symfony\Component\Console\Helper\FormatterHelper;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -46,7 +47,7 @@ class BuildCommand extends AbstractCommand
     {
         $this->setName('build')
             ->setDescription("Builds the project for the directory you are in. Must contain a config file.")
-            ->addOption('profile', 'p', InputOption::VALUE_REQUIRED, 'Profile to run', 'default')
+            ->addArgument('profile', InputArgument::REQUIRED, 'Profile to run')
             ->addOption('tasks', 't', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Tasks to run')
             ->setHelp(
                 <<<EOF
@@ -98,11 +99,13 @@ EOF
         return 0;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     private function doExecute($profileName = null, array $tasks = [])
     {
         if ([] === $tasks) {
-            $profile = $this->container->getParameter('profiles')[$profileName];
-
+            $profile = $this->getProfile($profileName);
 
             $projectFormat = [];
 
@@ -116,7 +119,7 @@ EOF
             $profileFormat = [
                 sprintf("Using the '%s' profile", $profileName)
             ];
-            if (isset($profile['description'])) {
+            if (!empty($profile['description'])) {
                 $profileFormat[] = sprintf(" - %s - ", $profile['description']);
             }
 
@@ -136,7 +139,7 @@ EOF
             $this->buildTasks($tasks);
         }
 
-        $this->runTasks();
+        $this->container->get('bldr.builder')->runTasks($this->tasks);
 
         if ([] === $tasks) {
             $this->addEvent(Event::POST_PROFILE, new Events\ProfileEvent($this, false));
@@ -194,9 +197,26 @@ EOF
         }
     }
 
-    private function runTasks()
+    /**
+     * @param $name
+     *
+     * @return mixed
+     * @throws \Exception
+     */
+    private function getProfile($name)
     {
-        $this->container->get('bldr.builder')->runTasks($this->tasks);
+        $profiles = $this->container->getParameter('profiles');
+        if (!array_key_exists($name, $profiles)) {
+            throw new \Exception(
+                sprintf(
+                    'There is no profile with the name \'%s\', expecting: (%s)',
+                    $name,
+                    array_keys($profiles)
+                )
+            );
+        }
+
+        return $profiles[$name];
     }
 
     /**
