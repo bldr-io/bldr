@@ -15,7 +15,7 @@ before_script:
     - composer require satooshi/php-coveralls:dev-master --no-progress --prefer-source
 
 script:
-    - ./bin/bldr build
+    - ./bin/bldr build default
 
 after_script:
     - php bin/coveralls -v
