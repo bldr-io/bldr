@@ -16,6 +16,10 @@ in ``$PATH`` as shown here_.
     $ curl -sS http://bldr.io/installer | php
     $ mv bldr.phar /usr/bin/bldr
 
+    # You can also install specific versions (Anything greater or equal to 5.0.0)
+    # Example: 5.0.0, 5.0.1, stable (latest tag in github), dev (last commit in master)
+    $ curl -sS http://bldr.io/installer | php --version=dev # Stable by default
+
 
 **Project Setup**
 
