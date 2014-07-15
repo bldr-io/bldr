@@ -92,7 +92,7 @@ EOF
 
         $this->output->writeln(["\n", Application::$logo, "\n"]);
 
-        $this->doExecute($this->input->getOption('profile'), $this->input->getOption('tasks'));
+        $this->doExecute($this->input->getArgument('profile'), $this->input->getOption('tasks'));
 
         $this->succeedBuild();
 
