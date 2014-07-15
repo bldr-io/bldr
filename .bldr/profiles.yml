@@ -7,7 +7,6 @@ bldr:
                 - lint
                 - phpcs
                 - test
-                - build
         watch:
             description: "Watch Profile"
             tasks:
