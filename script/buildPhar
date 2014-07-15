@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+if [ ! -d "$(pwd)/.git" ]; then
+    echo "Execute in the main directory please"
+    exit
+fi
+
+if [ ! -d $(pwd)/bldr-phar ]; then
+    echo "Cloning Bldr Phar repo"
+    git clone git@github.com:bldr-io/bldr-phar.git
+fi
+
+./bin/box build
+
+if [ ! -f $(pwd)/bldr.phar ]; then
+    echo "Failed creating phar file"
+    exit
+fi
+
+cd bldr-phar
+
+if [ -z $1 ]; then
+    git checkout dev
+    cp ../bldr.phar ./
+    git add bldr.phar
+    git commit -m "Updating Phar"
+    git push origin dev
+else
+    git checkout -b $1
+    git rm -rf .
+    cp ../bldr.phar ./
+    git add bldr.phar
+    git commit -m "Updating Phar"
+    git push origin $1
+
+    git checkout stable
+    cp ../bldr.phar ./
+    git add bldr.phar
+    git commit -m "Updating Phar"
+    git push origin stable
+fi
+
+cd -

@@ -191,7 +191,7 @@ EOF;
      */
     private function buildContainer(InputInterface $input, OutputInterface $output)
     {
-        $nonContainerCommands = ['NULL', 'install', 'update', 'dumpautoload'];
+        $nonContainerCommands = ['NULL', 'install', 'update', 'dumpautoload', 'help', 'list', null];
 
         if (in_array($input->getFirstArgument(), $nonContainerCommands)) {
             return false;

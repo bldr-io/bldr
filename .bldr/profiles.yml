@@ -25,3 +25,8 @@ bldr:
             description: Tests the MiscellaneousExtension calls
             tasks:
                 - misc
+        release:
+            description: Releases a new Tag of Bldr, and builds the phar
+            tasks:
+                - release
+                - buildPhar
