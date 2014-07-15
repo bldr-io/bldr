@@ -13,13 +13,13 @@ Create a ``.bldr.yml(.dist)`` file:
         name: some/name
         description:  A description about the project # (Not Required)
         profiles: # A list of profiles that can be ran with `./bldr.phar build`
-            default:
-                description: Gets ran when `./bldr.phar build` has no `-p` defined # (Not Required)
+            someTask:
+                description: Gets ran when `./bldr.phar build someTask` is called
                 tasks:
-                    - default
+                    - foo
         tasks:
-            default:
-                description: Default task # (Not Required)
+            foo:
+                description: FooBar task
                 calls:
                     -
                         type: exec
@@ -37,3 +37,9 @@ And to get more information on a particular type, run:
 .. code-block:: shell
 
     ./bldr.phar task:info <task name>
+
+To run your profiles: (This has changed since version 4)
+
+.. code-block:: shell
+
+    ./bldr.phar build <profile name>

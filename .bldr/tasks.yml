@@ -147,10 +147,29 @@ bldr:
                     failOnError: false
                     executable: php
                     arguments: [bin/phpunit]
-        build:
+        buildPhar:
             description: Builds the Box
             calls:
                 -
                     type: exec
-                    executable: bin/box
-                    arguments: [build]
+                    executable: script/buildPhar
+                    arguments:
+                        - $RELEASE_VERSION$
+        release:
+            description: Creates a tag, and pushes
+            calls:
+                -
+                    type: exec
+                    executable: git
+                    arguments:
+                        - tag
+                        - -a
+                        - -m "$RELEASE_MSG$"
+                        - $RELEASE_VERSION$
+                -
+                    type: exec
+                    executable: git
+                    arguments:
+                        - push
+                        - origin
+                        - --tags
