@@ -25,7 +25,8 @@ class TouchCall extends FilesystemCall
     {
         parent::configure();
         $this->setName('touch')
-            ->setDescription('Touches all the files provided in `files`');
+            ->setDescription('Touches all the files provided in `files`')
+        ;
     }
 
     /**

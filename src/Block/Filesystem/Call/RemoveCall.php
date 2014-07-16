@@ -25,7 +25,8 @@ class RemoveCall extends FilesystemCall
     {
         parent::configure();
         $this->setName('remove')
-            ->setDescription('Removes all the directories and files provided in `files`');
+            ->setDescription('Removes all the directories and files provided in `files`')
+        ;
     }
 
     /**

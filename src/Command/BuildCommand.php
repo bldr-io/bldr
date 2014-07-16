@@ -12,7 +12,6 @@
 namespace Bldr\Command;
 
 use Bldr\Application;
-use Bldr\Config;
 use Bldr\Event as Events;
 use Bldr\Event;
 use Bldr\Model\Task;

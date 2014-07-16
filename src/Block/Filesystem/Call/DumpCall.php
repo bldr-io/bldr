@@ -11,8 +11,6 @@
 
 namespace Bldr\Block\Filesystem\Call;
 
-use Symfony\Component\Console\Helper\FormatterHelper;
-
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
  */
@@ -28,7 +26,8 @@ class DumpCall extends FilesystemCall
             ->addOption('file', true, 'File to dump content to')
             ->addOption('append', true, 'If true, will append to the given file.', false)
             ->addOption('character', true, 'If append is true, character to use to append.', "\n")
-            ->addOption('content', true, 'Content to dump to file');
+            ->addOption('content', true, 'Content to dump to file')
+        ;
     }
 
     /**

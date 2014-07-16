@@ -12,6 +12,7 @@
 namespace Bldr\Event;
 
 use Bldr\Model\Task;
+use Bldr\Registry\TaskRegistry;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
@@ -19,11 +20,16 @@ use Bldr\Model\Task;
 class ProfileEvent extends AbstractEvent
 {
     /**
+     * @var TaskRegistry
+     */
+    private $registry;
+
+    /**
      * @return Task[]
      */
     public function getTasks()
     {
-        return $this->command->getTasks();
+        return $this->registry->getTasks();
     }
 
     /**
@@ -31,7 +37,7 @@ class ProfileEvent extends AbstractEvent
      */
     public function setTasks($tasks)
     {
-        $this->command->setTasks($tasks);
+        $this->registry->setTasks($tasks);
     }
 
     /**
@@ -39,6 +45,6 @@ class ProfileEvent extends AbstractEvent
      */
     public function addTask(Task $task)
     {
-        $this->command->addTask($task);
+        $this->registry->addTask($task);
     }
 }
