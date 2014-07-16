@@ -41,7 +41,8 @@ To use:
     <info>$ bldr %command.name% <task_name></info>
 
 EOF
-            );
+            )
+        ;
     }
 
     /**

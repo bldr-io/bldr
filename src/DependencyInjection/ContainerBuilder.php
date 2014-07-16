@@ -14,14 +14,9 @@ namespace Bldr\DependencyInjection;
 use Bldr\Application;
 use Bldr\Block;
 use Bldr\Config;
-use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder as BaseContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>

@@ -13,8 +13,6 @@ namespace Bldr\Block\Blocks;
 
 use Bldr\Block\Blocks\CompilerPass\BlocksCompilerPass;
 use Bldr\DependencyInjection\AbstractBlock;
-use Bldr\DependencyInjection\ContainerBuilder;
-use Bldr\Exception\ClassNotFoundException;
 use Symfony\Component\DependencyInjection\ContainerBuilder as SymfonyContainerBuilder;
 
 /**

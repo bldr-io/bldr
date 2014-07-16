@@ -59,7 +59,8 @@ EOF
         $task = new Task('no-task', '', false, [array_merge(['type' => $input->getArgument('name')], $options)]);
         $call = $task->getCalls()[0];
 
-        $service->initialize($input, $output, $this->getHelperSet(), $task, $call);
+        $dispatcher = $this->container->get('bldr.dispatcher');
+        $service->initialize($dispatcher, $input, $output, $this->getHelperSet(), $task, $call);
 
         return $service->run();
     }

@@ -12,9 +12,7 @@
 namespace Bldr\Block\Notify;
 
 use Bldr\DependencyInjection\AbstractBlock;
-use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
 
 /**
  * @author Aaron Scherer <aaron@undergroundelephant.com>
