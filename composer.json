@@ -7,6 +7,7 @@
         "composer/composer":            "dev-master@dev",
         "symfony/console":              "~2.5.0",
         "symfony/config":               "~2.5.0",
+        "symfony/yaml":                 "~2.5.0",
         "symfony/dependency-injection": "~2.5.0",
         "symfony/event-dispatcher":     "~2.5.0",
         "symfony/process":              "~2.5.0",
