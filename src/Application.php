@@ -118,9 +118,6 @@ EOF;
         ];
     }
 
-    /**
-     * @todo Fix config references
-     */
     public function setBuildName()
     {
         $date = new \DateTime('now');
@@ -183,8 +180,6 @@ EOF;
      * @param InputInterface  $input
      * @param OutputInterface $output
      *
-     * @return ContainerBuilder
-     *
      * @throws InvalidArgumentException
      */
     private function buildContainer(InputInterface $input, OutputInterface $output)
@@ -192,7 +187,7 @@ EOF;
         $nonContainerCommands = ['NULL', 'install', 'update', 'dumpautoload', 'help', 'list', null];
 
         if (in_array($input->getFirstArgument(), $nonContainerCommands)) {
-            return false;
+            return;
         }
 
         $this->container = new ContainerBuilder($this, $input, $output);

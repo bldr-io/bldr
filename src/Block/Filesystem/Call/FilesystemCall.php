@@ -24,9 +24,6 @@ abstract class FilesystemCall extends AbstractCall
      */
     protected $fileSystem;
 
-    /**
-     *
-     */
     public function __construct()
     {
         $this->fileSystem = new Filesystem();

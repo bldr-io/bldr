@@ -58,4 +58,16 @@ class TaskRegistry
     {
         return $this->tasks;
     }
+
+    /**
+     * @param Task[] $tasks
+     *
+     * @return $this
+     */
+    public function setTasks(array $tasks)
+    {
+        $this->tasks = $tasks;
+
+        return $this;
+    }
 }

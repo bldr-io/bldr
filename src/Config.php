@@ -83,7 +83,7 @@ class Config
         if (!$foundConfig) {
             throw new ConfigurationFileNotFoundException(
                 sprintf(
-                    "Either Couldn't find the configuration file, or couldn't read it. ".
+                    "Either couldn't find the configuration file, or couldn't read it. ".
                     "Make sure the extension is valid (%s). Tried: %s",
                     implode(', ', static::$TYPES),
                     implode(', ', $files)

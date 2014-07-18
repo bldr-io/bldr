@@ -47,10 +47,9 @@ class BuilderCompilerPass implements CompilerPassInterface
      */
     private function findBldrServices(ContainerBuilder $container)
     {
-        $services = [];
-
         $serviceIds = array_keys($container->findTaggedServiceIds('bldr'));
 
+        $services = [];
         foreach ($serviceIds as $id) {
             $services[] = new Reference($id);
         }
