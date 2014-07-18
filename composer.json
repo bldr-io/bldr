@@ -6,13 +6,14 @@
         "dflydev/embedded-composer":    "dev-master@dev",
         "composer/composer":            "dev-master@dev",
         "symfony/console":              "~2.5.0",
+        "symfony/config":               "~2.5.0",
         "symfony/dependency-injection": "~2.5.0",
         "symfony/event-dispatcher":     "~2.5.0",
         "symfony/process":              "~2.5.0",
         "zendframework/zend-json":      "~2.3.0"
     },
     "suggest":      {
-        "bldr-io/bldr-symfony": "Allows for shorter syntax with symfony commands (Not fully tested)"
+        "bldr-io/frontend-block": "Allows for managing front end compiling and minification"
     },
     "require-dev":  {
         "matthiasnoback/symfony-service-definition-validator": "~1.1.0",
