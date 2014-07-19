@@ -91,6 +91,10 @@ class ContainerBuilder extends BaseContainerBuilder
         }
 
         $blockNames = Yaml::parse(file_get_contents($blockFile));
+        if (null === $blockNames) {
+            return [];
+        }
+
         $blocks     = [];
         foreach ($blockNames as $block) {
             $blocks[] = new $block();
