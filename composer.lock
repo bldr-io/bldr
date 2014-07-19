@@ -4,8 +4,44 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "cd0cc5cab8429ae7e7a70c53113b930b",
+    "hash": "64a0f1435180d405fc19c51208af3302",
     "packages": [
+        {
+            "name": "bldr-io/composer-plugin",
+            "version": "1.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bldr-io/composer-plugin.git",
+                "reference": "4028ee515740a93b239c8ec6c13ebb689b800a0a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bldr-io/composer-plugin/zipball/4028ee515740a93b239c8ec6c13ebb689b800a0a",
+                "reference": "4028ee515740a93b239c8ec6c13ebb689b800a0a",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "1.0.0",
+                "symfony/yaml": "~2.5.0"
+            },
+            "require-dev": {
+                "composer/composer": "dev-master"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "Bldr\\Composer\\BldrPlugin\\BldrPlugin"
+            },
+            "autoload": {
+                "psr-4": {
+                    "Bldr\\Composer\\BldrPlugin\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "time": "2014-07-19 20:34:07"
+        },
         {
             "name": "composer/composer",
             "version": "dev-master",
@@ -893,7 +929,7 @@
                     "email": "roman@code-factory.org"
                 },
                 {
-                    "name": "Johannes Schmitt",
+                    "name": "Johannes M. Schmitt",
                     "email": "schmittjoh@gmail.com",
                     "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
@@ -948,7 +984,7 @@
                 {
                     "name": "Kevin Herrera",
                     "email": "kevin@herrera.io",
-                    "homepage": "http://kevin.herrera.io",
+                    "homepage": "http://kevin.herrera.io/",
                     "role": "Developer"
                 }
             ],
@@ -1010,7 +1046,7 @@
                 {
                     "name": "Kevin Herrera",
                     "email": "kevin@herrera.io",
-                    "homepage": "http://kevin.herrera.io",
+                    "homepage": "http://kevin.herrera.io/",
                     "role": "Developer"
                 }
             ],
@@ -1068,7 +1104,7 @@
                 {
                     "name": "Kevin Herrera",
                     "email": "kevin@herrera.io",
-                    "homepage": "http://kevin.herrera.io",
+                    "homepage": "http://kevin.herrera.io/",
                     "role": "Developer"
                 }
             ],
@@ -1128,7 +1164,7 @@
                 {
                     "name": "Kevin Herrera",
                     "email": "kevin@herrera.io",
-                    "homepage": "http://kevin.herrera.io",
+                    "homepage": "http://kevin.herrera.io/",
                     "role": "Developer"
                 }
             ],
@@ -1180,7 +1216,7 @@
                 {
                     "name": "Kevin Herrera",
                     "email": "kevin@herrera.io",
-                    "homepage": "http://kevin.herrera.io",
+                    "homepage": "http://kevin.herrera.io/",
                     "role": "Developer"
                 }
             ],
@@ -1235,7 +1271,7 @@
                 {
                     "name": "Kevin Herrera",
                     "email": "kevin@herrera.io",
-                    "homepage": "http://kevin.herrera.io",
+                    "homepage": "http://kevin.herrera.io/",
                     "role": "Developer"
                 }
             ],
@@ -1305,7 +1341,7 @@
                 {
                     "name": "Kevin Herrera",
                     "email": "kevin@herrera.io",
-                    "homepage": "http://kevin.herrera.io",
+                    "homepage": "http://kevin.herrera.io/",
                     "role": "Developer"
                 }
             ],
@@ -1474,7 +1510,7 @@
                 {
                     "name": "Kevin Herrera",
                     "email": "kevin@herrera.io",
-                    "homepage": "http://kevin.herrera.io",
+                    "homepage": "http://kevin.herrera.io/",
                     "role": "Developer"
                 }
             ],
@@ -1525,7 +1561,7 @@
                 {
                     "name": "Kevin Herrera",
                     "email": "kevin@herrera.io",
-                    "homepage": "http://kevin.herrera.io",
+                    "homepage": "http://kevin.herrera.io/",
                     "role": "Developer"
                 }
             ],
@@ -2526,7 +2562,8 @@
                 },
                 {
                     "name": "Adam Harvey",
-                    "email": "aharvey@php.net"
+                    "email": "aharvey@php.net",
+                    "role": "Lead"
                 },
                 {
                     "name": "Bernhard Schussek",

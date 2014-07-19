@@ -22,6 +22,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder as BaseContainerBuild
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
@@ -29,9 +30,9 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 class ContainerBuilder extends BaseContainerBuilder
 {
     /**
-     * @param Application $application
-     * @param InputInterface    $input
-     * @param OutputInterface   $output
+     * @param Application     $application
+     * @param InputInterface  $input
+     * @param OutputInterface $output
      */
     public function __construct(Application $application, InputInterface $input, OutputInterface $output)
     {
@@ -51,7 +52,7 @@ class ContainerBuilder extends BaseContainerBuilder
     {
         if (null !== $this->parameterBag) {
             $blocks = $this->getCoreBlocks();
-
+            $blocks = array_merge($blocks, $this->getThirdPartyBlocks());
             foreach ($blocks as $block) {
                 $this->prepareBlock($block);
             }
@@ -69,7 +70,6 @@ class ContainerBuilder extends BaseContainerBuilder
     {
         return [
             new Block\Core\BldrBlock(),
-            new Block\Blocks\BlocksBlock(),
             new Block\Execute\ExecuteBlock(),
             new Block\Filesystem\FilesystemBlock(),
             new Block\Notify\NotifyBlock(),
@@ -78,6 +78,30 @@ class ContainerBuilder extends BaseContainerBuilder
             new Block\Database\MysqlBlock(),
             new Block\Miscellaneous\MiscellaneousBlock(),
         ];
+    }
+
+    /**
+     * Gets all the third party blocks from .bldr/blocks.yml
+     *
+     * @return array
+     */
+    private function getThirdPartyBlocks()
+    {
+        /** @var Application $application */
+        $application = $this->get('application');
+        $blockFile   = $application->getEmbeddedComposer()->getExternalRootDirectory().'/.bldr/blocks.yml';
+
+        if (!file_exists($blockFile)) {
+            return [];
+        }
+
+        $blockNames = Yaml::parse(file_get_contents($blockFile));
+        $blocks     = [];
+        foreach ($blockNames as $block) {
+            $blocks[] = new $block();
+        }
+
+        return $blocks;
     }
 
     /**
