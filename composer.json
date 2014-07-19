@@ -3,6 +3,7 @@
     "description":  "Simple Build System / Task Runner",
     "require":      {
         "php":                          ">=5.4",
+        "bldr-io/composer-plugin":      "~1.0.4",
         "dflydev/embedded-composer":    "dev-master@dev",
         "composer/composer":            "dev-master@dev",
         "symfony/console":              "~2.5.0",
