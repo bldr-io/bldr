@@ -13,7 +13,6 @@ namespace Bldr\Block\Miscellaneous;
 
 use Bldr\DependencyInjection\AbstractBlock;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>

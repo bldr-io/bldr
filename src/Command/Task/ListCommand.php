@@ -39,7 +39,8 @@ To use:
     <info>$ bldr %command.name%</info>
 
 EOF
-            );
+            )
+        ;
     }
 
     /**

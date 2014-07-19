@@ -13,7 +13,6 @@ namespace Bldr\Block\Watch;
 
 use Bldr\DependencyInjection\AbstractBlock;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**

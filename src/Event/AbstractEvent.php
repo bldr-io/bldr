@@ -11,7 +11,6 @@
 
 namespace Bldr\Event;
 
-use Bldr\Command\BuildCommand;
 use Symfony\Component\EventDispatcher\Event;
 
 /**

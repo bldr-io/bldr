@@ -11,7 +11,6 @@
 
 namespace Bldr\Call;
 
-use Bldr\Application;
 use Bldr\Model\Call;
 use Bldr\Model\Task;
 use Symfony\Component\Console\Helper\HelperSet;
@@ -20,8 +19,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Class AbstractCall
- *
  * @author Aaron Scherer <aequasi@gmail.com>
  */
 abstract class AbstractCall implements CallInterface

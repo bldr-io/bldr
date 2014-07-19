@@ -15,8 +15,6 @@ use Bldr\Application;
 use Bldr\Block\Core\Command\CallCommand;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
