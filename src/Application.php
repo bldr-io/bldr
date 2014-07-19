@@ -14,7 +14,6 @@ namespace Bldr;
 use Bldr\Command as Commands;
 use Bldr\DependencyInjection\ContainerBuilder;
 use Bldr\Helper\DialogHelper;
-use Composer\Autoload\ClassLoader;
 use Dflydev\EmbeddedComposer\Console\Command as ComposerCmd;
 use Dflydev\EmbeddedComposer\Core\EmbeddedComposerAwareInterface;
 use Dflydev\EmbeddedComposer\Core\EmbeddedComposerInterface;
