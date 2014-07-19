@@ -295,9 +295,9 @@ abstract class AbstractCall implements CallInterface
      * @return string|int
      * @throws \RuntimeException
      */
-    protected function getOption($name)
+    public function getOption($name, $validate = true)
     {
-        if (!array_key_exists($name, $this->options)) {
+        if ($validate && !array_key_exists($name, $this->options)) {
             throw new \RuntimeException($name.' is not a valid option.');
         }
 
