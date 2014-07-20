@@ -76,10 +76,6 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $p = new Process('clear');
-        $p->run();
-        $output->write($p->getOutput());
-
         $this->setInput($input)
             ->setOutput($output)
             ->getApplication()
