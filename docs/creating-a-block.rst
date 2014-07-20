@@ -178,18 +178,27 @@ Next, we need to add the call to the container, so we can use it in .bldr.yml fi
         }
     }
 
+6. Register block with bldr
+---------------------------
 
-With this, you should be able to add it to a .bldr.yml file:
+In the composer.json file, add the following:
+
+.. code-block:: json
+
+    {
+        "extra": {
+            "block-class": "Namespace\\To\\Your\\Block\\Class"
+        }
+    }
+
+With this, you should be able to install it with the `bldr.json` file and add it to a .bldr.yml file:
 
 .. code-block:: yaml
-
-    blocks:
-        - Acme\Block\Demo\AcmeDemoBlock
 
     bldr:
         name: some/name
         profile:
-            default:
+            test:
                 tasks:
                     - randomize
 
@@ -205,7 +214,7 @@ And run it!
 
 .. code-block:: shell
 
-    ./bldr.phar build -p default
+    ./bldr.phar build test
 
 
 There's some more advanced stuff, like being able to specify configuration:
@@ -241,7 +250,7 @@ There's some more advanced stuff, like being able to specify configuration:
         }
     }
 
-6. Advanced Config
+7. Advanced Config
 ------------------
 
 Then make a Configuration.php file. This config is the config from symfony. You can read their docs for more information.
