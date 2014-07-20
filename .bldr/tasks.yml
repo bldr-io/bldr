@@ -141,9 +141,6 @@ bldr:
             calls:
                 -
                     type: exec
-                    executable: clear
-                -
-                    type: exec
                     failOnError: false
                     executable: php
                     arguments: [bin/phpunit]
