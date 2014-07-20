@@ -24,6 +24,9 @@ abstract class FilesystemCall extends AbstractCall
      */
     protected $fileSystem;
 
+    /**
+     * Builds call with an instance of Symfony's Filesystem component
+     */
     public function __construct()
     {
         $this->fileSystem = new Filesystem();
