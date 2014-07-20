@@ -50,7 +50,8 @@ class ServiceCall extends ExecuteCall
     public function run()
     {
         $this->addOption('executable', true)
-            ->addOption('arguments', true);
+            ->addOption('arguments', true)
+        ;
 
         $arguments  = [];
         $sudo       = $this->getOption('sudo');
