@@ -21,4 +21,4 @@ if (!$classLoader = includeIfExists(__DIR__.'/../vendor/autoload.php')) {
     exit(1);
 }
 
-include 'bldr.php';
+include __DIR__.'/bldr.php';

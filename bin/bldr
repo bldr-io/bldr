@@ -25,4 +25,4 @@ if (
     exit(1);
 }
 
-include 'bldr.php';
+include __DIR__.'/bldr.php';
