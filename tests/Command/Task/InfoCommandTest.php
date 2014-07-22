@@ -59,6 +59,7 @@ class InfoCommandTest extends \PHPUnit_Framework_TestCase
         $this->call1->shouldReceive('getOptions')->andReturn(array(
             array('name' => 'option1', 'default' => null, 'description' => '', 'required' => false),
             array('name' => 'option2', 'default' => 'bldr!', 'description' => 'Option 2 description', 'required' => true),
+            array('name' => 'option3', 'default' => true, 'description' => '', 'required' => false),
         ));
 
         $this->call2->shouldReceive('getName')->andReturn('Name 2');
@@ -78,10 +79,11 @@ Options:
 +---------+----------------------+----------+---------+
 | Option  | Description          | Required | Default |
 +---------+----------------------+----------+---------+
-| option1 | No Description       | No       | NULL    |
+| option1 | No Description       | No       | null    |
+| option2 | Option 2 description | Yes      | "bldr!" |
+| option3 | No Description       | No       | true    |
 +---------+----------------------+----------+---------+
-| option2 | Option 2 description | Yes      | 'bldr!' |
-+---------+----------------------+----------+---------+
+
 EOO
         , $tester->getDisplay());
     }
