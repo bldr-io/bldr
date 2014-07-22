@@ -56,7 +56,7 @@ EOF
             [
                 "",
                 '<fg=green>Task Name</fg=green>: '.$service->getName(),
-                '<fg=green>Task Description</fg=green>: '.$service->getDescription() !== '' ?: 'No Description',
+                '<fg=green>Task Description</fg=green>: '.($service->getDescription() !== '' ? $service->getDescription() : 'No Description'),
                 "",
                 "<fg=green>Options:</fg=green>"
             ]
@@ -70,22 +70,12 @@ EOF
         $tableHelper->setBorderFormat('<fg=yellow>%s</fg=yellow>');
 
         foreach ($service->getOptions() as $option) {
-            $default = 'NULL';
-            if ($option['default'] !== null) {
-                if (is_array($option['default'])) {
-                    $option['default'] = json_encode($option['default']);
-                } elseif (is_bool($option['default'])) {
-                    $option['default'] = $option['default'] ? 'True' : 'False';
-                }
-                $default = $option['default'];
-            }
-
             $tableHelper->addRow(
                 [
                     $option['name'],
-                    $option['description'] !== '' ?: 'No Description',
+                    $option['description'] !== '' ? $option['description'] : 'No Description',
                     $option['required'] ? 'Yes' : 'No',
-                    $default
+                    json_encode($option['default'])
                 ]
             );
         }
