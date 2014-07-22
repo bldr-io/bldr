@@ -63,7 +63,7 @@ EOF
             $tableHelper->addRow(
                 [
                     $service->getName(),
-                    $service->getDescription() !== '' ?: 'No Description'
+                    $service->getDescription() !== '' ? $service->getDescription() : 'No Description'
                 ]
             );
         }
