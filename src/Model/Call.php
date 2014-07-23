@@ -29,7 +29,7 @@ class Call
     /**
      * @var bool $failOnError
      */
-    private $failOnError = false;
+    private $failOnError = true;
 
     /**
      * @var int[] $successCodes
