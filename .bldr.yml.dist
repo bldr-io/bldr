@@ -5,6 +5,3 @@ imports:
 bldr:
     name: bldr-io/bldr
     description: The PHP Task Runner you've been waiting for
-
-#blocks:
-#    - Bldr\Block\Watch\WatchBlock

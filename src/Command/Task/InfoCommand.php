@@ -52,11 +52,12 @@ EOF
     {
         $service = $this->findService($input->getArgument('task'));
 
+        $description = ($service->getDescription() !== '' ? $service->getDescription() : 'No Description');
         $output->writeln(
             [
                 "",
                 '<fg=green>Task Name</fg=green>: '.$service->getName(),
-                '<fg=green>Task Description</fg=green>: '.($service->getDescription() !== '' ? $service->getDescription() : 'No Description'),
+                '<fg=green>Task Description</fg=green>: '.$description,
                 "",
                 "<fg=green>Options:</fg=green>"
             ]

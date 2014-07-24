@@ -128,7 +128,7 @@ EOF
                 ]
             );
 
-            $this->fetchTasks($profileName);
+            $this->fetchTasks($profile);
             $this->addEvent(Event::PRE_PROFILE, new Events\ProfileEvent($this, true));
         } else {
             $this->buildTasks($tasks);
@@ -157,12 +157,23 @@ EOF
     }
 
     /**
-     * @param string $profileName
+     * @param array $profile
      */
-    private function fetchTasks($profileName)
+    private function fetchTasks(array $profile)
     {
-        $profile = $this->container->getParameter('profiles')[$profileName];
+        if (!empty($profile['uses']) && !empty($profile['uses']['before'])) {
+            foreach ($profile['uses']['before'] as $name) {
+                $this->buildTasks($this->getProfile($name));
+            }
+        }
+
         $this->buildTasks($profile['tasks']);
+
+        if (!empty($profile['uses']) && !empty($profile['uses']['after'])) {
+            foreach ($profile['uses']['after'] as $name) {
+                $this->buildTasks($this->getProfile($name));
+            }
+        }
     }
 
     /**

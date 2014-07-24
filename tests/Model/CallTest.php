@@ -24,7 +24,7 @@ class CallTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('mock', $call->getType());
         $this->assertEmpty($call->getOptions());
-        $this->assertFalse($call->getFailOnError());
+        $this->assertTrue($call->getFailOnError());
         $this->assertEquals([0], $call->getSuccessCodes());
     }
 }
