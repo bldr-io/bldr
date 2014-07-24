@@ -17,14 +17,29 @@ Create a ``.bldr.yml(.dist)`` file:
                 description: Gets ran when `./bldr.phar build someTask` is called
                 tasks:
                     - foo
+            someOtherTask:
+                tasks:
+                    - bar
+            inheritanceExample:
+                description: Will run the tasks from `someTask` and then `someOtherTask`.
+                uses:
+                    before: [someTask]
+                    after: [someOtherTask]
         tasks:
             foo:
-                description: FooBar task
+                description: Foo task
                 calls:
                     -
                         type: exec
                         executable: echo
                         arguments: [Hello World]
+            bar:
+                description: Bar task
+                calls:
+                    -
+                        type: exec
+                        executable: sleep
+                        arguments: [1]
 
 To view a list of available call types, run:
 

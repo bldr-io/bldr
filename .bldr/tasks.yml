@@ -75,18 +75,16 @@ bldr:
                     seconds: 1
                 -
                     type: filesystem:remove
+                    failOnError: false
                     files: [build/coverage, build/logs]
                 -
                     type: filesystem:mkdir
-                    failOnError: true
                     files: [build/coverage, build/logs]
                 -
                     type: filesystem:touch
-                    failOnError: true
                     files: [build/coverage/index.html]
                 -
                     type: exec
-                    failOnError: true
                     executable: composer
                     arguments: [install, --prefer-dist]
                 -
@@ -97,7 +95,6 @@ bldr:
             calls:
                 -
                     type: apply
-                    failOnError: true
                     src:
                         - { path: [src, tests], files: *.php, recursive: true }
                     output: /dev/null
@@ -131,7 +128,6 @@ bldr:
             calls:
                 -
                     type: exec
-                    failOnError: true
                     executable: php
                     arguments:
                         - bin/phpunit
