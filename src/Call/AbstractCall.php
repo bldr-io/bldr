@@ -315,8 +315,8 @@ abstract class AbstractCall implements CallInterface
     {
         if (is_array($option)) {
             $tokenizedOptions = [];
-            foreach ($option as $opt) {
-                $tokenizedOptions[] = $this->replaceTokens($opt);
+            foreach ($option as $key => $opt) {
+                $tokenizedOptions[$key] = $this->replaceTokens($opt);
             }
 
             return $tokenizedOptions;

@@ -217,7 +217,7 @@ EOF
                 sprintf(
                     'There is no profile with the name \'%s\', expecting: (%s)',
                     $name,
-                    array_keys($profiles)
+                    implode(', ', array_keys($profiles))
                 )
             );
         }
