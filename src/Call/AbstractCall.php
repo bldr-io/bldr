@@ -301,9 +301,7 @@ abstract class AbstractCall implements CallInterface
             throw new \RuntimeException($name.' is not a valid option.');
         }
 
-        $this->replaceTokens($this->options[$name]['value']);
-
-        return $this->options[$name]['value'];
+        return $this->replaceTokens($this->options[$name]['value']);
     }
 
     /**
@@ -313,29 +311,26 @@ abstract class AbstractCall implements CallInterface
      *
      * @return mixed
      */
-    private function replaceTokens(&$option)
+    private function replaceTokens($option)
     {
-        if (!is_string($option)) {
-            if (is_array($option)) {
-                foreach ($option as &$opt) {
-                    $this->replaceTokens($opt);
-                }
+        if (is_array($option)) {
+            $tokenizedOptions = [];
+            foreach ($option as $opt) {
+                $tokenizedOptions[] = $this->replaceTokens($opt);
             }
 
-            return;
+            return $tokenizedOptions;
         }
+        
+        preg_replace_callback('/\$(.+)\$|\$\{(.+)\}/', function ($match) {
+            if ($value = getenv($match[1] ?: $match[2])) {
+                return $value;
+            }
+            
+            return $match[0];
+        }, $option);
 
-        $token_format = '/\$(.+)\$/';
-
-        preg_match_all($token_format, $option, $matches, PREG_SET_ORDER);
-
-        if (sizeof($matches) < 1) {
-            return;
-        }
-
-        foreach ($matches as $match) {
-            $option = str_replace($match[0], getenv($match[1]), $option);
-        }
+        return $option;
     }
 
     /**
