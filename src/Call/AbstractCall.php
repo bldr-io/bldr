@@ -322,15 +322,11 @@ abstract class AbstractCall implements CallInterface
             return $tokenizedOptions;
         }
         
-        preg_replace_callback('/\$(.+)\$|\$\{(.+)\}/', function ($match) {
-            if ($value = getenv($match[1] ?: $match[2])) {
-                return $value;
-            }
-            
-            return $match[0];
-        }, $option);
+        return preg_replace_callback('/\$(.+)\$|\$\{(.+)\}/', function ($match) {
+            $val = isset($match[2]) ? getenv($match[2]) : getenv($match[1]);
 
-        return $option;
+            return $val !== false ? $val : $match[0];
+        }, $option);
     }
 
     /**

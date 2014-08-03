@@ -60,15 +60,16 @@ class ExecuteCall extends AbstractCall
             return true;
         }
 
+
         if ($this->getOutput()->isVerbose()) {
             $this->getOutput()->writeln(
                 sprintf(
                     "Setting timeout for %d seconds.",
-                    $this->getOption('timeout') !== 0 ?: 'null'
+                    $this->getOption('timeout')
                 )
             );
         }
-        $builder->setTimeout($this->getOption('timeout') !== 0 ?: null);
+        $builder->setTimeout($this->getOption('timeout') !== 0 ? $this->getOption('timeout') : null);
 
         if ($this->hasOption('cwd')) {
             $builder->setWorkingDirectory($this->getOption('cwd'));
