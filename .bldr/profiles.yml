@@ -38,6 +38,6 @@ bldr:
             description: Releases Bldr
             uses:
                 after:
-                    - buildPhar
+                    - build
             tasks:
                 - release
