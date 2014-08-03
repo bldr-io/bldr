@@ -163,7 +163,7 @@ EOF
     {
         if (!empty($profile['uses']) && !empty($profile['uses']['before'])) {
             foreach ($profile['uses']['before'] as $name) {
-                $this->buildTasks($this->getProfile($name));
+                $this->buildTasks($this->getProfile($name)['tasks']);
             }
         }
 
@@ -171,7 +171,7 @@ EOF
 
         if (!empty($profile['uses']) && !empty($profile['uses']['after'])) {
             foreach ($profile['uses']['after'] as $name) {
-                $this->buildTasks($this->getProfile($name));
+                $this->buildTasks($this->getProfile($name)['tasks']);
             }
         }
     }

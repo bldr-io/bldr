@@ -13,8 +13,10 @@ bldr:
                 - testDev
         watch:
             description: "Watch Profile"
+            uses:
+                before:
+                    - test
             tasks:
-                - testDev
                 - watch
         server:
             description: Starts a server and waits for a bit. Then kills it.
@@ -34,6 +36,8 @@ bldr:
                 - buildPhar
         release:
             description: Releases Bldr
+            uses:
+                after:
+                    - buildPhar
             tasks:
                 - release
-                - buildPhar
