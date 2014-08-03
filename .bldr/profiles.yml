@@ -34,8 +34,6 @@ bldr:
                 - buildPhar
         release:
             description: Releases Bldr
-            uses:
-                after:
-                    - build
             tasks:
                 - release
+                - buildPhar
