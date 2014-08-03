@@ -18,26 +18,25 @@ if [ ! -f $(pwd)/bldr.phar ]; then
 fi
 
 cd bldr-phar
+git checkout master
 
-if [ -z $1 ]; then
-    git checkout dev
-    cp ../bldr.phar ./
-    git add bldr.phar
+if [ $1 == '$RELEASE_VERSION$' ]; then
+    mkdir -p dev
+    cp ../bldr.phar ./dev/
+    git add dev/bldr.phar -f
     git commit -m "Updating Phar"
-    git push origin dev
+    git push origin master
 else
-    git checkout -b $1
-    git rm -rf .
-    cp ../bldr.phar ./
-    git add bldr.phar
+    mkdir -p $1
+    cp ../bldr.phar ./$1/
+    git add $1/bldr.phar -f
     git commit -m "Updating Phar"
-    git push origin $1
+    git push origin master
 
-    git checkout stable
-    cp ../bldr.phar ./
-    git add bldr.phar
+    cp ../bldr.phar ./stable/
+    git add stable/bldr.phar -f
     git commit -m "Updating Phar"
-    git push origin stable
+    git push origin master
 fi
 
 cd -
