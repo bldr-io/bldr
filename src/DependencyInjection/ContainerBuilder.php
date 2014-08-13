@@ -41,7 +41,7 @@ class ContainerBuilder extends BaseContainerBuilder
     }
 
     /**
-     * @todo Add logic to find other blocks
+     * Compiles the container with third party blocks
      */
     public function compile()
     {
