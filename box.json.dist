@@ -33,7 +33,6 @@
             "in": ["bin", "src", "vendor"]
         }
     ],
-    "extract": true,
     "git-commit": "git-commit",
     "git-version": "package_version",
     "main": "bin/bldr-phar-stub",
