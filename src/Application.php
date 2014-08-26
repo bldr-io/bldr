@@ -59,6 +59,13 @@ EOF;
     private $embeddedComposer;
 
     /**
+     * Are we building via shortcut
+     *
+     * @var bool $shortcut
+     */
+    private $shortcut = false;
+
+    /**
      * @param EmbeddedComposerInterface $embeddedComposer
      *
      * @return Application
@@ -172,6 +179,38 @@ EOF;
         }
 
         return parent::doRun($input, $output);
+    }
+
+    /**
+     * Falls back to "build" for a shortcut
+     *
+     * @param string $name
+     *
+     * @return Command
+     */
+    public function find($name)
+    {
+        try {
+            return parent::find($name);
+        } catch (\InvalidArgumentException $e) {
+            $this->shortcut = true;
+            return parent::find('build');
+        }
+    }
+
+    /**
+     * Resets arguments if shortcutting
+     *
+     * @return \Symfony\Component\Console\Input\InputDefinition
+     */
+    public function getDefinition()
+    {
+        $definition = parent::getDefinition();
+        if ($this->shortcut) {
+            $definition->setArguments();
+        }
+
+        return $definition;
     }
 
     /**
