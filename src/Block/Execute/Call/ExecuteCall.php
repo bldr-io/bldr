@@ -13,8 +13,8 @@ namespace Bldr\Block\Execute\Call;
 
 use Bldr\Call\AbstractCall;
 use Bldr\Event;
-use Bldr\Event\PreExecuteEvent;
 use Bldr\Event\PostExecuteEvent;
+use Bldr\Event\PreExecuteEvent;
 use Symfony\Component\Console\Helper\FormatterHelper;
 use Symfony\Component\Console\Output\StreamOutput;
 use Symfony\Component\Process\ProcessBuilder;
@@ -37,8 +37,7 @@ class ExecuteCall extends AbstractCall
             ->addOption('output', false, 'Sets the location to output to')
             ->addOption('append', false, 'If output is set, should it append?', false)
             ->addOption('dry_run', true, 'If set, will not run command', false)
-            ->addOption('timeout', true, 'Timeout for the command', 0)
-        ;
+            ->addOption('timeout', true, 'Timeout for the command', 0);
     }
 
     /**
@@ -59,7 +58,6 @@ class ExecuteCall extends AbstractCall
         if ($preExecuteEvent->isPropagationStopped()) {
             return true;
         }
-
 
         if ($this->getOutput()->isVerbose()) {
             $this->getOutput()->writeln(
@@ -103,11 +101,14 @@ class ExecuteCall extends AbstractCall
             $output = $this->getOutput();
         }
 
-        $process->run(
+        $process->start(
             function ($type, $buffer) use ($output) {
                 $output->write($buffer);
             }
         );
+
+        while ($process->isRunning()) {
+        }
 
         $postExecuteEvent = new PostExecuteEvent($this, $process);
         $this->getDispatcher()->dispatch(Event::POST_EXECUTE, $postExecuteEvent);
