@@ -30,7 +30,7 @@ bldr:
             description: Tests the MiscellaneousExtension calls
             tasks:
                 - misc
-        build:
+        buildPhar:
             description: Builds the phar
             tasks:
                 - buildPhar
@@ -38,6 +38,6 @@ bldr:
             description: Releases Bldr
             uses:
                 after:
-                    - build
+                    - buildPhar
             tasks:
                 - release
