@@ -31,7 +31,7 @@ It is suggested that you use the phar, as you can get conflicts with dependencie
 
     # Or
 
-    $ composer require bldr-io/bldr "~6.3.0"
+    $ composer require bldr-io/bldr "~6.4.0"
 
 
 And that's it! From here, you should be able to run ``bldr`` if you set it up globally, or ``./bin/bldr`` or ``php ./vendor/bin/bldr`` if you set
