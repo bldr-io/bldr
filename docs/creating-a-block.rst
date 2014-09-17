@@ -1,7 +1,7 @@
 Creating A Block
 ================
 
-Creating a `Bldr Block` for `Bldr` is fairly similar to creating a Bundle for Symfony2. Here's a quick guide:
+Creating a `Bldr Block` for `Bldr` is fairly similar to creating a Bundle for Symfony. Here's a quick guide:
 
 1. Create a repo
 ----------------
@@ -253,7 +253,7 @@ There's some more advanced stuff, like being able to specify configuration:
 7. Advanced Config
 ------------------
 
-Then make a Configuration.php file. This config is the config from symfony. You can read their docs for more information.
+Then make a Configuration.php file. This config is the config from Symfony. You can read their docs for more information.
 
 *src/Configuration.php*
 
