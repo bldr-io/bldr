@@ -84,7 +84,9 @@ class ContainerBuilder extends BaseContainerBuilder
     {
         /** @var Application $application */
         $application = $this->get('application');
-        $blockFile   = $application->getEmbeddedComposer()->getExternalRootDirectory().'/.bldr/blocks.yml';
+        $config = $application->getEmbeddedComposer()->getExternalComposerConfig();
+        $loadBlock = $config->has('block-loader') ? $config->get('block-loader') : '.bldr/blocks.yml';
+        $blockFile = $application->getEmbeddedComposer()->getExternalRootDirectory().DIRECTORY_SEPARATOR.$loadBlock;
 
         if (!file_exists($blockFile)) {
             return [];
