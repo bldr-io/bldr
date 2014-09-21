@@ -30,7 +30,7 @@ class BaseProphecy extends \PHPUnit_Framework_TestCase
 
     protected function setup()
     {
-        $this->prophet = new Prophet;
+        $this->prophet = new Prophet();
     }
 
     protected function tearDown()

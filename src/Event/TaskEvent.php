@@ -27,7 +27,7 @@ class TaskEvent extends AbstractEvent
     /**
      * @param BuildCommand $command
      * @param Task         $task
-     * @param bool      $running
+     * @param bool         $running
      */
     public function __construct(BuildCommand $command, Task $task, $running = true)
     {

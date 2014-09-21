@@ -12,8 +12,8 @@
 namespace Bldr\Command;
 
 use Bldr\Application;
-use Bldr\Event as Events;
 use Bldr\Event;
+use Bldr\Event as Events;
 use Bldr\Model\Task;
 use Bldr\Registry\TaskRegistry;
 use Bldr\Service\Builder;
@@ -22,7 +22,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Process\Process;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>

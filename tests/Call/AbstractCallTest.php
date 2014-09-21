@@ -11,10 +11,10 @@
 
 namespace Bldr\Test\Call;
 
+use Bldr\Call\CallInterface;
 use Bldr\Model\Call;
 use Bldr\Model\Task;
 use Bldr\Test\Mock\Call\MockCall;
-use Bldr\Call\CallInterface;
 use Mockery\MockInterface;
 
 /**

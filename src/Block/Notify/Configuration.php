@@ -11,8 +11,8 @@
 
 namespace Bldr\Block\Notify;
 
-use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>

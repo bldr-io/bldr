@@ -13,10 +13,10 @@ namespace Bldr\Command\Task;
 
 use Bldr\Call\CallInterface;
 use Bldr\Command\AbstractCommand;
+use Symfony\Component\Console\Helper\TableHelper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Helper\TableHelper;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
@@ -92,7 +92,6 @@ EOF
      */
     private function findService($name)
     {
-
         $serviceIds = array_keys($this->container->findTaggedServiceIds('bldr'));
         foreach ($serviceIds as $id) {
             /** @var CallInterface $service */

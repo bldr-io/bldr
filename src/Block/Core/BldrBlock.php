@@ -41,8 +41,8 @@ class BldrBlock extends AbstractBlock
     public function getCompilerPasses()
     {
         return [
-            new CompilerPass\BuilderCompilerPass,
-            new CompilerPass\CommandCompilerPass
+            new CompilerPass\BuilderCompilerPass(),
+            new CompilerPass\CommandCompilerPass()
         ];
     }
 

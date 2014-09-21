@@ -66,7 +66,7 @@ abstract class AbstractBlock extends Extension implements BlockInterface
     }
 
     /**
-     * @param array            $config
+     * @param array                   $config
      * @param SymfonyContainerBuilder $container
      *
      * @return mixed
@@ -142,7 +142,7 @@ abstract class AbstractBlock extends Extension implements BlockInterface
 
     /**
      * @param string $name
-     * @param mixed $value
+     * @param mixed  $value
      */
     protected function setParameter($name, $value)
     {
