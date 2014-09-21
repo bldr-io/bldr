@@ -12,8 +12,8 @@
 namespace Bldr\Service;
 
 use Bldr\Call\CallInterface;
-use Bldr\Event\PreCallEvent;
 use Bldr\Event;
+use Bldr\Event\PreCallEvent;
 use Bldr\Model\Call;
 use Bldr\Model\Task;
 use Bldr\Registry\TaskRegistry;

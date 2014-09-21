@@ -31,6 +31,5 @@ class MockCall extends AbstractCall
      */
     public function run()
     {
-
     }
 }

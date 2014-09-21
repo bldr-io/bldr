@@ -194,6 +194,7 @@ EOF;
             return parent::find($name);
         } catch (\InvalidArgumentException $e) {
             $this->shortcut = true;
+
             return parent::find('build');
         }
     }
