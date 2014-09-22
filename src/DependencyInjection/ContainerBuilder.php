@@ -80,7 +80,7 @@ class ContainerBuilder extends BaseContainerBuilder
      *
      * @return array
      */
-    private function getThirdPartyBlocks()
+    public function getThirdPartyBlocks()
     {
         /** @var Application $application */
         $application = $this->get('application');
