@@ -77,7 +77,7 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         $embeddedComposer
             ->expects($this->once())
             ->method('getExternalRootDirectory')
-            ->willReturn('/my-project')
+            ->willReturn(vfsStream::url('root'))
         ;
         $this->application
             ->expects($this->once())
@@ -85,14 +85,11 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
             ->willReturn($embeddedComposer)
         ;
 
-        $myProjectFolder = vfsStream::newDirectory('my-project')->at($this->root);
-        $bldrFolder = vfsStream::newDirectory('build')->at($myProjectFolder);
+        $bldrFolder = vfsStream::newDirectory('build')->at($this->root);
         vfsStream::newFile('blocks.yml')
-            ->withContent('- Block\Miscellaneous\MiscellaneousBlock')
+            ->withContent('[ \stdClass, \stdClass ]')
             ->at($bldrFolder)
         ;
-
-        $this->assertTrue(file_exists('my-project/build/blocks.yml'));
 
         $this->containerBuilder = new ContainerBuilder(
             $this->application,
@@ -100,6 +97,6 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
             $this->output
         );
 
-        $this->assertCount(1, $this->containerBuilder->getThirdPartyBlocks());
+        $this->assertCount(2, $this->containerBuilder->getThirdPartyBlocks());
     }
 }
