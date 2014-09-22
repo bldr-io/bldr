@@ -231,6 +231,7 @@ EOF;
         }
 
         $this->container = new ContainerBuilder($this, $input, $output);
+        $this->container->compile();
     }
 
     /**

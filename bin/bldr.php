@@ -59,11 +59,15 @@ if ($projectDir = $input->getParameterOption('--project-dir')) {
     chdir($projectDir);
 }
 
+if (!$vendorDir = $input->getParameterOption('--vendor-dir')) {
+    $vendorDir = '.bldr/vendor/';
+}
+
 $embeddedComposerBuilder = new EmbeddedComposerBuilder($classLoader);
 
 $embeddedComposer = $embeddedComposerBuilder
     ->setComposerFilename('bldr.json')
-    ->setVendorDirectory('.bldr/vendor/')
+    ->setVendorDirectory($vendorDir)
     ->build()
 ;
 

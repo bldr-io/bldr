@@ -95,7 +95,7 @@ class Config
     /**
      * @param InputInterface $input
      *
-     * @return string
+     * @return array
      * @throws \Exception
      */
     public static function findFiles(InputInterface $input)
