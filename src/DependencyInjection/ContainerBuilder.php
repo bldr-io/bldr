@@ -36,8 +36,6 @@ class ContainerBuilder extends BaseContainerBuilder
         $this->set('application', $application);
         $this->set('input', $input);
         $this->set('output', $output);
-
-        $this->compile();
     }
 
     /**
@@ -59,23 +57,6 @@ class ContainerBuilder extends BaseContainerBuilder
     }
 
     /**
-     * @return array
-     */
-    private function getCoreBlocks()
-    {
-        return [
-            new Block\Core\BldrBlock(),
-            new Block\Execute\ExecuteBlock(),
-            new Block\Filesystem\FilesystemBlock(),
-            new Block\Notify\NotifyBlock(),
-            new Block\Watch\WatchBlock(),
-            new Block\Database\DatabaseBlock(),
-            new Block\Database\MysqlBlock(),
-            new Block\Miscellaneous\MiscellaneousBlock(),
-        ];
-    }
-
-    /**
      * Gets all the third party blocks from .bldr/blocks.yml
      *
      * @return array
@@ -84,9 +65,10 @@ class ContainerBuilder extends BaseContainerBuilder
     {
         /** @var Application $application */
         $application = $this->get('application');
-        $config = $application->getEmbeddedComposer()->getExternalComposerConfig();
+        $embeddedComposer = $application->getEmbeddedComposer();
+        $config = $embeddedComposer->getExternalComposerConfig();
         $loadBlock = $config->has('block-loader') ? $config->get('block-loader') : '.bldr/blocks.yml';
-        $blockFile = $application->getEmbeddedComposer()->getExternalRootDirectory().DIRECTORY_SEPARATOR.$loadBlock;
+        $blockFile = $embeddedComposer->getExternalRootDirectory().DIRECTORY_SEPARATOR.$loadBlock;
 
         if (!file_exists($blockFile)) {
             return [];
@@ -103,6 +85,23 @@ class ContainerBuilder extends BaseContainerBuilder
         }
 
         return $blocks;
+    }
+
+    /**
+     * @return array
+     */
+    private function getCoreBlocks()
+    {
+        return [
+            new Block\Core\BldrBlock(),
+            new Block\Execute\ExecuteBlock(),
+            new Block\Filesystem\FilesystemBlock(),
+            new Block\Notify\NotifyBlock(),
+            new Block\Watch\WatchBlock(),
+            new Block\Database\DatabaseBlock(),
+            new Block\Database\MysqlBlock(),
+            new Block\Miscellaneous\MiscellaneousBlock(),
+        ];
     }
 
     /**

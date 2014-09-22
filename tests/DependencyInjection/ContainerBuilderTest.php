@@ -12,10 +12,11 @@
 namespace Bldr\Test\DependencyInjection;
 
 use Bldr\DependencyInjection\ContainerBuilder;
+use org\bovigo\vfs\vfsStream;
+use org\bovigo\vfs\vfsStreamWrapper;
 
 /**
  * @author Luis Cordova <cordoval@gmail.com>
- * @group now
  */
 class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,6 +27,7 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
     protected $application;
     protected $input;
     protected $output;
+    protected $root;
 
     public function setUp()
     {
@@ -41,11 +43,9 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock()
         ;
-        $this->containerBuilder = new ContainerBuilder(
-            $this->application,
-            $this->input,
-            $this->output
-        );
+
+        vfsStreamWrapper::register();
+        vfsStreamWrapper::setRoot($this->root = vfsStream::newDirectory('exampleDir'));
     }
 
     public function testGetThirdPartyBlocks()
@@ -54,21 +54,47 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock()
         ;
-        $config = $this->getMockBuilder('Bldr\Config')
+        $config = $this->getMockBuilder('Composer\Config')
             ->disableOriginalConstructor()
             ->getMock()
+        ;
+        $config->expects($this->once())
+            ->method('has')
+            ->with('block-loader')
+            ->willReturn(true)
+        ;
+        $config->expects($this->once())
+            ->method('get')
+            ->with('block-loader')
+            ->willReturn('build/blocks.yml')
         ;
         $embeddedComposer
             ->expects($this->once())
             ->method('getExternalComposerConfig')
             ->willReturn($config)
         ;
-
+        $embeddedComposer
+            ->expects($this->once())
+            ->method('getExternalRootDirectory')
+            ->willReturn('/my/project')
+        ;
         $this->application
             ->expects($this->once())
             ->method('getEmbeddedComposer')
             ->willReturn($embeddedComposer)
         ;
+
+        $bldrFolder = vfsStream::newDirectory('.bldr')->at($this->root);
+        vfsStream::newFile('blocks.yml')
+            ->withContent('- Block\Miscellaneous\MiscellaneousBlock')
+            ->at($bldrFolder)
+        ;
+
+        $this->containerBuilder = new ContainerBuilder(
+            $this->application,
+            $this->input,
+            $this->output
+        );
 
         $this->assertCount(2, $this->containerBuilder->getThirdPartyBlocks());
     }
