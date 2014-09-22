@@ -13,9 +13,6 @@ namespace Bldr\Test\DependencyInjection;
 
 use Bldr\DependencyInjection\ContainerBuilder;
 use org\bovigo\vfs\vfsStream;
-use org\bovigo\vfs\vfsStreamContent;
-use org\bovigo\vfs\vfsStreamDirectory;
-use org\bovigo\vfs\vfsStreamWrapper;
 
 /**
  * @author Luis Cordova <cordoval@gmail.com>
