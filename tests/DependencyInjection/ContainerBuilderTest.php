@@ -46,7 +46,7 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
             ->getMock()
         ;
 
-        vfsStream::setup();
+        $this->root = vfsStream::setup();
     }
 
     public function testGetThirdPartyBlocks()
@@ -85,22 +85,21 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
             ->willReturn($embeddedComposer)
         ;
 
-        $root = vfsStreamWrapper::getRoot();
-        $myProjectFolder = vfsStream::newDirectory('my-project')->at($root);
+        $myProjectFolder = vfsStream::newDirectory('my-project')->at($this->root);
         $bldrFolder = vfsStream::newDirectory('build')->at($myProjectFolder);
         vfsStream::newFile('blocks.yml')
             ->withContent('- Block\Miscellaneous\MiscellaneousBlock')
             ->at($bldrFolder)
         ;
-        $this->assertTrue($root->hasChild('my-project'));
-        $this->assertTrue($root->hasChild('my-project/build/blocks.yml'));
+
         $this->assertTrue(file_exists('my-project/build/blocks.yml'));
+
         $this->containerBuilder = new ContainerBuilder(
             $this->application,
             $this->input,
             $this->output
         );
 
-        $this->assertCount(2, $this->containerBuilder->getThirdPartyBlocks());
+        $this->assertCount(1, $this->containerBuilder->getThirdPartyBlocks());
     }
 }
