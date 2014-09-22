@@ -13,6 +13,8 @@ namespace Bldr\Test\DependencyInjection;
 
 use Bldr\DependencyInjection\ContainerBuilder;
 use org\bovigo\vfs\vfsStream;
+use org\bovigo\vfs\vfsStreamContent;
+use org\bovigo\vfs\vfsStreamDirectory;
 use org\bovigo\vfs\vfsStreamWrapper;
 
 /**
@@ -44,8 +46,7 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
             ->getMock()
         ;
 
-        vfsStreamWrapper::register();
-        vfsStreamWrapper::setRoot($this->root = vfsStream::newDirectory('exampleDir'));
+        vfsStream::setup();
     }
 
     public function testGetThirdPartyBlocks()
@@ -76,7 +77,7 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
         $embeddedComposer
             ->expects($this->once())
             ->method('getExternalRootDirectory')
-            ->willReturn('/my/project')
+            ->willReturn('/my-project')
         ;
         $this->application
             ->expects($this->once())
@@ -84,12 +85,16 @@ class ContainerBuilderTest extends \PHPUnit_Framework_TestCase
             ->willReturn($embeddedComposer)
         ;
 
-        $bldrFolder = vfsStream::newDirectory('.bldr')->at($this->root);
+        $root = vfsStreamWrapper::getRoot();
+        $myProjectFolder = vfsStream::newDirectory('my-project')->at($root);
+        $bldrFolder = vfsStream::newDirectory('build')->at($myProjectFolder);
         vfsStream::newFile('blocks.yml')
             ->withContent('- Block\Miscellaneous\MiscellaneousBlock')
             ->at($bldrFolder)
         ;
-
+        $this->assertTrue($root->hasChild('my-project'));
+        $this->assertTrue($root->hasChild('my-project/build/blocks.yml'));
+        $this->assertTrue(file_exists('my-project/build/blocks.yml'));
         $this->containerBuilder = new ContainerBuilder(
             $this->application,
             $this->input,
