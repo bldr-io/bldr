@@ -14,18 +14,19 @@ namespace Bldr\Block\Miscellaneous\Call;
 use Bldr\Call\AbstractCall;
 
 /**
- * @author Aaron Scherer <aequasi@gmail.com>
+ * @author Luis Cordova <cordoval@gmail.com>
+ * @author Raul Rodriguez <raulrodriguez782@gmail.com>
  */
-class SleepCall extends AbstractCall
+class ExportCall extends AbstractCall
 {
     /**
      * {@inheritDoc}
      */
     public function configure()
     {
-        $this->setName('sleep')
-            ->setDescription('Sleep for the given amount of time')
-            ->addOption('seconds', true, 'Milliseconds to sleep for.')
+        $this->setName('export')
+            ->setDescription('Exports an environmental variable within the context of the bldr task run.')
+            ->addOption('env_vars', false, 'Arguments to run on the export', [])
         ;
     }
 
@@ -34,7 +35,12 @@ class SleepCall extends AbstractCall
      */
     public function run()
     {
-        sleep($this->getOption('seconds'));
+        foreach ($this->getOption('env_vars') as $argument) {
+            if (2 !== count(explode('=', $argument))) {
+                throw new \RuntimeException('env var needs to follow the pattern e.g. SYMFONY_ENV=prod');
+            };
+            putenv($argument);
+        }
 
         return true;
     }

@@ -26,5 +26,6 @@ class MiscellaneousBlock extends AbstractBlock
     {
         $this->addCall('bldr_miscellaneous.sleep', 'Bldr\Block\Miscellaneous\Call\SleepCall');
         $this->addCall('bldr_miscellaneous.service', 'Bldr\Block\Miscellaneous\Call\ServiceCall');
+        $this->addCall('bldr_miscellaneous.export', 'Bldr\Block\Miscellaneous\Call\ExportCall');
     }
 }
