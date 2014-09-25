@@ -29,11 +29,10 @@ class MiscellaneousBlock extends AbstractBlock
         $this->addCall('bldr_miscellaneous.service', 'Bldr\Block\Miscellaneous\Call\ServiceCall');
 
         $this->addService(
-                'bldr_miscellaneous.service.envvar_repository',
-                'Bldr\Block\Miscellaneous\Service\EnvironmentVariableRepository'
-            )
-            ->setPublic(false)
-        ;
+            'bldr_miscellaneous.service.envvar_repository',
+            'Bldr\Block\Miscellaneous\Service\EnvironmentVariableRepository'
+        )
+        ->setPublic(false);
 
         $this->addCall(
             'bldr_miscellaneous.export',
@@ -42,12 +41,11 @@ class MiscellaneousBlock extends AbstractBlock
         );
 
         $this->addService(
-                'bldr_miscellaneous.service.envvar_subscriber',
-                'Bldr\Block\Miscellaneous\Service\EnvironmentVariableSubscriber',
-                [new Reference('bldr_miscellaneous.service.envvar_repository')]
-            )
-            ->setPublic(false)
-            ->addTag('bldr_subscriber')
-        ;
+            'bldr_miscellaneous.service.envvar_subscriber',
+            'Bldr\Block\Miscellaneous\Service\EnvironmentVariableSubscriber',
+            [new Reference('bldr_miscellaneous.service.envvar_repository')]
+        )
+        ->setPublic(false)
+        ->addTag('bldr_subscriber');
     }
 }
