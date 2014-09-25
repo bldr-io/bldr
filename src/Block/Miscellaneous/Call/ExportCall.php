@@ -11,7 +11,7 @@
 
 namespace Bldr\Block\Miscellaneous\Call;
 
-use Bldr\Block\Miscellaneous\Service\EnvVarRepository;
+use Bldr\Block\Miscellaneous\Service\EnvironmentVariableRepository;
 use Bldr\Call\AbstractCall;
 
 /**
@@ -20,11 +20,11 @@ use Bldr\Call\AbstractCall;
  */
 class ExportCall extends AbstractCall
 {
-    protected $envVarRepository;
+    protected $environmentVariableRepository;
 
-    public function __construct(EnvVarRepository $envVarRepository)
+    public function __construct(EnvironmentVariableRepository $environmentVariableRepository)
     {
-        $this->envVarRepository = $envVarRepository;
+        $this->environmentVariableRepository = $environmentVariableRepository;
     }
 
     /**
@@ -47,7 +47,7 @@ class ExportCall extends AbstractCall
             if (2 !== count(explode('=', $argument))) {
                 throw new \RuntimeException('env var needs to follow the pattern e.g. SYMFONY_ENV=prod');
             };
-            $this->envVarRepository->addEnvVar($argument);
+            $this->environmentVariableRepository->addEnvironmentVariable($argument);
         }
 
         return true;

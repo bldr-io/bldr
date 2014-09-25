@@ -28,7 +28,10 @@ class MiscellaneousBlock extends AbstractBlock
         $this->addCall('bldr_miscellaneous.sleep', 'Bldr\Block\Miscellaneous\Call\SleepCall');
         $this->addCall('bldr_miscellaneous.service', 'Bldr\Block\Miscellaneous\Call\ServiceCall');
 
-        $this->addService('bldr_miscellaneous.service.envvar_repository', 'Bldr\Block\Miscellaneous\Service\EnvVarRepository')
+        $this->addService(
+                'bldr_miscellaneous.service.envvar_repository',
+                'Bldr\Block\Miscellaneous\Service\EnvironmentVariableRepository'
+            )
             ->setPublic(false)
         ;
 
@@ -39,9 +42,10 @@ class MiscellaneousBlock extends AbstractBlock
         );
 
         $this->addService(
-            'bldr_miscellaneous.service.envvar_subscriber', 'Bldr\Block\Miscellaneous\Service\EnvVarSubscriber',
-            [new Reference('bldr_miscellaneous.service.envvar_repository')]
-        )
+                'bldr_miscellaneous.service.envvar_subscriber',
+                'Bldr\Block\Miscellaneous\Service\EnvironmentVariableSubscriber',
+                [new Reference('bldr_miscellaneous.service.envvar_repository')]
+            )
             ->setPublic(false)
             ->addTag('bldr_subscriber')
         ;

@@ -15,16 +15,16 @@ namespace Bldr\Block\Miscellaneous\Service;
  * @author Luis Cordova <cordoval@gmail.com>
  * @author Raul Rodriguez <raulrodriguez782@gmail.com>
  */
-class EnvVarRepository
+class EnvironmentVariableRepository
 {
     protected $environmentVariables = [];
 
-    public function addEnvVar($envVar)
+    public function addEnvironmentVariable($environmentVariable)
     {
-        $this->environmentVariables[] = $envVar;
+        $this->environmentVariables[] = $environmentVariable;
     }
 
-    public function getEnvVars()
+    public function getEnvironmentVariables()
     {
         return $this->environmentVariables;
     }

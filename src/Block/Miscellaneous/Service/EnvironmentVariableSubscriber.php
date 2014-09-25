@@ -18,11 +18,13 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  * @author Luis Cordova <cordoval@gmail.com>
  * @author Raul Rodriguez <raulrodriguez782@gmail.com>
  */
-class EnvVarSubscriber implements EventSubscriberInterface
+class EnvironmentVariableSubscriber implements EventSubscriberInterface
 {
-    public function __construct(EnvVarRepository $envVarRepository)
+    protected $environmentVariableRepository;
+
+    public function __construct(EnvironmentVariableRepository $environmentVariableRepository)
     {
-        $this->envVarRepository = $envVarRepository;
+        $this->environmentVariableRepository = $environmentVariableRepository;
     }
 
     /**
@@ -33,7 +35,7 @@ class EnvVarSubscriber implements EventSubscriberInterface
     public function onPreExecute(PreExecuteEvent $event)
     {
         $builder = $event->getProcessBuilder();
-        foreach ($this->envVarRepository->getEnvVars() as $row) {
+        foreach ($this->environmentVariableRepository->getEnvironmentVariables() as $row) {
             list ($key, $value) = explode('=', $row);
             $builder->addEnvironmentVariables([$key => $value]);
         }
