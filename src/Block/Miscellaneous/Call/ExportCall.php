@@ -34,7 +34,7 @@ class ExportCall extends AbstractCall
     {
         $this->setName('export')
             ->setDescription('Exports an environmental variable within the context of the bldr task run.')
-            ->addOption('env_vars', false, 'Arguments to run on the export', [])
+            ->addOption('arguments', true, 'Arguments to run on the export', [])
         ;
     }
 
@@ -43,9 +43,9 @@ class ExportCall extends AbstractCall
      */
     public function run()
     {
-        foreach ($this->getOption('env_vars') as $argument) {
+        foreach ($this->getOption('arguments') as $argument) {
             if (2 !== count(explode('=', $argument))) {
-                throw new \RuntimeException('env var needs to follow the pattern e.g. SYMFONY_ENV=prod');
+                throw new \RuntimeException('Each argument needs to follow the pattern e.g. SYMFONY_ENV=prod');
             };
             $this->environmentVariableRepository->addEnvironmentVariable($argument);
         }

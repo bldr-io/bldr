@@ -37,7 +37,7 @@ class EnvironmentVariableSubscriber implements EventSubscriberInterface
         $builder = $event->getProcessBuilder();
         foreach ($this->environmentVariableRepository->getEnvironmentVariables() as $row) {
             list ($key, $value) = explode('=', $row);
-            $builder->addEnvironmentVariables([$key => $value]);
+            $builder->setEnv($key, $value);
         }
     }
 
