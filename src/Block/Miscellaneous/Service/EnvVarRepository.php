@@ -17,15 +17,15 @@ namespace Bldr\Block\Miscellaneous\Service;
  */
 class EnvVarRepository
 {
-    protected $envVars = [];
+    protected $environmentVariables = [];
 
     public function addEnvVar($envVar)
     {
-        $this->envVars[] = $envVar;
+        $this->environmentVariables[] = $envVar;
     }
 
     public function getEnvVars()
     {
-        return $this->envVars;
+        return $this->environmentVariables;
     }
 }
