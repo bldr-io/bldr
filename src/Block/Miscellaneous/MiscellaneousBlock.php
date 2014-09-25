@@ -40,7 +40,7 @@ class MiscellaneousBlock extends AbstractBlock
 
         $this->addService(
             'bldr_miscellaneous.service.envvar_subscriber', 'Bldr\Block\Miscellaneous\Service\EnvVarSubscriber',
-            ['bldr_miscellaneous.service.envvar_repository']
+            [new Reference('bldr_miscellaneous.service.envvar_repository')]
         )
             ->setPublic(false)
             ->addTag('bldr_subscriber')

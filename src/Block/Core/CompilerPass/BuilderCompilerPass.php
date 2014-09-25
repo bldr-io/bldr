@@ -26,6 +26,30 @@ class BuilderCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
+        $this->buildBuilder($container);
+        $this->addSubscribers($container);
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     * @param string           $tagName
+     *
+     * @return Reference[]
+     */
+    private function findBldrServicesTaggedWith(ContainerBuilder $container, $tagName)
+    {
+        $serviceIds = array_keys($container->findTaggedServiceIds($tagName));
+
+        $services = [];
+        foreach ($serviceIds as $id) {
+            $services[] = new Reference($id);
+        }
+
+        return $services;
+    }
+
+    private function buildBuilder(ContainerBuilder $container)
+    {
         $container->setDefinition(
             'bldr.builder',
             new Definition(
@@ -34,26 +58,17 @@ class BuilderCompilerPass implements CompilerPassInterface
                     new Reference('bldr.dispatcher'),
                     new Reference('input'),
                     new Reference('output'),
-                    $this->findBldrServices($container)
+                    $this->findBldrServicesTaggedWith($container, 'bldr')
                 ]
             )
         );
     }
 
-    /**
-     * @param ContainerBuilder $container
-     *
-     * @return Reference[]
-     */
-    private function findBldrServices(ContainerBuilder $container)
+    private function addSubscribers(ContainerBuilder $container)
     {
-        $serviceIds = array_keys($container->findTaggedServiceIds('bldr'));
-
-        $services = [];
-        foreach ($serviceIds as $id) {
-            $services[] = new Reference($id);
+        $dispatcher = $container->get('bldr.dispatcher');
+        foreach ($this->findBldrServicesTaggedWith($container, 'bldr_subscriber') as $subscriber) {
+            $dispatcher->addSubscriber($subscriber);
         }
-
-        return $services;
     }
 }
