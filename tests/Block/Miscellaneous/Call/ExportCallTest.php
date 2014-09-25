@@ -52,7 +52,7 @@ class ExportCallTest extends \PHPUnit_Framework_TestCase
     public function testSetEnvVarsWithInvalidValue()
     {
         $this->setExpectedException(
-            \RuntimeException::class,
+            '\RuntimeException',
             'Each argument needs to follow the pattern e.g. SYMFONY_ENV=prod'
         );
 
