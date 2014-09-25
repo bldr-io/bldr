@@ -12,6 +12,7 @@
 namespace Bldr\Tests\Block\Miscellaneous\Call;
 
 use Bldr\Block\Miscellaneous\Call\ExportCall;
+use Bldr\Block\Miscellaneous\Service\EnvironmentVariableRepository;
 
 /**
  * @author Luis Cordova <cordoval@gmail.com>
@@ -21,10 +22,12 @@ class ExportCallTest extends \PHPUnit_Framework_TestCase
 {
     protected $method;
     protected $exportCall;
+    protected $environmentVariableRepository;
 
     public function setUp()
     {
-        $this->exportCall = new ExportCall();
+        $this->environmentVariableRepository = new EnvironmentVariableRepository();
+        $this->exportCall = new ExportCall($this->environmentVariableRepository);
         $this->exportCall->configure();
 
         $object = new \ReflectionObject($this->exportCall);
@@ -36,30 +39,26 @@ class ExportCallTest extends \PHPUnit_Framework_TestCase
     {
         $this->method->invoke(
             $this->exportCall,
-            'env_vars', ['SYMFONY_ENV=prod', 'TRAVIS_DEBUG=true', 'TRAVIS_BOOLEAN=']
+            'arguments', ['SYMFONY_ENV=prod', 'TRAVIS_DEBUG=true', 'TRAVIS_BOOLEAN=']
         );
 
-        $this->assertFalse(getenv('SYMFONY_ENV'));
-        $this->assertFalse(getenv('TRAVIS_DEBUG'));
-        $this->assertFalse(getenv('TRAVIS_BOOLEAN'));
+        $this->assertCount(0, $this->environmentVariableRepository->getEnvironmentVariables());
 
         $this->exportCall->run();
 
-        $this->assertEquals('prod', getenv('SYMFONY_ENV'));
-        $this->assertEquals('true', getenv('TRAVIS_DEBUG'));
-        $this->assertEquals('', getenv('TRAVIS_BOOLEAN'));
+        $this->assertCount(3, $this->environmentVariableRepository->getEnvironmentVariables());
     }
 
     public function testSetEnvVarsWithInvalidValue()
     {
         $this->setExpectedException(
             \RuntimeException::class,
-            'env var needs to follow the pattern e.g. SYMFONY_ENV=prod'
+            'Each argument needs to follow the pattern e.g. SYMFONY_ENV=prod'
         );
 
         $this->method->invoke(
             $this->exportCall,
-            'env_vars', ['TRAVIS_WRONG_VALUE']
+            'arguments', ['TRAVIS_WRONG_VALUE']
         );
 
         $this->exportCall->run();
