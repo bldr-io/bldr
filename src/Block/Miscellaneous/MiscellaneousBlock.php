@@ -37,5 +37,13 @@ class MiscellaneousBlock extends AbstractBlock
             'Bldr\Block\Miscellaneous\Call\ExportCall',
             [new Reference('bldr_miscellaneous.service.envvar_repository')]
         );
+
+        $this->addService(
+            'bldr_miscellaneous.service.envvar_subscriber', 'Bldr\Block\Miscellaneous\Service\EnvVarSubscriber',
+            ['bldr_miscellaneous.service.envvar_repository']
+        )
+            ->setPublic(false)
+            ->addTag('bldr_subscriber')
+        ;
     }
 }
