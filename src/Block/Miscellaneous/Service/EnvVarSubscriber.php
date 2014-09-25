@@ -9,9 +9,8 @@
  * with this source code in the file LICENSE
  */
 
-namespace Bldr\Block\Miscellaneous;
+namespace Bldr\Block\Miscellaneous\Service;
 
-use Bldr\Block\Execute\Service\EnvVarRepository;
 use Bldr\Event\PreExecuteEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 

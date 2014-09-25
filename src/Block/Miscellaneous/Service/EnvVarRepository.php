@@ -9,7 +9,7 @@
  * with this source code in the file LICENSE
  */
 
-namespace Bldr\Block\Execute\Service;
+namespace Bldr\Block\Miscellaneous\Service;
 
 /**
  * @author Luis Cordova <cordoval@gmail.com>
@@ -17,7 +17,7 @@ namespace Bldr\Block\Execute\Service;
  */
 class EnvVarRepository
 {
-    protected $envVars;
+    protected $envVars = [];
 
     public function addEnvVar($envVar)
     {

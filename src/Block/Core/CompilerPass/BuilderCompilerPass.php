@@ -66,9 +66,9 @@ class BuilderCompilerPass implements CompilerPassInterface
 
     private function addSubscribers(ContainerBuilder $container)
     {
-        $dispatcher = $container->get('bldr.dispatcher');
+        $dispatcher = $container->findDefinition('bldr.dispatcher');
         foreach ($this->findBldrServicesTaggedWith($container, 'bldr_subscriber') as $subscriber) {
-            $dispatcher->addSubscriber($subscriber);
+            $dispatcher->addMethodCall('addSubscriber', [$subscriber]);
         }
     }
 }
