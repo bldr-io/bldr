@@ -13,6 +13,7 @@ namespace Bldr\Block\Miscellaneous;
 
 use Bldr\DependencyInjection\AbstractBlock;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
@@ -26,5 +27,25 @@ class MiscellaneousBlock extends AbstractBlock
     {
         $this->addCall('bldr_miscellaneous.sleep', 'Bldr\Block\Miscellaneous\Call\SleepCall');
         $this->addCall('bldr_miscellaneous.service', 'Bldr\Block\Miscellaneous\Call\ServiceCall');
+
+        $this->addService(
+            'bldr_miscellaneous.service.envvar_repository',
+            'Bldr\Block\Miscellaneous\Service\EnvironmentVariableRepository'
+        )
+        ->setPublic(false);
+
+        $this->addCall(
+            'bldr_miscellaneous.export',
+            'Bldr\Block\Miscellaneous\Call\ExportCall',
+            [new Reference('bldr_miscellaneous.service.envvar_repository')]
+        );
+
+        $this->addService(
+            'bldr_miscellaneous.service.envvar_subscriber',
+            'Bldr\Block\Miscellaneous\Service\EnvironmentVariableSubscriber',
+            [new Reference('bldr_miscellaneous.service.envvar_repository')]
+        )
+        ->setPublic(false)
+        ->addTag('bldr_subscriber');
     }
 }
