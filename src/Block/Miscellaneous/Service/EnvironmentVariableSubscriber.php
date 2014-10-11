@@ -20,8 +20,14 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class EnvironmentVariableSubscriber implements EventSubscriberInterface
 {
+    /**
+     * @type EnvironmentVariableRepository
+     */
     protected $environmentVariableRepository;
 
+    /**
+     * @param EnvironmentVariableRepository $environmentVariableRepository
+     */
     public function __construct(EnvironmentVariableRepository $environmentVariableRepository)
     {
         $this->environmentVariableRepository = $environmentVariableRepository;

@@ -18,24 +18,4 @@ use Symfony\Component\EventDispatcher\Event;
  */
 abstract class AbstractEvent extends Event implements EventInterface
 {
-    /**
-     * @var bool $running
-     */
-    protected $running;
-
-    /**
-     * @param bool $running
-     */
-    public function __construct($running = true)
-    {
-        $this->running = $running;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isRunning()
-    {
-        return $this->running;
-    }
 }

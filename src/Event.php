@@ -19,29 +19,9 @@ namespace Bldr;
 class Event
 {
     /**
-     * Called at the very start, before loading profiles
-     */
-    const START = 'bldr.event.start';
-
-    /**
-     * Called before descending into a profile
-     */
-    const PRE_PROFILE = 'bldr.event.profile.before';
-
-    /**
      * Called before descending into a task
      */
     const PRE_TASK = 'bldr.event.task.before';
-
-    /**
-     * Called before descending into a call
-     */
-    const PRE_CALL = 'bldr.event.call.before';
-
-    /**
-     * Called before running the service
-     */
-    const PRE_SERVICE = 'bldr.event.service.before';
 
     /**
      * Called before executing a process
@@ -49,32 +29,17 @@ class Event
     const PRE_EXECUTE = 'bldr.event.execute.before';
 
     /**
+     * Called before a TaskInterface is initialized
+     */
+    const PRE_INITIALIZE_TASK = 'bldr.event.task.initialize.before';
+
+    /**
      * Called after executing a process
      */
     const POST_EXECUTE = 'bldr.event.execute.after';
 
     /**
-     * Called after running the service
-     */
-    const POST_SERVICE = 'bldr.event.service.after';
-
-    /**
-     * Called after running a call
-     */
-    const POST_CALL = 'bldr.event.call.after';
-
-    /**
      * Called after running a task
      */
     const POST_TASK = 'bldr.event.task.after';
-
-    /**
-     * Called after running a profile
-     */
-    const POST_PROFILE = 'bldr.event.profile.after';
-
-    /**
-     * Called after everything has ran
-     */
-    const END = 'bldr.event.end';
 }

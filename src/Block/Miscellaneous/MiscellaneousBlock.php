@@ -25,18 +25,19 @@ class MiscellaneousBlock extends AbstractBlock
      */
     public function assemble(array $config, ContainerBuilder $container)
     {
-        $this->addCall('bldr_miscellaneous.sleep', 'Bldr\Block\Miscellaneous\Call\SleepCall');
-        $this->addCall('bldr_miscellaneous.service', 'Bldr\Block\Miscellaneous\Call\ServiceCall');
+        $this->addTask('bldr_miscellaneous.sleep', 'Bldr\Block\Miscellaneous\Task\SleepTask');
+        $this->addTask('bldr_miscellaneous.service', 'Bldr\Block\Miscellaneous\Task\ServiceTask');
 
         $this->addService(
             'bldr_miscellaneous.service.envvar_repository',
             'Bldr\Block\Miscellaneous\Service\EnvironmentVariableRepository'
         )
-        ->setPublic(false);
+            ->setPublic(false)
+        ;
 
-        $this->addCall(
+        $this->addTask(
             'bldr_miscellaneous.export',
-            'Bldr\Block\Miscellaneous\Call\ExportCall',
+            'Bldr\Block\Miscellaneous\Task\ExportTask',
             [new Reference('bldr_miscellaneous.service.envvar_repository')]
         );
 
@@ -45,7 +46,8 @@ class MiscellaneousBlock extends AbstractBlock
             'Bldr\Block\Miscellaneous\Service\EnvironmentVariableSubscriber',
             [new Reference('bldr_miscellaneous.service.envvar_repository')]
         )
-        ->setPublic(false)
-        ->addTag('bldr_subscriber');
+            ->setPublic(false)
+            ->addTag('bldr_subscriber')
+        ;
     }
 }

@@ -68,7 +68,7 @@ class Configuration implements ConfigurationInterface
                             ->end()
                         ->end()
                     ->end()
-                    ->arrayNode('tasks')
+                    ->arrayNode('jobs')
                         ->prototype('scalar')->end()
                     ->end()
                 ->end()
@@ -81,7 +81,7 @@ class Configuration implements ConfigurationInterface
     private function getTasksNode()
     {
         $treeBuilder = new TreeBuilder();
-        $node        = $treeBuilder->root('tasks');
+        $node        = $treeBuilder->root('jobs');
 
         $node
             ->useAttributeAsKey('name')
@@ -89,13 +89,13 @@ class Configuration implements ConfigurationInterface
                 ->addDefaultsIfNotSet()
                 ->children()
                     ->scalarNode('description')->defaultValue('')->end()
-                    ->booleanNode('runOnFailure')->defaultFalse()->end()
-                    ->arrayNode('calls')
+                    ->arrayNode('tasks')
                         ->requiresAtLeastOneElement()
                         ->prototype('array')
                             ->ignoreExtraKeys()
                             ->children()
                                 ->scalarNode('type')->isRequired()->end()
+                                ->booleanNode('continueOnError')->defaultFalse()->end()
                             ->end()
                         ->end()
                     ->end()

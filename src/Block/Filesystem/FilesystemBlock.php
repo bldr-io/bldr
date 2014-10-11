@@ -24,14 +24,14 @@ class FilesystemBlock extends AbstractBlock
      */
     public function assemble(array $config, ContainerBuilder $container)
     {
-        $this->addService('bldr_filesystem.abstract', 'Bldr\Block\Filesystem\Call\FilesystemCall')
+        $this->addService('bldr_filesystem.abstract', 'Bldr\Block\Filesystem\Task\FilesystemTask')
             ->setAbstract(true)
         ;
 
-        $namespace = 'Bldr\Block\Filesystem\Call\\';
-        $this->addDecoratedCall('bldr_filesystem.remove', $namespace.'RemoveCall', 'bldr_filesystem.abstract');
-        $this->addDecoratedCall('bldr_filesystem.mkdir', $namespace.'MkdirCall', 'bldr_filesystem.abstract');
-        $this->addDecoratedCall('bldr_filesystem.touch', $namespace.'TouchCall', 'bldr_filesystem.abstract');
-        $this->addDecoratedCall('bldr_filesystem.dump', $namespace.'DumpCall', 'bldr_filesystem.abstract');
+        $namespace = 'Bldr\Block\Filesystem\Task\\';
+        $this->addDecoratedTask('bldr_filesystem.remove', $namespace.'RemoveTask', 'bldr_filesystem.abstract');
+        $this->addDecoratedTask('bldr_filesystem.mkdir', $namespace.'MkdirTask', 'bldr_filesystem.abstract');
+        $this->addDecoratedTask('bldr_filesystem.touch', $namespace.'TouchTask', 'bldr_filesystem.abstract');
+        $this->addDecoratedTask('bldr_filesystem.dump', $namespace.'DumpTask', 'bldr_filesystem.abstract');
     }
 }

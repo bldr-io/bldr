@@ -104,7 +104,7 @@ abstract class AbstractBlock extends Extension implements BlockInterface
      *
      * @return Definition
      */
-    protected function addCall($name, $class, array $arguments = [])
+    protected function addTask($name, $class, array $arguments = [])
     {
         return $this->addService($name, $class, $arguments)
             ->addTag('bldr')
@@ -131,7 +131,7 @@ abstract class AbstractBlock extends Extension implements BlockInterface
      *
      * @return Definition
      */
-    protected function addDecoratedCall($name, $class, $parentName, array $arguments = [])
+    protected function addDecoratedTask($name, $class, $parentName, array $arguments = [])
     {
         return $this->container->setDefinition($name, new DefinitionDecorator($parentName))
             ->setClass($class)

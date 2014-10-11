@@ -2,42 +2,35 @@ bldr:
     profiles:
         default:
             description: 'Development Profile'
-            tasks:
+            jobs:
                 - prepare
                 - lint
                 - phpcs
                 - test
         test:
             description: "Test Profile"
-            tasks:
+            jobs:
                 - testDev
         watch:
             description: "Watch Profile"
             uses:
                 before:
                     - test
-            tasks:
+            jobs:
                 - watch
-        server:
-            description: Starts a server and waits for a bit. Then kills it.
-            tasks:
-                - server
-        mysql:
-            description: Tests the MysqlExtension calls
-            tasks:
-                - mysql
-        misc:
-            description: Tests the MiscellaneousExtension calls
-            tasks:
-                - misc
         buildPhar:
             description: Builds the phar
-            tasks:
+            jobs:
                 - buildPhar
         release:
             description: Releases Bldr
             uses:
                 after:
                     - buildPhar
-            tasks:
+            jobs:
                 - release
+        functionalTest:
+            description: used for running a functional test on bldr
+            jobs:
+                - fsTest
+                - lint

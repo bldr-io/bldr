@@ -11,7 +11,7 @@
 
 namespace Bldr\Event;
 
-use Bldr\Call\AbstractCall;
+use Bldr\Task\TaskInterface;
 use Symfony\Component\Process\Process;
 
 /**
@@ -20,9 +20,9 @@ use Symfony\Component\Process\Process;
 class PostExecuteEvent extends AbstractEvent
 {
     /**
-     * @var AbstractCall
+     * @var TaskInterface
      */
-    private $call;
+    private $task;
 
     /**
      * @var Process
@@ -30,22 +30,26 @@ class PostExecuteEvent extends AbstractEvent
     private $process;
 
     /**
-     * @param AbstractCall $call
-     * @param Process      $process
-     * @param bool         $running
+     * @param TaskInterface $task
+     * @param Process       $process
      */
-    public function __construct(AbstractCall $call, Process $process, $running = false)
+    public function __construct(TaskInterface $task, Process $process)
     {
-        parent::__construct($running);
-        $this->call = $call;
+        $this->task    = $task;
         $this->process = $process;
     }
 
-    public function getCall()
+    /**
+     * @return TaskInterface
+     */
+    public function getTask()
     {
-        return $this->call;
+        return $this->task;
     }
 
+    /**
+     * @return Process
+     */
     public function getProcess()
     {
         return $this->process;
