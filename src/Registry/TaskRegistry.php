@@ -1,17 +1,20 @@
 <?php
 
 /**
- * This file is part of Bldr.io
+ * This file is part of bldr
  *
  * (c) Aaron Scherer <aequasi@gmail.com>
  *
- * This source file is subject to the MIT license that is bundled
+ * This source file is subject to the license that is bundled
  * with this source code in the file LICENSE
  */
 
 namespace Bldr\Registry;
 
-use Bldr\Model\Task;
+use Bldr\Block\Core\Task\AbstractTask;
+use Bldr\Exception\TaskNotFoundException;
+use Bldr\Task\TaskInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
@@ -19,55 +22,52 @@ use Bldr\Model\Task;
 class TaskRegistry
 {
     /**
-     * @var Task[] $tasks
+     * @type TaskInterface[]|AbstractTask[] $tasks
      */
     private $tasks;
 
     /**
-     * @return mixed
+     * @param EventDispatcherInterface       $dispatcher
+     * @param TaskInterface[]|AbstractTask[] $tasks
      */
-    public function getNewTask()
+    public function __construct(EventDispatcherInterface $dispatcher, array $tasks)
     {
-        return array_shift($this->tasks);
+        foreach ($tasks as $service) {
+            if ($service instanceof AbstractTask) {
+                $service->configure();
+            }
+
+            if (method_exists($service, 'setEventDispatcher')) {
+                $service->setEventDispatcher($dispatcher);
+            }
+
+            $this->tasks[$service->getName()] = $service;
+        }
     }
 
     /**
-     * @param Task $task
+     * @param string $type
      *
-     * @return $this
+     * @throws TaskNotFoundException
+     * @return TaskInterface|AbstractTask
      */
-    public function addTask(Task $task)
+    public function findTaskByType($type)
     {
-        $this->tasks[] = $task;
+        foreach ($this->tasks as $task) {
+            if ($task->getName() === $type) {
+                return $task;
+            }
+        }
 
-        return $this;
+        throw new TaskNotFoundException($type);
     }
 
     /**
-     * @return int
+     * @return AbstractTask[]|TaskInterface[]
      */
-    public function count()
-    {
-        return sizeof($this->tasks);
-    }
-
-    /**
-     * @return Task[]
-     */
-    public function getTasks()
+    public function findAll()
     {
         return $this->tasks;
     }
-
-    /**
-     * @param Task[] $tasks
-     *
-     * @return $this
-     */
-    public function setTasks(array $tasks)
-    {
-        $this->tasks = $tasks;
-
-        return $this;
-    }
 }
+ 

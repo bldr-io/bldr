@@ -19,14 +19,14 @@ class PreExecuteEventTest extends \PHPUnit_Framework_TestCase
 {
     public static function createPreExecuteEvent()
     {
-        $call    = \Mockery::mock('Bldr\Call\AbstractCall');
+        $task    = \Mockery::mock('Bldr\Task\TaskInterface');
         $builder = \Mockery::mock('Symfony\Component\Process\ProcessBuilder');
 
-        return new PreExecuteEvent($call, $builder, false);
+        return new PreExecuteEvent($task, $builder, false);
     }
 
     /**
-     * Tests the __construct($call, $builder) method
+     * Tests the __construct($task, $builder) method
      *
      * @throws \PHPUnit_Framework_Exception
      * @return PreExecuteEvent
@@ -48,13 +48,13 @@ class PreExecuteEventTest extends \PHPUnit_Framework_TestCase
         return $postExecuteEvent;
     }
 
-    public function testGetCall()
+    public function testGetTask()
     {
         $postExecuteEvent = self::createPreExecuteEvent();
 
         $this->assertInstanceOf(
-            'Bldr\Call\AbstractCall',
-            $postExecuteEvent->getCall()
+            'Bldr\Task\TaskInterface',
+            $postExecuteEvent->getTask()
         );
     }
 

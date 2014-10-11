@@ -8,7 +8,7 @@
  * with this source code in the file LICENSE
  */
 
-namespace Blrd\Test\Event;
+namespace Bldr\Test\Event;
 
 use Bldr\Event\PostExecuteEvent;
 
@@ -19,12 +19,12 @@ class PostExecuteEventTest extends \PHPUnit_Framework_TestCase
 {
     public static function createPostExecuteEvent()
     {
-        $call    = \Mockery::mock('Bldr\Call\AbstractCall');
+        $task    = \Mockery::mock('Bldr\Task\TaskInterface');
         $process = \Mockery::mock('Symfony\Component\Process\Process');
 
         $process->shouldReceive('stop')->andReturn('0');
 
-        return new PostExecuteEvent($call, $process, false);
+        return new PostExecuteEvent($task, $process, false);
     }
 
     /**
@@ -55,8 +55,8 @@ class PostExecuteEventTest extends \PHPUnit_Framework_TestCase
         $postExecuteEvent = self::createPostExecuteEvent();
 
         $this->assertInstanceOf(
-            'Bldr\Call\AbstractCall',
-            $postExecuteEvent->getCall()
+            'Bldr\Task\TaskInterface',
+            $postExecuteEvent->getTask()
         );
     }
 

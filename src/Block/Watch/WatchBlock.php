@@ -25,14 +25,14 @@ class WatchBlock extends AbstractBlock
      */
     public function assemble(array $config, ContainerBuilder $container)
     {
-        $this->addCall(
+        $this->addTask(
             'bldr_watch.watch',
-            'Bldr\Block\Watch\Call\WatchCall',
+            'Bldr\Block\Watch\Task\WatchTask',
             [
-                new Reference('bldr.registry.task'),
+                new Reference('bldr.registry.job'),
                 [
                     'profiles' => $container->getParameter('profiles'),
-                    'tasks'    => $container->getParameter('tasks')
+                    'jobs'     => $container->getParameter('jobs')
                 ]
             ]
         );

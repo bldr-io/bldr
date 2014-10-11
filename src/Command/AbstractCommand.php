@@ -13,7 +13,9 @@ namespace Bldr\Command;
 
 use Bldr\Application;
 use Bldr\Event\EventInterface;
+use Bldr\Output\BldrOutput;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -23,7 +25,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
  */
-class AbstractCommand extends Command implements ContainerAwareInterface
+abstract class AbstractCommand extends Command implements ContainerAwareInterface
 {
     /**
      * @var ContainerInterface|ContainerBuilder $container
@@ -39,6 +41,29 @@ class AbstractCommand extends Command implements ContainerAwareInterface
      * @var OutputInterface $output
      */
     protected $output;
+
+    /**
+     * @type HelperSet
+     */
+    protected $helperSet;
+
+    /**
+     * @return int
+     */
+    abstract protected function doExecute();
+
+    /**
+     * {@inheritdoc}
+     */
+    final protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $this->setInput($input);
+        $this->getApplication()->setBuildName();
+        $this->setOutput($output);
+        $this->setHelperSet($this->getApplication()->getHelperSet());
+
+        $this->doExecute();
+    }
 
     /**
      * {@inheritdoc}
@@ -84,7 +109,7 @@ class AbstractCommand extends Command implements ContainerAwareInterface
      *
      * @return $this
      */
-    protected function setInput($input)
+    protected function setInput(InputInterface $input)
     {
         $this->input = $input;
 
@@ -104,9 +129,29 @@ class AbstractCommand extends Command implements ContainerAwareInterface
      *
      * @return $this
      */
-    protected function setOutput($output)
+    protected function setOutput(OutputInterface $output)
     {
         $this->output = $output;
+
+        return $this;
+    }
+
+    /**
+     * @return HelperSet
+     */
+    public function getHelperSet()
+    {
+        return $this->helperSet;
+    }
+
+    /**
+     * @param HelperSet $helperSet
+     *
+     * @return AbstractCommand
+     */
+    public function setHelperSet(HelperSet $helperSet)
+    {
+        $this->helperSet = $helperSet;
 
         return $this;
     }

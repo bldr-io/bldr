@@ -24,15 +24,15 @@ class BldrBlock extends AbstractBlock
      */
     public function assemble(array $config, SymfonyContainerBuilder $container)
     {
-        $this->addCallOptions($config, $this->originalConfiguration);
+        $this->addTaskOptions($config, $this->originalConfiguration);
 
         $this->setParameter('name', $config['name']);
         $this->setParameter('description', $config['description']);
         $this->setParameter('profiles', $config['profiles']);
-        $this->setParameter('tasks', $config['tasks']);
+        $this->setParameter('jobs', $config['jobs']);
 
         $this->addService('bldr.dispatcher', 'Symfony\Component\EventDispatcher\EventDispatcher');
-        $this->addService('bldr.registry.task', 'Bldr\Registry\TaskRegistry');
+        $this->addService('bldr.registry.job', 'Bldr\Registry\JobRegistry');
     }
 
     /**
@@ -41,8 +41,7 @@ class BldrBlock extends AbstractBlock
     public function getCompilerPasses()
     {
         return [
-            new CompilerPass\BuilderCompilerPass(),
-            new CompilerPass\CommandCompilerPass()
+            new CompilerPass\CoreCompilerPass()
         ];
     }
 
@@ -54,18 +53,22 @@ class BldrBlock extends AbstractBlock
         return 'Bldr\Block\Core\Configuration';
     }
 
-    private function addCallOptions(array &$configuration, array $configs)
+    /**
+     * @param array $configuration
+     * @param array $configs
+     */
+    private function addTaskOptions(array &$configuration, array $configs)
     {
         foreach ($configs as $config) {
-            foreach ($configuration['tasks'] as $name => $task) {
-                if (!isset($config['tasks'])) {
+            foreach ($configuration['jobs'] as $name => $job) {
+                if (!isset($config['jobs'])) {
                     continue;
                 }
 
-                foreach ($task['calls'] as $index => $call) {
-                    if (isset($config['tasks'][$name], $config['tasks'][$name]['calls'][$index])) {
-                        $options = $config['tasks'][$name]['calls'][$index];
-                        $configuration['tasks'][$name]['calls'][$index] = array_merge($call, $options);
+                foreach ($job['tasks'] as $index => $task) {
+                    if (isset($config['jobs'][$name], $config['jobs'][$name]['tasks'][$index])) {
+                        $options = $config['jobs'][$name]['tasks'][$index];
+                        $configuration['jobs'][$name]['tasks'][$index] = array_merge($task, $options);
                     }
                 }
             }

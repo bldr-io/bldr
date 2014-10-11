@@ -24,7 +24,7 @@ class NotifyBlock extends AbstractBlock
      */
     public function assemble(array $config, ContainerBuilder $container)
     {
-        $notify = $this->addCall('bldr_notify.notify', 'Bldr\Block\Notify\Call\NotifyCall');
+        $notify = $this->addTask('bldr_notify.notify', 'Bldr\Block\Notify\Task\NotifyTask');
 
         if (isset($config['smtp'])) {
             $notify->addMethodCall('setSMTPInfo', [$config['smtp']]);
