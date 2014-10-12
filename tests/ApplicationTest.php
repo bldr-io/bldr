@@ -12,6 +12,9 @@
 namespace Bldr\Test;
 
 use Bldr\Application;
+use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Output\StreamOutput;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
@@ -28,6 +31,12 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
 
         $embeddedComposer = \Mockery::mock('Dflydev\EmbeddedComposer\Core\EmbeddedComposerInterface');
         $embeddedComposer->shouldReceive('findPackage')->once()->andReturn($package);
+
+        $config = \Mockery::mock('Composer\Config');
+        $config->shouldReceive('has')->andReturn(false);
+
+        $embeddedComposer->shouldReceive('getExternalComposerConfig')->andReturn($config);
+        $embeddedComposer->shouldReceive('getExternalRootDirectory')->andReturn(__DIR__); // doesn't matter.
 
         return Application::create($embeddedComposer);
     }
@@ -55,6 +64,9 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         return $application;
     }
 
+    /**
+     *
+     */
     public function testSetBuildName()
     {
         $container = \Mockery::mock('Bldr\DependencyInjection\ContainerBuilder');
@@ -84,6 +96,9 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         putenv("TRAVIS_JOB_NUMBER={$travisJobNumber}");
     }
 
+    /**
+     *
+     */
     public function testGetCommands()
     {
         $app      = self::createApplication();
@@ -97,29 +112,48 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testGetDefaultHelperSet()
+    /**
+     * @throws \Exception
+     */
+    public function testFunctionalRunthrough()
     {
-        $app    = self::createApplication();
-        $class  = new \ReflectionClass($app);
-        $method = $class->getMethod('getDefaultHelperSet');
-        $method->setAccessible(true);
+        $application = self::createApplication();
+        $application->setAutoExit(false);
+        $stream  = 'php://memory';
 
-        /** @var HelperSet $helperSet */
-        $helperSet = $method->invoke($app);
+        $output = new StreamOutput(fopen($stream, 'w', false));
+        $application->run(new ArgvInput(['bldr', 'run', 'functionalTest']), $output);
+        $this->functionalAsserts($output);
 
-        $this->assertInstanceOf(
-            'Bldr\Helper\DialogHelper',
-            $helperSet->get('dialog')
-        );
+        $output = new StreamOutput(fopen($stream, 'w', false));
+        $application->run(new ArgvInput(['bldr', 'functionalTest']), $output);
+        $this->functionalAsserts($output);
     }
 
-    protected function tearDown()
+    /**
+     * @param StreamOutput $output
+     */
+    private function functionalAsserts(StreamOutput $output)
     {
-        if (file_exists(getcwd().'/.test.yml')) {
-            unlink(getcwd().'/.test.yml');
-        }
-        if (file_exists(getcwd().'/.test.yml.dist')) {
-            unlink(getcwd().'/.test.yml.dist');
-        }
+        $baseDir = realpath(__DIR__.'/..');
+        rewind($output->getStream());
+        $content = stream_get_contents($output->getStream());
+
+        $this->assertContains('Running the fsTest job > Filesystem Block Tests', $content);
+
+        $this->assertContains('Creating tmp/', $content);
+        $this->assertFileExists($baseDir.'/tmp');
+        $this->assertContains('Creating tmp/test/deep', $content);
+        $this->assertFileExists($baseDir.'/tmp/test');
+        $this->assertFileExists($baseDir.'/tmp/test/deep');
+        $this->assertContains('Touching tmp/test.tmp', $content);
+        $this->assertFileExists($baseDir.'/tmp/test.tmp');
+        $this->assertContains('Touching tmp/test/deep/test.tmp', $content);
+        $this->assertFileExists($baseDir.'/tmp/test/deep/test.tmp');
+
+        $this->assertContains('Running the lint job > Lints the files of the project', $content);
+
+        $this->assertContains('Lint Task Finished', $content);
+        $this->assertContains('Build Success!', $content);
     }
 }

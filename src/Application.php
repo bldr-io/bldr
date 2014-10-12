@@ -14,6 +14,7 @@ namespace Bldr;
 use Bldr\Command as Commands;
 use Bldr\DependencyInjection\ContainerBuilder;
 use Bldr\Helper\DialogHelper;
+use Bldr\Output\NullBldrOutput;
 use Dflydev\EmbeddedComposer\Console\Command as ComposerCmd;
 use Dflydev\EmbeddedComposer\Core\EmbeddedComposerAwareInterface;
 use Dflydev\EmbeddedComposer\Core\EmbeddedComposerInterface;
@@ -21,6 +22,7 @@ use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -116,9 +118,6 @@ EOF;
     public function getCommands()
     {
         return [
-            new Commands\BuildCommand(),
-            new Commands\Task\ListCommand(),
-            new Commands\Task\InfoCommand(),
             new ComposerCmd\DumpAutoloadCommand(''),
             new ComposerCmd\InstallCommand(''),
             new ComposerCmd\UpdateCommand('')
@@ -168,7 +167,7 @@ EOF;
                 [
                     "\n\n",
                     $this->getHelperSet()->get('formatter')->formatBlock(
-                        "Either you have no config file, or the config file is invalid.",
+                        " [Error] Either you have no config file, or the config file is invalid.",
                         "bg=red;fg=white",
                         true
                     )
@@ -182,7 +181,27 @@ EOF;
     }
 
     /**
-     * Falls back to "build" for a shortcut
+     * Builds the container with extensions
+     *
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     *
+     * @throws InvalidArgumentException
+     */
+    private function buildContainer(InputInterface $input, OutputInterface $output)
+    {
+        $nonContainerCommands = ['install', 'update', 'dumpautoload', 'help'];
+
+        if (in_array($input->getFirstArgument(), $nonContainerCommands)) {
+            return;
+        }
+
+        $this->container = new ContainerBuilder($this, $input, $output);
+        $this->container->compile();
+    }
+
+    /**
+     * Falls back to "run" for a shortcut
      *
      * @param string $name
      *
@@ -195,7 +214,7 @@ EOF;
         } catch (\InvalidArgumentException $e) {
             $this->shortcut = true;
 
-            return parent::find('build');
+            return parent::find('run');
         }
     }
 
@@ -212,38 +231,6 @@ EOF;
         }
 
         return $definition;
-    }
-
-    /**
-     * Builds the container with extensions
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @throws InvalidArgumentException
-     */
-    private function buildContainer(InputInterface $input, OutputInterface $output)
-    {
-        $nonContainerCommands = ['NULL', 'install', 'update', 'dumpautoload', 'help', 'list', null];
-
-        if (in_array($input->getFirstArgument(), $nonContainerCommands)) {
-            return;
-        }
-
-        $this->container = new ContainerBuilder($this, $input, $output);
-        $this->container->compile();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function getDefaultHelperSet()
-    {
-        $helperSet = parent::getDefaultHelperSet();
-
-        $helperSet->set(new DialogHelper());
-
-        return $helperSet;
     }
 
     /**

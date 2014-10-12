@@ -1,6 +1,6 @@
 imports:
     - { resource: .bldr/profiles.yml }
-    - { resource: .bldr/tasks.yml }
+    - { resource: .bldr/jobs.yml }
 
 bldr:
     name: bldr-io/bldr
