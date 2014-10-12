@@ -34,6 +34,7 @@ class ContainerBuilder extends BaseContainerBuilder
         parent::__construct();
 
         $this->set('application', $application);
+        $this->set('helper_set', $application->getHelperSet());
         $this->set('input', $input);
         $this->set('output', $output);
     }
@@ -98,8 +99,6 @@ class ContainerBuilder extends BaseContainerBuilder
             new Block\Filesystem\FilesystemBlock(),
             new Block\Notify\NotifyBlock(),
             new Block\Watch\WatchBlock(),
-            new Block\Database\DatabaseBlock(),
-            new Block\Database\MysqlBlock(),
             new Block\Miscellaneous\MiscellaneousBlock(),
         ];
     }

@@ -17,13 +17,22 @@ namespace Bldr\Block\Miscellaneous\Service;
  */
 class EnvironmentVariableRepository
 {
+    /**
+     * @type string[]
+     */
     protected $environmentVariables = [];
 
+    /**
+     * @param string $environmentVariable
+     */
     public function addEnvironmentVariable($environmentVariable)
     {
         $this->environmentVariables[] = $environmentVariable;
     }
 
+    /**
+     * @return string[]
+     */
     public function getEnvironmentVariables()
     {
         return $this->environmentVariables;
