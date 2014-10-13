@@ -44,16 +44,16 @@
         },
         {
             "name": "bldr-io/frontend-block",
-            "version": "2.0.0",
+            "version": "2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bldr-io/frontend-block.git",
-                "reference": "e8586f65588d6a1f4bdf2576a1d20215b16eb53c"
+                "reference": "22ddf3da3622396414f4895f47643f5b662c0dca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bldr-io/frontend-block/zipball/e8586f65588d6a1f4bdf2576a1d20215b16eb53c",
-                "reference": "e8586f65588d6a1f4bdf2576a1d20215b16eb53c",
+                "url": "https://api.github.com/repos/bldr-io/frontend-block/zipball/22ddf3da3622396414f4895f47643f5b662c0dca",
+                "reference": "22ddf3da3622396414f4895f47643f5b662c0dca",
                 "shasum": ""
             },
             "require": {
@@ -88,20 +88,20 @@
                 }
             ],
             "description": "Block for handling the Front End tasks (less/sass, css and js min, etc)",
-            "time": "2014-10-12 20:42:20"
+            "time": "2014-10-13 03:43:57"
         },
         {
             "name": "bldr-io/remote-block",
-            "version": "2.0.0",
+            "version": "2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bldr-io/remote-block.git",
-                "reference": "bd26f6ec52b6dd5229df35a3a767a50ac204d6fd"
+                "reference": "5d8e5e0abe9daa2984752c80c6d037491486f8cc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bldr-io/remote-block/zipball/bd26f6ec52b6dd5229df35a3a767a50ac204d6fd",
-                "reference": "bd26f6ec52b6dd5229df35a3a767a50ac204d6fd",
+                "url": "https://api.github.com/repos/bldr-io/remote-block/zipball/5d8e5e0abe9daa2984752c80c6d037491486f8cc",
+                "reference": "5d8e5e0abe9daa2984752c80c6d037491486f8cc",
                 "shasum": ""
             },
             "require": {
@@ -136,7 +136,7 @@
                 }
             ],
             "description": "Remote Execution Block for Bldr",
-            "time": "2014-10-12 20:49:45"
+            "time": "2014-10-13 03:45:51"
         },
         {
             "name": "coffeescript/coffeescript",
