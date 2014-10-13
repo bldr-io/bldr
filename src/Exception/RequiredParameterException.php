@@ -24,4 +24,3 @@ class RequiredParameterException extends BldrException
         parent::__construct("The required parameter, {$parameter}, is not set, and it is required.", 500);
     }
 }
- 

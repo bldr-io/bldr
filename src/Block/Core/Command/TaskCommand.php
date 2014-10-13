@@ -11,9 +11,9 @@
 
 namespace Bldr\Block\Core\Command;
 
+use Bldr\Block\Core\Task\AbstractTask;
 use Bldr\Command\AbstractCommand;
 use Bldr\Task\TaskInterface;
-use Bldr\Task\AbstractTask;
 use Symfony\Component\Console\Input\InputArgument;
 
 /**
@@ -41,7 +41,8 @@ To pass arguments:
 
 EOF
             )
-            ->ignoreValidationErrors();
+            ->ignoreValidationErrors()
+        ;
     }
 
     /**
@@ -50,9 +51,8 @@ EOF
     protected function doExecute()
     {
         $service = $this->findCall($this->input->getArgument('name'), $this->getOptions());
-        $options = $this->getOptions((string)$this->input);
 
-        return $service->run($this->output);
+        $service->run($this->output);
     }
 
     /**
@@ -65,9 +65,9 @@ EOF
      */
     private function findCall($name, array $options = [])
     {
-        $calls    = array_keys($this->container->findTaggedServiceIds('bldr'));
+        $tasks    = array_keys($this->container->findTaggedServiceIds('bldr'));
         $services = [];
-        foreach ($calls as $serviceName) {
+        foreach ($tasks as $serviceName) {
             /** @var TaskInterface|AbstractTask $service */
 
             $service = $this->container->get($serviceName);

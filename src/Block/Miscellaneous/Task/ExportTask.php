@@ -43,7 +43,8 @@ class ExportTask extends AbstractTask
     {
         $this->setName('export')
             ->setDescription('Exports an environmental variable within the context of the bldr task run.')
-            ->addParameter('arguments', true, 'Arguments to run on the export', []);
+            ->addParameter('arguments', true, 'Arguments to run on the export', [])
+        ;
     }
 
     /**

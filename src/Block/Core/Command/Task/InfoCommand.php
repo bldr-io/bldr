@@ -28,7 +28,7 @@ class InfoCommand extends AbstractCommand
     protected function configure()
     {
         $this->setName('task:info')
-            ->setDescription("Lists all the options for the given task.")
+            ->setDescription('Lists all the options for the given task.')
             ->addArgument('task', InputArgument::REQUIRED, 'The task to list info for')
             ->setHelp(
                 <<<EOF
@@ -59,8 +59,7 @@ EOF
         }
 
         if ($service instanceof AbstractTask) {
-            $this->output->writeln('');
-            $this->output->writeln("<fg=green>Options:</fg=green>");
+            $this->output->writeln(['', '<fg=green>Options:</fg=green>']);
             /** @var TableHelper $tableHelper */
             $tableHelper = $this->getHelperSet()->get('table');
             $tableHelper->setHeaders(['Option', 'Description', 'Required', "Default"]);
@@ -79,6 +78,5 @@ EOF
             }
             $tableHelper->render($this->output);
         }
-
     }
 }

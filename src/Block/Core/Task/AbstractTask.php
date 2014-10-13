@@ -55,6 +55,9 @@ abstract class AbstractTask implements TaskInterface
      */
     private $continueOnError;
 
+    /**
+     * {@inheritdoc}
+     */
     public function configure()
     {
     }
@@ -120,7 +123,7 @@ abstract class AbstractTask implements TaskInterface
      *
      * @return AbstractTask
      */
-    public function setEventDispatcher($dispatcher)
+    public function setEventDispatcher(EventDispatcherInterface $dispatcher)
     {
         $this->dispatcher = $dispatcher;
 
@@ -239,31 +242,6 @@ abstract class AbstractTask implements TaskInterface
     }
 
     /**
-     * Tokenize the given option, if it is a string.
-     *
-     * @param mixed $option
-     *
-     * @return mixed
-     */
-    private function replaceTokens($option)
-    {
-        if (is_array($option)) {
-            $tokenizedOptions = [];
-            foreach ($option as $key => $opt) {
-                $tokenizedOptions[$key] = $this->replaceTokens($opt);
-            }
-
-            return $tokenizedOptions;
-        }
-
-        return preg_replace_callback('/\$(.+)\$|\$\{(.+)\}/', function ($match) {
-            $val = isset($match[2]) ? getenv($match[2]) : getenv($match[1]);
-
-            return $val !== false ? $val : $match[0];
-        }, $option);
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function validate()
@@ -297,10 +275,40 @@ abstract class AbstractTask implements TaskInterface
         return $this->helperSet === null;
     }
 
+    /**
+     * @param HelperSet $helperSet
+     *
+     * @return $this
+     */
     public function setHelperSet(HelperSet $helperSet)
     {
         $this->helperSet = $helperSet;
 
         return $this;
+    }
+
+    /**
+     * Tokenize the given option, if it is a string.
+     *
+     * @param mixed $option
+     *
+     * @return mixed
+     */
+    private function replaceTokens($option)
+    {
+        if (is_array($option)) {
+            $tokenizedOptions = [];
+            foreach ($option as $key => $opt) {
+                $tokenizedOptions[$key] = $this->replaceTokens($opt);
+            }
+
+            return $tokenizedOptions;
+        }
+
+        return preg_replace_callback('/\$(.+)\$|\$\{(.+)\}/', function ($match) {
+                $val = isset($match[2]) ? getenv($match[2]) : getenv($match[1]);
+
+                return $val !== false ? $val : $match[0];
+            }, $option);
     }
 }

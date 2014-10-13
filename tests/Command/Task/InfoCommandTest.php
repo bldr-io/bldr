@@ -17,6 +17,9 @@ use Bldr\Test\Mock\MockApplication;
 use Mockery\MockInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 
+/**
+ * @author Wouter J <wouter@wouterj.nl>
+ */
 class InfoCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**

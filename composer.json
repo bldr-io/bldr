@@ -13,7 +13,10 @@
         "symfony/event-dispatcher":     "~2.5.0",
         "symfony/process":              "~2.5.0",
         "zendframework/zend-json":      "~2.3.0",
-        "swiftmailer/swiftmailer":      "~5.3.0"
+        "swiftmailer/swiftmailer":      "~5.3.0",
+        "bldr-io/frontend-block":       "~2.0.0@dev",
+        "richthegeek/phpsass":          "dev-master",
+        "bldr-io/remote-block":         "~2.0.0"
     },
     "suggest":      {
         "bldr-io/frontend-block": "Allows for managing front end compiling and minification"

@@ -38,8 +38,9 @@ class ExecuteTask extends AbstractTask
             ->addParameter('output', false, 'Sets the location to output to')
             ->addParameter('successCodes', false, 'Sets the status codes allowed for a success (Array)', [0])
             ->addParameter('append', false, 'If output is set, should it append?', false)
-            ->addParameter('dry_run', false, 'If set, will not run command', false)
-            ->addParameter('timeout', false, 'Timeout for the command', 0);
+            ->addParameter('dry_run', false, 'If set will not run command', false)
+            ->addParameter('timeout', false, 'Timeout for the command', 0)
+        ;
     }
 
     /**
@@ -62,9 +63,8 @@ class ExecuteTask extends AbstractTask
 
         if ($output->getVerbosity() === OutputInterface::VERBOSITY_VERY_VERBOSE) {
             $output->writeln(
-                "        // ".
                 sprintf(
-                    "Setting timeout for %d seconds.",
+                    '        // Setting timeout for %d seconds.',
                     $this->getParameter('timeout')
                 )
             );
@@ -80,12 +80,12 @@ class ExecuteTask extends AbstractTask
 
         if (get_class($this) === 'Bldr\Block\Execute\Task\ExecuteTask') {
             $output->writeln(
-                ['', sprintf("    <info>[%s]</info> - <comment>Starting</comment>", $this->getName()), '']
+                ['', sprintf('    <info>[%s]</info> - <comment>Starting</comment>', $this->getName()), '']
             );
         }
 
         if ($output->getVerbosity() === OutputInterface::VERBOSITY_VERBOSE || $this->getParameter('dry_run')) {
-            $output->writeln("        // ".$process->getCommandLine());
+            $output->writeln('        // '.$process->getCommandLine());
         }
 
         if ($this->getParameter('dry_run')) {

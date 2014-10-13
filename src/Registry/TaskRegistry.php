@@ -32,16 +32,16 @@ class TaskRegistry
      */
     public function __construct(EventDispatcherInterface $dispatcher, array $tasks)
     {
-        foreach ($tasks as $service) {
-            if ($service instanceof AbstractTask) {
-                $service->configure();
+        foreach ($tasks as $task) {
+            if ($task instanceof AbstractTask) {
+                $task->configure();
             }
 
-            if (method_exists($service, 'setEventDispatcher')) {
-                $service->setEventDispatcher($dispatcher);
+            if (method_exists($task, 'setEventDispatcher')) {
+                $task->setEventDispatcher($dispatcher);
             }
 
-            $this->tasks[$service->getName()] = $service;
+            $this->tasks[$task->getName()] = $task;
         }
     }
 
@@ -70,4 +70,3 @@ class TaskRegistry
         return $this->tasks;
     }
 }
- 

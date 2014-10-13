@@ -54,8 +54,10 @@ The <info>%command.name%</info> builds the current project, using the config fil
 To use:
 
     <info>$ bldr %command.name% <profile_name></info>
+
 EOF
-            );
+            )
+        ;
     }
 
     /**
@@ -69,7 +71,6 @@ EOF
 
         $this->output->writeln(["\n", Application::$logo, "\n"]);
 
-
         $profile = $this->getProfile($profileName);
 
         $projectFormat = [];
@@ -81,9 +82,7 @@ EOF
             $projectFormat[] = sprintf(" - %s - ", $this->container->getParameter('description'));
         }
 
-        $profileFormat = [
-            sprintf("Using the '%s' profile", $profileName)
-        ];
+        $profileFormat = [sprintf("Using the '%s' profile", $profileName)];
         if (!empty($profile['description'])) {
             $profileFormat[] = sprintf(" - %s - ", $profile['description']);
         }
@@ -101,7 +100,7 @@ EOF
         $this->fetchJobs($profile);
         $this->builder->runJobs($this->registry);
 
-        $this->succeedBuild();
+        $this->output->writeln(['', $this->formatBlock('Build Success!', 'green', 'white', true), '']);
     }
 
     /**
@@ -145,7 +144,7 @@ EOF
      * @throws \Exception
      * @return array
      */
-    private function buildJobs($names)
+    private function buildJobs(array $names)
     {
         $jobs = $this->container->getParameter('jobs');
         foreach ($names as $name) {
@@ -159,8 +158,8 @@ EOF
                 );
             }
 
-            $jobInfo      = $jobs[$name];
-            $description  = isset($jobInfo['description']) ? $jobInfo['description'] : "";
+            $jobInfo     = $jobs[$name];
+            $description = isset($jobInfo['description']) ? $jobInfo['description'] : "";
             $job         = new JobDefinition($name, $description);
 
             foreach ($jobInfo['tasks'] as $taskInfo) {
@@ -195,13 +194,5 @@ EOF
         }
 
         return $profiles[$name];
-    }
-
-    /**
-     * @return int
-     */
-    private function succeedBuild()
-    {
-        $this->output->writeln(['', $this->formatBlock('Build Success!', 'green', 'white', true), '']);
     }
 }

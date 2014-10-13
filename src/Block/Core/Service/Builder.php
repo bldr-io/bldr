@@ -101,7 +101,7 @@ class Builder
             [
                 "\n",
                 sprintf(
-                    "<info>Running the %s job</info><comment>%s</comment>",
+                    '<info>Running the %s job</info><comment>%s</comment>',
                     $job->getName(),
                     $job->getDescription() !== '' ? " > ".$job->getDescription() : ''
                 )
@@ -130,16 +130,16 @@ class Builder
                 $formatter = $this->helperSet->get('formatter');
                 $this->output->writeln(
                     [
-                        "",
+                        '',
                         $formatter->formatBlock(
                             [
-                                sprintf("[Warning] Task: %s", $task->getType()),
-                                sprintf("%s", $e->getMessage())
+                                sprintf('[Warning] Task: %s', $task->getType()),
+                                sprintf('%s', $e->getMessage())
                             ],
                             'bg=yellow;fg=black',
                             true
                         ),
-                        ""
+                        ''
                     ]
                 );
             }
