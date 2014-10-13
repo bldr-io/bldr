@@ -11,8 +11,10 @@
 
 namespace Bldr\Test\Command\Task;
 
-use Bldr\Command\Task\ListCommand;
-use Symfony\Component\Console\Application;
+use Bldr\Block\Core\Command\Task\ListCommand;
+use Bldr\Registry\TaskRegistry;
+use Bldr\Test\Mock\MockApplication;
+use Mockery\MockInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -20,52 +22,70 @@ use Symfony\Component\Console\Tester\CommandTester;
  */
 class ListCommandTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @type MockInterface
+     */
     protected $container;
-    protected $call1;
-    protected $call2;
+
+    /**
+     * @type ListCommand
+     */
+    protected $command;
+
+    /**
+     * @type MockInterface
+     */
+    protected $task1;
+
+    /**
+     * @type MockInterface
+     */
+    protected $task2;
 
     public function setUp()
     {
         $this->container = \Mockery::mock('Symfony\Component\DependencyInjection\Container');
-        $this->command = new ListCommand();
-        $this->call1 = \Mockery::mock('Bldr\Call\CallInterface');
-        $this->call1->shouldReceive('configure');
-        $this->call2 = \Mockery::mock('Bldr\Call\CallInterface');
-        $this->call2->shouldReceive('configure');
 
+        $this->command = new ListCommand();
         $this->command->setContainer($this->container);
 
-        $this->container
-            ->shouldReceive('findTaggedServiceIds')
-            ->with('bldr')
-            ->andReturn(array('call1' => true, 'call2' => true)); // value is not important
+        $this->task1 = \Mockery::mock('Bldr\Block\Core\Task\AbstractTask');
+        $this->task1->shouldReceive('configure');
+        $this->task1->shouldReceive('validate');
+        $this->task1->shouldReceive('setEventDispatcher');
+        $this->task1->shouldReceive('getName')->andReturn('Name 1');
+
+        $this->task2 = \Mockery::mock('Bldr\Task\TaskInterface');
+        $this->task2->shouldReceive('configure');
+        $this->task2->shouldReceive('validate');
+        $this->task2->shouldReceive('getName')->andReturn('Name 2');
+
+        $registry = new TaskRegistry(
+            \Mockery::mock('Symfony\Component\EventDispatcher\EventDispatcherInterface'), [$this->task1, $this->task2]
+        );
 
         $this->container
             ->shouldReceive('get')
-            ->with('call1')
-            ->andReturn($this->call1);
-
-        $this->container
-            ->shouldReceive('get')
-            ->with('call2')
-            ->andReturn($this->call2);
+            ->with('bldr.registry.task')
+            ->andReturn($registry);
     }
 
     public function testCommand()
     {
-        $this->call1->shouldReceive('getName')->andReturn('Name 1');
-        $this->call1->shouldReceive('getDescription')->andReturn('A first description.');
+        $this->task1->shouldReceive('getName')->andReturn('Name 1');
+        $this->task1->shouldReceive('getDescription')->andReturn('A first description.');
 
-        $this->call2->shouldReceive('getName')->andReturn('Name 2');
-        $this->call2->shouldReceive('getDescription')->andReturn('A second description.');
+        $this->task2->shouldReceive('getName')->andReturn('Name 2');
+        $this->task2->shouldReceive('getDescription')->andReturn('A second description.');
 
-        $application = new Application();
+        $application = new MockApplication();
         $application->add($this->command);
 
         $tester = new CommandTester($application->find('task:list'));
         $tester->execute([]);
 
-        $this->assertEquals(<<<EOO
+        $this->assertEquals(
+            <<<EOO
 +--------+-----------------------+
 | Name   | Description           |
 +--------+-----------------------+
@@ -74,6 +94,8 @@ class ListCommandTest extends \PHPUnit_Framework_TestCase
 +--------+-----------------------+
 
 EOO
-        , $tester->getDisplay());
+            ,
+            $tester->getDisplay()
+        );
     }
 }

@@ -25,16 +25,16 @@ class ExecuteBlock extends AbstractBlock
      */
     public function assemble(array $config, ContainerBuilder $container)
     {
-        $this->addCall('bldr_execute.execute', 'Bldr\Block\Execute\Call\ExecuteCall');
-        $this->addCall('bldr_execute.apply', 'Bldr\Block\Execute\Call\ApplyCall');
+        $this->addTask('bldr_execute.execute', 'Bldr\Block\Execute\Task\ExecuteTask');
+        $this->addTask('bldr_execute.apply', 'Bldr\Block\Execute\Task\ApplyTask');
 
         $this->addService('bldr_execute.service.background', 'Bldr\Block\Execute\Service\BackgroundService')
             ->setPublic(false)
         ;
 
-        $this->addCall(
+        $this->addTask(
             'bldr_execute.background',
-            'Bldr\Block\Execute\Call\BackgroundCall',
+            'Bldr\Block\Execute\Task\BackgroundTask',
             [new Reference('bldr_execute.service.background')]
         );
     }
