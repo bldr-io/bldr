@@ -44,9 +44,6 @@ Then, add it to your ``.bldr.yml`` file:
 
     bldr: ~
 
-    blocks:
-        - Acme\Block\Demo\AcmeDemoBlock
-
     # If you have configs
     acme_demo:
         some_setting: some_value
@@ -64,9 +61,9 @@ This extension lets you run ``exec`` and ``apply`` tasks.
 
 .. code-block:: yaml
 
-    tasks:
+    jobs:
         sample:
-            calls:
+            tasks:
                 -
                     task: exec
                     executable: php
@@ -91,9 +88,9 @@ Some examples:
 
 .. code-block:: yaml
 
-    tasks:
+    jobs:
         sample:
-            calls:
+            tasks:
                 -
                     task: filesystem:mkdir
                     files: [testDir]
@@ -116,9 +113,9 @@ To use this:
 
 .. code-block:: yaml
 
-    tasks:
+    jobs:
         sample:
-            calls:
+            tasks:
                 -
                     task: notify
                     message: Test Message
@@ -127,9 +124,6 @@ To use this:
 When adding this extension, you can specify `smtp` connections:
 
 .. code-block:: yaml
-
-    blocks:
-        - Bldr\Block\Notify\NotifyBlock
 
     notify:
         smtp:
@@ -149,9 +143,9 @@ This one needs some work. Right now, you can only have one watch task.
 
 .. code-block:: yaml
 
-    tasks:
+    jobs:
         sample:
-            calls:
+            tasks:
                 -
                     task: watch
                     src:
@@ -159,7 +153,7 @@ This one needs some work. Right now, you can only have one watch task.
                         - { path: vendor/, files: [*.php, *.yml], recursive: true } # Checks vendor/ directory for *.php and *.yml files recursively
                     profile: someProfile
         sample2:
-            calls:
+            tasks:
                 -
                     task: watch
                     src:

@@ -12,49 +12,49 @@ Create a ``.bldr.yml(.dist)`` file:
     bldr:
         name: some/name
         description:  A description about the project # (Not Required)
-        profiles: # A list of profiles that can be ran with `./bldr.phar build`
-            someTask:
-                description: Gets ran when `./bldr.phar build someTask` is called
-                tasks:
+        profiles: # A list of profiles that can be ran with `./bldr.phar run`
+            someJob:
+                description: Gets ran when `./bldr.phar run someJob` is called
+                jobs:
                     - foo
-            someOtherTask:
-                tasks:
+            someOtherJob:
+                jobs:
                     - bar
             inheritanceExample:
-                description: Will run the tasks from `someTask` and then `someOtherTask`.
+                description: Will run the tasks from `someJob` and then `someOtherJob`.
                 uses:
-                    before: [someTask]
-                    after: [someOtherTask]
-        tasks:
+                    before: [someJob]
+                    after: [someOtherJob]
+        jobs:
             foo:
-                description: Foo task
-                calls:
+                description: Foo job
+                tasks:
                     -
                         type: exec
                         executable: echo
                         arguments: [Hello World]
             bar:
-                description: Bar task
-                calls:
+                description: Bar job
+                tasks:
                     -
                         type: exec
                         executable: sleep
                         arguments: [1]
 
-To view a list of available call types, run:
+To view a list of available task types, run:
 
 .. code-block:: shell
 
     ./bldr.phar task:list
 
-And to get more information on a particular type, run:
+And to get more information on a particular task, run:
 
 .. code-block:: shell
 
     ./bldr.phar task:info <task name>
 
-To run your profiles: (This has changed since version 4)
+To run your profiles: (This has changed since version 7)
 
 .. code-block:: shell
 
-    ./bldr.phar build <profile name>
+    ./bldr.phar run <profile name>

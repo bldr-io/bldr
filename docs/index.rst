@@ -4,7 +4,7 @@ Welcome to Bldr's documentation!
 Bldr, in the simplest terms, is a task runner, and an awesome one at that. It was written with simpler configs in mind. If you are used to build systems,
 you've probably seen some pretty complicated build files, and they were probably written in xml that is clunky and a pain to maintain.
 
-Well, here's one written for Bldr using yaml (json is also supported):
+Well, here's one written for Bldr using yaml (json and php are also supported):
 
 **This is a sample configuration. Your project may not have the dependencies required to run this configuration.**
 
@@ -17,18 +17,19 @@ Well, here's one written for Bldr using yaml (json is also supported):
         profiles:
             default:
                 description: Development Profile
-                tasks:
+                jobs:
                     - prepare
                     - lint
                     - phpcs
                     - test
 
-        tasks:
+        jobs:
             prepare:
                 description: Cleans up old builds and prepares the new one
-                calls:
+                tasks:
                     -
                         type: filesystem:remove
+                        continue
                         files: [build/coverage, build/logs]
                     -
                         type: filesystem:mkdir
@@ -42,10 +43,9 @@ Well, here's one written for Bldr using yaml (json is also supported):
                         arguments: [install, --prefer-dist]
             lint:
                 description: Lints the files of the project
-                calls:
+                tasks:
                     -
                         type: apply
-                        failOnError: true
                         src:
                             - { path: [src, tests], files: *.php, recursive: true } # Checks src and tests directories for *.php files recursively
                         executable: php
@@ -53,7 +53,7 @@ Well, here's one written for Bldr using yaml (json is also supported):
 
             phpcs:
                 description: Runs the PHP Code Sniffer
-                calls:
+                tasks:
                     -
                         type: exec
                         executable: php
@@ -66,10 +66,9 @@ Well, here's one written for Bldr using yaml (json is also supported):
                             - src/
             test:
                 description: Runs the PHPUnit Tests
-                calls:
+                tasks:
                     -
                         type: exec
-                        failOnError: true
                         executable: php
                         arguments:
                             - bin/phpunit
@@ -91,7 +90,6 @@ Content
     :maxdepth: 2
 
     installation
-    configuration
     usage
     blocks
     creating-a-block

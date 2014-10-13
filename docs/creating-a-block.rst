@@ -27,7 +27,7 @@ stable release you will have to add them too into your composer.json as below:
 
     {
         "require-dev": {
-            "bldr-io/bldr":              "~4.2.0",
+            "bldr-io/bldr":              "~7.0.0",
             "dflydev/embedded-composer": "dev-master@dev",
             "composer/composer":         "dev-master@dev"
         }
@@ -36,7 +36,7 @@ stable release you will have to add them too into your composer.json as below:
 4. Create a Block class
 -----------------------
 
-All of bldr, and the official extensions follow `PSR-4`_ (as well as all the other PSR's, and most, if not all, of the bylaws).
+All of bldr, and the official extensions follow `PSR-4`_ (as well as all the other applicable PSR's, and most, if not all, of the bylaws).
 With that, create your directory structure and your Block class:
 
 .. code-block:: shell
@@ -76,22 +76,23 @@ All blocks must extend the `Bldr\DependencyInjection\AbstractBlock`_, so your cl
 The assemble function is where the magic happens. If you take a look at the AbstractBlock, there are some helper functions
 in there to make it easier to add new calls, services, and parameters to the Container.
 
-5. Create your Call
+5. Create your Task
 -------------------
 
-As a demo, let's say we want to make a call that will output a random number to the user when running the call.
+As a demo, let's say we want to make a task that will output a random number to the user when running the task.
 
-First, lets create the call. Directory structure doesn't really matter, but the core structure is normally `src/Call/<Name>Call.php`.
-Similar to blocks, all calls must extend `Bldr\Call\AbstractCall`_.
+First, lets create the task. Directory structure doesn't really matter, but the core structure is normally `src/Task/<Name>Task.php`.
+Similar to blocks, all tasks should extend `Bldr\Block\Core\Task\AbstractTask`_ and must implement `Bldr\Task\TaskInterface`_.
 
-Lets make the `src/Call` directory, and create the new Call:
+Lets make the `src/Task` directory, and create the new task:
 .. code-block:: shell
 
-    mkdir src/Call && vim src/Call/OutputRandomNumberCall.php
+    mkdir src/Task && vim src/Task/OutputRandomNumberCall.php
 
-Then, let's build the call class! Extending the AbstractCall, requires that we implement two methods: `configure`_ and `run`_
+Then, let's build the task class! Extending the AbstractTask, suggests that we implement `configure`_ and requires that we
+implement `run`_.
 
-*src/Call/OutputRandomNumberCall.php*
+*src/Task/OutputRandomNumberTask.php*
 
 .. code-block:: php
 
@@ -101,14 +102,15 @@ Then, let's build the call class! Extending the AbstractCall, requires that we i
      * License Information
      */
 
-    namespace Acme\Block\Demo\Call;
+    namespace Acme\Block\Demo\Task;
 
-    use Bldr\Call\AbstractCall;
+    use Bldr\Block\Core\Task\AbstractTask;
+    use Symfony\Component\Console\Output\OutputInterface;
 
     /**
      * @author John Doe <john@doh.com>
      */
-    class OutputRandomNumberCall extends AbstractCall
+    class OutputRandomNumberTask extends AbstractTask
     {
         /**
          * {@inheritDoc}
@@ -117,24 +119,22 @@ Then, let's build the call class! Extending the AbstractCall, requires that we i
         {
             $this->setName('acme_demo:output_random_number')
                 ->setDescription('This call outputs a random number. If min and max are specified, it will use those as the range')
-                ->addOption('min', true, 'Minimum number in range', 0)
-                ->addOption('max', true, 'Maximum number in range', 100)
+                ->addParameter('min', true, 'Minimum number in range', 0)
+                ->addParameter('max', true, 'Maximum number in range', 100)
             ;
         }
 
         /**
          * {@inheritDoc}
          */
-        public function run()
+        public function run(OutputInterface $output)
         {
-            $random = rand($this->getOption('min'), $this->getOption('max'));
-            $this->output->writeln(['', 'Random Number: '.$random, '']);
-
-            return true;
+            $random = rand($this->getParameter('min'), $this->getParameter('max'));
+            $output->writeln(['', 'Random Number: '.$random, '']);
         }
     }
 
-Next, we need to add the call to the container, so we can use it in .bldr.yml files:
+Next, we need to add the task to the container, so we can use it in .bldr.yml(.dist) files:
 
 *src/AcmeDemoBlock.php*
 
@@ -164,15 +164,15 @@ Next, we need to add the call to the container, so we can use it in .bldr.yml fi
             // Here's one of the shortcut methods! This method will return a Symfony DI Definition
             // that is tagged as `bldr`. If you need to, you can easily add arguments to the constructor,
             // or calls to methods.
-            $call = $this->addCall('acme_demo.output_random_number', 'Acme\Block\Demo\AcmeDemoBlock');
+            $task = $this->addTask('acme_demo.output_random_number', 'Acme\Block\Demo\Task\OutputRandomNumberTask');
 
             // If you need dependencies, you could do the following:
-            // $call->setArgument(0, new Reference('some_service'));
+            // $task->setArgument(0, new Reference('some_service'));
             // or
             // $arguments = array(new Reference('some_service'));
-            // $call->addMethodCall('someMethodName', $arguments);
+            // $task->addMethodCall('someMethodName', $arguments);
 
-            // If you want to add a service, that isn't a call, you can also use:
+            // If you want to add a service, that isn't a task, you can also use:
             // $this->addService($name, $class);
             // Which will also return a Symfony DI Definition
         }
@@ -199,12 +199,12 @@ With this, you should be able to install it with the `bldr.json` file and add it
         name: some/name
         profile:
             test:
-                tasks:
+                jobs:
                     - randomize
 
-        tasks:
+        jobs:
             randomize:
-                calls:
+                tasks:
                     -
                         type: acme_demo:output_random_number
                         min: 0
@@ -214,7 +214,7 @@ And run it!
 
 .. code-block:: shell
 
-    ./bldr.phar build test
+    ./bldr.phar run test
 
 
 There's some more advanced stuff, like being able to specify configuration:
@@ -291,6 +291,7 @@ Then make a Configuration.php file. This config is the config from Symfony. You 
 
 .. _PSR-4: http://www.php-fig.org/psr/psr-4/
 .. _BldrDependencyInjectionAbstractBlock: https://github.com/bldr-io/bldr/blob/master/src/DependencyInjection/AbstractBlock.php
-.. _BldrCallAbstractCall:https://github.com/bldr-io/bldr/blob/master/src/Call/AbstractCall.php
+.. _BldrBlockCoreTaskAbstractTask:https://github.com/bldr-io/bldr/blob/master/src/Block/Core/Task/AbstractTask.php
+.. _BldrTaskTaskInterface:https://github.com/bldr-io/bldr/blob/master/src/Task/TaskInterface.php
 .. _configure: https://github.com/bldr-io/bldr/blob/master/src/Call/CallInterface.php#L28
 .. _run: https://github.com/bldr-io/bldr/blob/master/src/Call/CallInterface.php#L54
