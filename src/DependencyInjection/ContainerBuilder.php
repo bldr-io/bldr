@@ -100,6 +100,8 @@ class ContainerBuilder extends BaseContainerBuilder
             new Block\Notify\NotifyBlock(),
             new Block\Watch\WatchBlock(),
             new Block\Miscellaneous\MiscellaneousBlock(),
+            new Block\Frontend\FrontendBlock(),
+            new Block\Remote\RemoteBlock()
         ];
     }
 
