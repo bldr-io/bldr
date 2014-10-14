@@ -44,16 +44,16 @@
         },
         {
             "name": "bldr-io/frontend-block",
-            "version": "2.0.2",
+            "version": "2.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bldr-io/frontend-block.git",
-                "reference": "c8c9fd361011e3e85cc00c7b31648fda025295d9"
+                "reference": "281b3c15d2707e81e252a2fba291a9a80854fdca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bldr-io/frontend-block/zipball/c8c9fd361011e3e85cc00c7b31648fda025295d9",
-                "reference": "c8c9fd361011e3e85cc00c7b31648fda025295d9",
+                "url": "https://api.github.com/repos/bldr-io/frontend-block/zipball/281b3c15d2707e81e252a2fba291a9a80854fdca",
+                "reference": "281b3c15d2707e81e252a2fba291a9a80854fdca",
                 "shasum": ""
             },
             "require": {
@@ -88,7 +88,7 @@
                 }
             ],
             "description": "Block for handling the Front End tasks (less/sass, css and js min, etc)",
-            "time": "2014-10-14 03:40:14"
+            "time": "2014-10-14 04:30:30"
         },
         {
             "name": "bldr-io/remote-block",
