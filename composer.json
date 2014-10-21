@@ -19,7 +19,8 @@
         "bldr-io/remote-block":         "~2.0.0"
     },
     "suggest":      {
-        "bldr-io/frontend-block": "Allows for managing front end compiling and minification"
+        "bldr-io/frontend-block": "Allows for managing front end compiling and minification",
+        "yosymfony/toml": "Allows for loading from TOML configuration files"
     },
     "require-dev":  {
         "matthiasnoback/symfony-service-definition-validator": "~1.1.0",
@@ -29,7 +30,8 @@
         "mockery/mockery":           "~0.9.2",
         "raulfraile/ladybug":        "~1.0.11",
         "kherge/box":                "~2.4.4",
-        "phpspec/prophecy":          "~1.1.2"
+        "phpspec/prophecy":          "~1.1.2",
+        "yosymfony/toml":            "~0.2.0"
     },
     "license":      "MIT",
     "authors":      [
