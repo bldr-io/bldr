@@ -8,7 +8,7 @@
  * with this source code in the file LICENSE
  */
 
-namespace Blrd\Test\Event;
+namespace Bldr\Test\Event;
 
 use Bldr\Event\PreExecuteEvent;
 
