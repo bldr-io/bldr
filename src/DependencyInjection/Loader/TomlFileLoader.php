@@ -12,7 +12,7 @@
 namespace Bldr\DependencyInjection\Loader;
 
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use Yosymfony\Toml\Parser as TomlParser;
+use Yosymfony\Toml\Toml;
 
 /**
  * @author Rob Loach <robloach@gmail.com>
@@ -20,8 +20,6 @@ use Yosymfony\Toml\Parser as TomlParser;
 class TomlFileLoader extends JsonFileLoader
 {
     use SupportsTrait;
-
-    private $tomlParser;
 
     /**
      * Loads the Toml File
@@ -41,10 +39,6 @@ class TomlFileLoader extends JsonFileLoader
             throw new InvalidArgumentException(sprintf('The service file "%s" is not valid.', $file));
         }
 
-        if (null === $this->tomlParser) {
-            $this->tomlParser = new TomlParser();
-        }
-
-        return $this->tomlParser->parse(file_get_contents($file), true);
+        return Toml::Parse($file);
     }
 }
