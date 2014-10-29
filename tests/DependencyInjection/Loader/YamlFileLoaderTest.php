@@ -19,5 +19,5 @@ namespace Bldr\Test\DependencyInjection\Loader;
 class YamlFileLoaderTest extends FileLoaderTest
 {
     protected $class = 'Bldr\DependencyInjection\Loader\YamlFileLoader';
-    protected $extension = 'yaml';
+    protected $extension = 'yml';
 }

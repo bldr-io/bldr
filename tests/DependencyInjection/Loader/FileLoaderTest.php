@@ -32,7 +32,7 @@ abstract class FileLoaderTest extends \PHPUnit_Framework_TestCase
 	protected $expected = array(
 		'bldr' => array(
 			'description' => 'Description for your project',
-			'name' => 'test',
+			'name' => 'acme/demo-project',
 			'profiles' => array(
 				'default' => array(
 					'description' => 'Sample Profile',
@@ -63,14 +63,9 @@ abstract class FileLoaderTest extends \PHPUnit_Framework_TestCase
 	 * Set up the FileLoader.
 	 */
 	public function setUp() {
-		// Mock an extension.
-		$extension = $this->getMock('Symfony\Component\DependencyInjection\Extension\ExtensionInterface');
-		$extension->method('getNamespace')->willReturn('bldr');
-		$extension->method('getAlias')->willReturn('bldr');
-
 		// Mock the Container Builder.
 		$container = $this->getMock('Symfony\Component\DependencyInjection\ContainerBuilder');
-		$container->method('getExtensions')->willReturn(array($extension));
+		$container->method('hasExtension')->willReturn(true);
 
 		// Mock the Locator.
 		$locator = $this->getMock('Symfony\Component\Config\FileLocatorInterface');
@@ -80,9 +75,10 @@ abstract class FileLoaderTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Tests out the protected loadFile() function from the FileLoader.
+	 * Tests the protected loadFile() function from the FileLoader.
 	 */
-	public function testLoadFile() {
+	public function testLoadFile()
+	{
 		$actual = $this->invokeMethod($this->loader, 'loadFile', array(
 			__DIR__ . '/Fixtures/test.' . $this->extension
 		));
@@ -90,13 +86,24 @@ abstract class FileLoaderTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Tests the getFileExtension function.
+	 */
+	public function testGetFileExtension()
+	{
+		$actual = $this->invokeMethod($this->loader, 'getFileExtension');
+		$this->assertEquals($this->extension, $actual);
+	}
+
+	/**
 	 * Invoke a protected or private method from a class.
 	 */
 	private function invokeMethod(&$object, $methodName, array $parameters = array()) {
 		$reflection = new \ReflectionClass(get_class($object));
-	    $method = $reflection->getMethod('loadFile');
+	    $method = $reflection->getMethod($methodName);
 	    $method->setAccessible(true);
 
 	    return $method->invokeArgs($object, $parameters);
 	}
+
+
 }

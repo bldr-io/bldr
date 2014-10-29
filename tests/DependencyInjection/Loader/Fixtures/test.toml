@@ -1,6 +1,6 @@
 [bldr]
   description = "Description for your project"
-  name = "test"
+  name = "acme/demo-project"
 
   [bldr.profiles.default]
     description = "Sample Profile"
