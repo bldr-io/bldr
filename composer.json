@@ -16,11 +16,11 @@
         "swiftmailer/swiftmailer":      "~5.3.0",
         "bldr-io/frontend-block":       "~2.0.0@dev",
         "richthegeek/phpsass":          "dev-master",
-        "bldr-io/remote-block":         "~2.0.0"
+        "bldr-io/remote-block":         "~2.0.0",
+        "yosymfony/toml":               "~0.2"
     },
     "suggest":      {
-        "bldr-io/frontend-block": "Allows for managing front end compiling and minification",
-        "yosymfony/toml": "Allows for loading from TOML configuration files"
+        "bldr-io/frontend-block": "Allows for managing front end compiling and minification"
     },
     "require-dev":  {
         "matthiasnoback/symfony-service-definition-validator": "~1.1.0",
@@ -30,8 +30,7 @@
         "mockery/mockery":           "~0.9.2",
         "raulfraile/ladybug":        "~1.0.11",
         "kherge/box":                "~2.4.4",
-        "phpspec/prophecy":          "~1.1.2",
-        "yosymfony/toml":            "~0.2.0"
+        "phpspec/prophecy":          "~1.1.2"
     },
     "license":      "MIT",
     "authors":      [

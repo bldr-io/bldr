@@ -1,0 +1,18 @@
+[bldr]
+  description = "Description for your project"
+  name = "test"
+
+  [bldr.profiles.default]
+    description = "Sample Profile"
+    jobs = ["sampleJob"]
+
+  [bldr.jobs.sampleJob]
+    description = "Runs a sleep for 5 seconds, then sends a message to the screen"
+
+    [bldr.jobs.sampleJob.tasks.0]
+      type = "sleep"
+      seconds = 5
+
+    [bldr.jobs.sampleJob.tasks.1]
+      type = "notify"
+      message = "Finished Sleeping. Ending now."
