@@ -32,7 +32,7 @@ class Config
     /**
      * @var array $TYPES
      */
-    public static $TYPES = ['yml', 'xml', 'php', 'ini', 'json'];
+    public static $TYPES = ['yml', 'xml', 'php', 'ini', 'json', 'toml'];
 
     /**
      * @var string $DEFAULT_TYPE
@@ -62,7 +62,8 @@ class Config
                 new Loader\XmlFileLoader($container, $locator),
                 new Loader\PhpFileLoader($container, $locator),
                 new Loader\IniFileLoader($container, $locator),
-                new Loader\JsonFileLoader($container, $locator)
+                new Loader\JsonFileLoader($container, $locator),
+                new Loader\TomlFileLoader($container, $locator)
             ]
         );
 

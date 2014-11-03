@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "2a148beba8304b7710c1ecf5e5953d27",
+    "hash": "e2e367f08033322694a50ec0a034146e",
     "packages": [
         {
             "name": "bldr-io/composer-plugin",
@@ -1179,6 +1179,54 @@
                 "minifier"
             ],
             "time": "2014-05-05 20:44:19"
+        },
+        {
+            "name": "yosymfony/toml",
+            "version": "v0.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yosymfony/Toml.git",
+                "reference": "b2b20ec07e45d3fbfe63f1e67b15dfc0bfcb1147"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yosymfony/Toml/zipball/b2b20ec07e45d3fbfe63f1e67b15dfc0bfcb1147",
+                "reference": "b2b20ec07e45d3fbfe63f1e67b15dfc0bfcb1147",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.2-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Yosymfony\\Toml": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Victor Puertas",
+                    "email": "vpgugr@gmail.com",
+                    "homepage": "http://yosymfony.com"
+                }
+            ],
+            "description": "A PHP parser for TOML compatible with specification 0.2.0",
+            "homepage": "http://github.com/yosymfony/toml",
+            "keywords": [
+                "mojombo",
+                "parser",
+                "toml"
+            ],
+            "time": "2014-05-03 17:43:40"
         },
         {
             "name": "zendframework/zend-json",
