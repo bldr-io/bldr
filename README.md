@@ -7,7 +7,7 @@ Uses Yaml, JSON, XML, PHP, or INI for configs
 
 ### Quick Usage
 
-To develop, run ./script/bootstrap, and then ./script/test to run the tests.
+To develop, run `./script/bootstrap`, and then `./script/test` to run the tests.
 
 ### Documentation
 
