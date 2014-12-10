@@ -70,8 +70,8 @@ trait FinderAwareTrait
      */
     protected function appendFileSet(Finder $finder, array $fileSet)
     {
+        /** @var SplFileInfo[] $files */
         foreach ($finder as $file) {
-            /** @var SplFileInfo $file */
             $fileSet[] = $file;
         }
 

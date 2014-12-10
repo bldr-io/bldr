@@ -13,7 +13,6 @@ namespace Bldr\Command;
 
 use Bldr\Application;
 use Bldr\Event\EventInterface;
-use Bldr\Output\BldrOutput;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\InputInterface;

@@ -12,11 +12,9 @@
 namespace Bldr\Block\Core\Command\Task;
 
 use Bldr\Block\Core\Task\AbstractTask;
-use Bldr\Task\TaskInterface;
 use Bldr\Command\AbstractCommand;
-use Symfony\Component\Console\Helper\TableHelper;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Helper\TableStyle;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
@@ -49,15 +47,18 @@ EOF
      */
     protected function doExecute()
     {
-        /** @var TableHelper $tableHelper */
-        $tableHelper = $this->getHelperSet()->get('table');
-        $tableHelper->setHeaders(['Name', 'Description']);
-        $tableHelper->setCellHeaderFormat('<fg=red>%s</fg=red>');
-        $tableHelper->setCellRowFormat('<fg=blue>%s</fg=blue>');
-        $tableHelper->setBorderFormat('<fg=yellow>%s</fg=yellow>');
+        $table = new Table($this->output);
+        $table->setHeaders(['Name', 'Description']);
+
+        $style = new TableStyle();
+        $style->setCellHeaderFormat('<fg=red>%s</fg=red>');
+        $style->setCellRowFormat('<fg=blue>%s</fg=blue>');
+        $style->setBorderFormat('<fg=yellow>%s</fg=yellow>');
+
+        $table->setStyle($style);
 
 
-        /** @type TaskInterface[]|AbstractTask[] $services */
+        /** @type AbstractTask[] $services */
         $services = $this->container->get('bldr.registry.task')->findAll();
         foreach ($services as $service) {
 
@@ -65,7 +66,7 @@ EOF
                 $service->configure();
             }
 
-            $tableHelper->addRow(
+            $table->addRow(
                 [
                     $service->getName(),
                     $service->getDescription() !== '' ? $service->getDescription() : 'No Description'
@@ -73,6 +74,6 @@ EOF
             );
         }
 
-        $tableHelper->render($this->output);
+        $table->render($this->output);
     }
 }

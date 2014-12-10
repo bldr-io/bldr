@@ -12,6 +12,7 @@
 namespace Bldr\DependencyInjection\Loader;
 
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Zend\Json\Json;
 
 /**
@@ -70,14 +71,14 @@ class JsonFileLoader extends YamlFileLoader
         }
 
         foreach (array_keys($content) as $namespace) {
-            if (in_array($namespace, array('imports', 'parameters', 'services'))) {
+            if (in_array($namespace, ['imports', 'parameters', 'services'])) {
                 continue;
             }
 
             if (!$this->container->hasExtension($namespace)) {
                 $extensionNamespaces = array_filter(
                     array_map(
-                        function ($ext) {
+                        function (ExtensionInterface $ext) {
                             return $ext->getAlias();
                         },
                         $this->container->getExtensions()

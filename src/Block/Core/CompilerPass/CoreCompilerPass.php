@@ -76,8 +76,7 @@ class CoreCompilerPass implements CompilerPassInterface
                     new Reference('bldr.dispatcher'),
                     new Reference('output'),
                     new Reference('helper_set'),
-                    new Reference('bldr.registry.task'),
-                    $this->findBldrServicesTaggedWith($container, 'bldr')
+                    new Reference('bldr.registry.task')
                 ]
             )
         );

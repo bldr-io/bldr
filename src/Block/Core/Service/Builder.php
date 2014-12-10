@@ -51,29 +51,21 @@ class Builder
     private $taskRegistry;
 
     /**
-     * @var TaskInterface[] $tasks
-     */
-    private $tasks;
-
-    /**
      * @param EventDispatcherInterface $dispatcher
      * @param OutputInterface          $output
      * @param HelperSet                $helperSet
      * @param TaskRegistry             $taskRegistry
-     * @param array                    $tasks
      */
     public function __construct(
         EventDispatcherInterface $dispatcher,
         OutputInterface $output,
         HelperSet $helperSet,
-        TaskRegistry $taskRegistry,
-        array $tasks = []
+        TaskRegistry $taskRegistry
     ) {
         $this->dispatcher   = $dispatcher;
         $this->output       = $output;
         $this->helperSet    = $helperSet;
         $this->taskRegistry = $taskRegistry;
-        $this->tasks        = $tasks;
     }
 
     /**

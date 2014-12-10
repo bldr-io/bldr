@@ -101,4 +101,3 @@ interface TaskInterface
      */
     public function getEventDispatcher();
 }
- 

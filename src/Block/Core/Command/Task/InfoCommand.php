@@ -12,7 +12,6 @@
 namespace Bldr\Block\Core\Command\Task;
 
 use Bldr\Block\Core\Task\AbstractTask;
-use Bldr\Task\TaskInterface;
 use Bldr\Command\AbstractCommand;
 use Symfony\Component\Console\Helper\TableHelper;
 use Symfony\Component\Console\Input\InputArgument;
@@ -49,7 +48,7 @@ EOF
      */
     protected function doExecute()
     {
-        /** @type TaskInterface|AbstractTask $service */
+        /** @type AbstractTask $service */
         $service = $this->container->get('bldr.registry.task')->findTaskByType($this->input->getArgument('task'));
 
         $this->output->writeln('');

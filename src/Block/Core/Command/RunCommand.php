@@ -16,8 +16,6 @@ use Bldr\Block\Core\Service\Builder;
 use Bldr\Command\AbstractCommand;
 use Bldr\Definition\JobDefinition;
 use Bldr\Definition\TaskDefinition;
-use Bldr\Event as Events;
-use Bldr\Event;
 use Bldr\Exception\BldrException;
 use Bldr\Registry\JobRegistry;
 use Symfony\Component\Console\Helper\FormatterHelper;
