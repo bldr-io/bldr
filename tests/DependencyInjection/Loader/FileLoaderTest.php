@@ -16,94 +16,94 @@ namespace Bldr\Test\DependencyInjection\Loader;
  */
 abstract class FileLoaderTest extends \PHPUnit_Framework_TestCase
 {
-	/**
-	 * The name of the class to test.
-	 */
-	protected $class;
+    /**
+     * The name of the class to test.
+     */
+    protected $class;
 
-	/**
-	 * The extension for the file.
-	 */
-	protected $extension;
+    /**
+     * The extension for the file.
+     */
+    protected $extension;
 
-	/**
-	 * The expected result from loading the file.
-	 */
-	protected $expected = array(
-		'bldr' => array(
-			'description' => 'Description for your project',
-			'name' => 'acme/demo-project',
-			'profiles' => array(
-				'default' => array(
-					'description' => 'Sample Profile',
-					'jobs' => array(
-						0 => 'sampleJob',
-					),
-				),
-			),
-			'jobs' => array(
-				'sampleJob' => array(
-					'description' => 'Runs a sleep for 5 seconds, then sends a message to the screen',
-					'tasks' => array(
-						0 => array(
-							'type' => 'sleep',
-							'seconds' => 5,
-						),
-						1 => array(
-							'type' => 'notify',
-							'message' => 'Finished Sleeping. Ending now.'
-						),
-					),
-				),
-			)
-		),
-	);
+    /**
+     * The expected result from loading the file.
+     */
+    protected $expected = [
+        'bldr' => [
+            'description' => 'Description for your project',
+            'name'        => 'acme/demo-project',
+            'profiles'    => [
+                'default' => [
+                    'description' => 'Sample Profile',
+                    'jobs'        => [
+                        0 => 'sampleJob',
+                    ],
+                ],
+            ],
+            'jobs'        => [
+                'sampleJob' => [
+                    'description' => 'Runs a sleep for 5 seconds, then sends a message to the screen',
+                    'tasks'       => [
+                        0 => [
+                            'type'    => 'sleep',
+                            'seconds' => 5,
+                        ],
+                        1 => [
+                            'type'    => 'notify',
+                            'message' => 'Finished Sleeping. Ending now.'
+                        ],
+                    ],
+                ],
+            ]
+        ],
+    ];
 
-	/**
-	 * Set up the FileLoader.
-	 */
-	public function setUp() {
-		// Mock the Container Builder.
-		$container = $this->getMock('Symfony\Component\DependencyInjection\ContainerBuilder');
-		$container->method('hasExtension')->willReturn(true);
+    /**
+     * Set up the FileLoader.
+     */
+    public function setUp()
+    {
+        // Mock the Container Builder.
+        $container = $this->getMock('Symfony\Component\DependencyInjection\ContainerBuilder');
+        $container->method('hasExtension')->willReturn(true);
 
-		// Mock the Locator.
-		$locator = $this->getMock('Symfony\Component\Config\FileLocatorInterface');
+        // Mock the Locator.
+        $locator = $this->getMock('Symfony\Component\Config\FileLocatorInterface');
 
-		// Build the FileLoader.
-		$this->loader = new $this->class($container, $locator);
-	}
+        // Build the FileLoader.
+        $this->loader = new $this->class($container, $locator);
+    }
 
-	/**
-	 * Tests the protected loadFile() function from the FileLoader.
-	 */
-	public function testLoadFile()
-	{
-		$actual = $this->invokeMethod($this->loader, 'loadFile', array(
-			__DIR__ . '/Fixtures/test.' . $this->extension
-		));
-		$this->assertEquals($this->expected, $actual);
-	}
+    /**
+     * Tests the protected loadFile() function from the FileLoader.
+     */
+    public function testLoadFile()
+    {
+        $actual = $this->invokeMethod($this->loader, 'loadFile', [
+            __DIR__.'/Fixtures/test.'.$this->extension
+        ]);
+        $this->assertEquals($this->expected, $actual);
+    }
 
-	/**
-	 * Tests the getFileExtension function.
-	 */
-	public function testGetFileExtension()
-	{
-		$actual = $this->invokeMethod($this->loader, 'getFileExtension');
-		$this->assertEquals($this->extension, $actual);
-	}
+    /**
+     * Tests the getFileExtension function.
+     */
+    public function testGetFileExtension()
+    {
+        $actual = $this->invokeMethod($this->loader, 'getFileExtension');
+        $this->assertEquals($this->extension, $actual);
+    }
 
-	/**
-	 * Invoke a protected or private method from a class.
-	 */
-	private function invokeMethod(&$object, $methodName, array $parameters = array()) {
-		$reflection = new \ReflectionClass(get_class($object));
-	    $method = $reflection->getMethod($methodName);
-	    $method->setAccessible(true);
+    /**
+     * Invoke a protected or private method from a class.
+     */
+    private function invokeMethod(&$object, $methodName, array $parameters = [])
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $method     = $reflection->getMethod($methodName);
+        $method->setAccessible(true);
 
-	    return $method->invokeArgs($object, $parameters);
-	}
-
-
+        return $method->invokeArgs($object, $parameters);
+    }
 }
