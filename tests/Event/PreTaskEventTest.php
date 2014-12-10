@@ -16,7 +16,7 @@ use Bldr\Event\PreTaskEvent;
 /**
  * @author Mauricio Walters <nvitius@gmail.com>
  */
-class PreCallEventTest extends \PHPUnit_Framework_TestCase
+class PreTaskEventTest extends \PHPUnit_Framework_TestCase
 {
     public static function createPreTaskEvent()
     {

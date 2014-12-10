@@ -34,8 +34,8 @@ class JobDefinition
     private $tasks = [];
 
     /**
-     * @param string $name
-     * @param string $description
+     * @param string           $name
+     * @param string           $description
      * @param TaskDefinition[] $tasks
      */
     public function __construct($name, $description = '', array $tasks = [])

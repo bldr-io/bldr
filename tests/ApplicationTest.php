@@ -13,7 +13,6 @@ namespace Bldr\Test;
 
 use Bldr\Application;
 use Symfony\Component\Console\Input\ArgvInput;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\StreamOutput;
 
 /**

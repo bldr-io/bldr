@@ -58,7 +58,7 @@ EOF
     /**
      * @param string $name
      *
-     * @param array  $options
+     * @param array $options
      *
      * @throws \Exception
      * @return TaskInterface|AbstractTask

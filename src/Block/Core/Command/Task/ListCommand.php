@@ -57,7 +57,6 @@ EOF
 
         $table->setStyle($style);
 
-
         /** @type AbstractTask[] $services */
         $services = $this->container->get('bldr.registry.task')->findAll();
         foreach ($services as $service) {

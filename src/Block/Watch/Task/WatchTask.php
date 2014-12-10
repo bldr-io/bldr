@@ -103,7 +103,6 @@ class WatchTask extends AbstractTask
                         )
                     );
 
-
                     $this->getJobs();
                     $this->registry->addJob($this->registry->getNewJob());
 
