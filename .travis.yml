@@ -20,6 +20,7 @@ matrix:
           env: DEPENDENCIES=low
 
 before_script:
+    - composer selfupdate
     - composer require satooshi/php-coveralls:dev-master --no-update
     - if [[ "$DEPENDENCIES" == "" ]]; then composer update; fi
     - if [[ "$DEPENDENCIES" == "low" ]]; then composer update --prefer-lowest; fi
