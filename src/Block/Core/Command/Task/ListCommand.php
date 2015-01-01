@@ -60,7 +60,6 @@ EOF
         /** @type AbstractTask[] $services */
         $services = $this->container->get('bldr.registry.task')->findAll();
         foreach ($services as $service) {
-
             if ($service instanceof AbstractTask) {
                 $service->configure();
             }
