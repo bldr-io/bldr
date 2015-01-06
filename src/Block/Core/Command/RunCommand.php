@@ -43,7 +43,7 @@ class RunCommand extends AbstractCommand
     {
         $this->setName('run')
             ->setDescription("Runs the project for the directory you are in. Must contain a config file.")
-            ->addArgument('profile', InputArgument::REQUIRED, 'Profile to run')
+            ->addArgument('profile', InputArgument::OPTIONAL, 'Profile to run')
             ->setHelp(
                 <<<EOF
 
@@ -65,7 +65,7 @@ EOF
     {
         $this->registry = $this->container->get('bldr.registry.job');
         $this->builder  = $this->container->get('bldr.builder');
-        $profileName    = $this->input->getArgument('profile');
+        $profileName    = $this->input->getArgument('profile') ?: 'default';
 
         $this->output->writeln(["\n", Application::$logo, "\n"]);
 
