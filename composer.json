@@ -15,13 +15,9 @@
         "symfony/process":              "~2.6",
         "zendframework/zend-json":      "~2.3",
         "swiftmailer/swiftmailer":      "~5.3",
-        "bldr-io/frontend-block":       "~2.0.0@dev",
-        "richthegeek/phpsass":          "dev-master",
+        "bldr-io/frontend-block":       "~3.0.1",
         "bldr-io/remote-block":         "~2.0",
         "yosymfony/toml":               "~0.2"
-    },
-    "suggest":      {
-        "bldr-io/frontend-block": "Allows for managing front end compiling and minification"
     },
     "require-dev":  {
         "matthiasnoback/symfony-service-definition-validator": "~1.1",
