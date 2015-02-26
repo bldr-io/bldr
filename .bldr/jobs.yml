@@ -93,10 +93,10 @@ bldr:
                     arguments:
                         - bin/phpunit
                         - -v
-                -
-                    type: exec
-                    executable: test
-                    arguments: ['-f', 'build/logs/clover.xml']
+#                -
+#                    type: exec
+#                    executable: test
+#                    arguments: ['-f', 'build/logs/clover.xml']
                 -
                     type: notify
                     message: Test Task Finished
