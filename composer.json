@@ -26,7 +26,7 @@
         "squizlabs/php_codesniffer":                           "~2.0",
         "mockery/mockery":                                     "~0.9",
         "raulfraile/ladybug":                                  "~1.0",
-        "kherge/box":                                          "~2.4",
+        "kherge/box":                                          "~2.5.0",
         "kherge/amend":                                        "~3.0.4",
         "phpspec/prophecy":                                    "~1.1"
     },
