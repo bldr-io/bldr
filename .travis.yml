@@ -4,18 +4,29 @@ php:
     - 5.4
     - 5.5
     - 5.6
+    - 7.0
     - hhvm
 
 matrix:
     allow_failures:
         - php: hhvm
+        - php: 7.0
+    include:
+        - php: 5.4
+          env: DEPENDENCIES=low
 
-before_script:
-    - composer install
-    - composer require satooshi/php-coveralls:dev-master --no-progress --prefer-source
+sudo: false
 
-script:
-    - ./bin/bldr run default
+cache:
+    directories:
+        - $HOME/.composer/cache
 
-after_script:
-    - php bin/coveralls
+install:
+    - travis_retry composer install
+    - travis_retry composer require satooshi/php-coveralls:dev-master --no-progress --prefer-source
+    - if [[ "$DEPENDENCIES" == "" ]]; then composer update; fi
+    - if [[ "$DEPENDENCIES" == "low" ]]; then composer update --prefer-lowest; fi
+
+script: ./bin/bldr run default
+
+after_script: php bin/coveralls

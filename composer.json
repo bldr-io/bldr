@@ -4,20 +4,20 @@
     "require":      {
         "php":                          ">=5.4",
         "bldr-io/composer-plugin":      "~1.0.4",
-        "dflydev/embedded-composer":    "dev-master@dev",
-        "composer/composer":            "dev-master@dev",
-        "symfony/console":              "~2.6",
-        "symfony/config":               "~2.6",
-        "symfony/yaml":                 "~2.6",
-        "symfony/dependency-injection": "~2.6",
-        "symfony/expression-language":  "~2.6",
-        "symfony/event-dispatcher":     "~2.6",
-        "symfony/process":              "~2.6",
-        "zendframework/zend-json":      "~2.3",
+        "dflydev/embedded-composer":    "dev-master",
+        "composer/composer":            "dev-master",
+        "symfony/console":              "~2.3",
+        "symfony/config":               "~2.3",
+        "symfony/yaml":                 "~2.3",
+        "symfony/dependency-injection": "~2.3",
+        "symfony/expression-language":  "~2.3",
+        "symfony/event-dispatcher":     "~2.3",
+        "symfony/process":              "~2.3",
+        "zendframework/zend-json":      "~2.",
         "swiftmailer/swiftmailer":      "~5.3",
         "bldr-io/frontend-block":       "~3.0.1",
         "bldr-io/remote-block":         "~2.0",
-        "yosymfony/toml":               "~0.2"
+        "yosymfony/toml":               "~0.2@dev"
     },
     "require-dev":  {
         "matthiasnoback/symfony-service-definition-validator": "~1.1",
@@ -34,10 +34,6 @@
         {
             "name":  "Aaron Scherer",
             "email": "aequasi@gmail.com"
-        },
-        {
-            "name":  "Luis Cordova",
-            "email": "cordoval@gmail.com"
         }
     ],
     "autoload":     {
