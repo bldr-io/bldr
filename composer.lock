@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1529100c931401cb8491761cd1d3680e",
+    "hash": "eb646f2d41c8c6b9d479e9d94436a7f3",
     "packages": [
         {
             "name": "bldr-io/composer-plugin",

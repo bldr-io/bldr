@@ -20,12 +20,12 @@
         </testsuite>
     </testsuites>
 
-    <logging>
-        <!--log type="coverage-text" target="php://stdout"/>
+    <!--logging>
+        <log type="coverage-text" target="php://stdout"/>
         <log type="coverage-html" target="build/coverage"/>
-        <log type="coverage-clover" target="build/logs/clover.xml" /-->
+        <log type="coverage-clover" target="build/logs/clover.xml"/>
         <log type="junit" target="build/logs/junit.xml" logIncompleteSkipped="false"/>
-    </logging>
+    </logging-->
 
     <filter>
         <whitelist>
