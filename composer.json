@@ -16,7 +16,7 @@
         "zendframework/zend-json":      "~2.",
         "swiftmailer/swiftmailer":      "~5.3",
         "bldr-io/frontend-block":       "~3.0.1",
-        "bldr-io/remote-block":         "~2.0",
+        "bldr-io/remote-block":         "~2.0.5",
         "yosymfony/toml":               "~0.2@dev"
     },
     "require-dev":  {
