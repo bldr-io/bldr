@@ -14,6 +14,12 @@ matrix:
     include:
         - php: 5.4
           env: DEPENDENCIES=low
+    include:
+        - php: 5.5
+          env: DEPENDENCIES=low
+    include:
+        - php: 5.6
+          env: DEPENDENCIES=low
 
 sudo: false
 
@@ -23,10 +29,7 @@ cache:
 
 install:
     - travis_retry composer install
-    - travis_retry composer require satooshi/php-coveralls:dev-master --no-progress --prefer-source
     - if [[ "$DEPENDENCIES" == "" ]]; then composer update; fi
     - if [[ "$DEPENDENCIES" == "low" ]]; then composer update --prefer-lowest; fi
 
 script: ./bin/bldr run default
-
-after_script: php bin/coveralls
