@@ -12,6 +12,8 @@
 namespace Bldr\Block\Notify\Task;
 
 use Bldr\Block\Core\Task\AbstractTask;
+use Joli\JoliNotif\Notification;
+use Joli\JoliNotif\NotifierFactory;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -44,6 +46,8 @@ class NotifyTask extends AbstractTask
         $message = $this->getParameter('message');
 
         if (!$this->hasParameter('email')) {
+            $this->sendDesktopNotification($message);
+
             return $output->writeln(["", '    <info>[notify]</info> - <comment>'.$message.'</comment>', ""]);
         }
 
@@ -112,5 +116,26 @@ class NotifyTask extends AbstractTask
         }
 
         return $this->getParameter('email');
+    }
+
+    /**
+     * @param string $message
+     */
+    private function sendDesktopNotification($message)
+    {
+        $notifier = NotifierFactory::create();
+
+        if ($notifier) {
+            // Create your notification
+            $notification =
+                (new Notification())
+                    ->setTitle('Bldr')
+                    ->setBody($message)
+                    ->setIcon('../Resources/image/notifier.png')
+            ;
+
+            // Send it
+            $notifier->send($notification);
+        }
     }
 }

@@ -17,7 +17,8 @@
         "swiftmailer/swiftmailer":      "~5.3",
         "bldr-io/frontend-block":       "~3.0.1",
         "bldr-io/remote-block":         "~2.0.5",
-        "yosymfony/toml":               "~0.2@dev"
+        "yosymfony/toml":               "~0.2@dev",
+        "jolicode/jolinotif":           "^1.0"
     },
     "require-dev":  {
         "matthiasnoback/symfony-service-definition-validator": "~1.1",
