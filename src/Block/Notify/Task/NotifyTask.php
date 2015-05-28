@@ -131,7 +131,6 @@ class NotifyTask extends AbstractTask
                 (new Notification())
                     ->setTitle('Bldr')
                     ->setBody($message)
-                    ->setIcon(__DIR__.'/../Resources/image/notifier.png')
             ;
 
             // Send it
