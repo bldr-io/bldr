@@ -18,7 +18,9 @@ use Bldr\Event\PreExecuteEvent;
 use Bldr\Exception\TaskRuntimeException;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\StreamOutput;
+use Symfony\Component\Process\Process;
 use Symfony\Component\Process\ProcessBuilder;
+use Symfony\Component\Console\Helper\DebugFormatterHelper;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
@@ -36,6 +38,7 @@ class ExecuteTask extends AbstractTask
             ->addParameter('arguments', false, 'Arguments to run on the executable (Array)', [])
             ->addParameter('cwd', false, 'Sets the working directory for the executable')
             ->addParameter('output', false, 'Sets the location to output to')
+            ->addParameter('raw', false, 'Should the output be raw (unformatted)')
             ->addParameter('successCodes', false, 'Sets the status codes allowed for a success (Array)', [0])
             ->addParameter('append', false, 'If output is set, should it append?', false)
             ->addParameter('dry_run', false, 'If set will not run command', false)
@@ -48,6 +51,9 @@ class ExecuteTask extends AbstractTask
      */
     public function run(OutputInterface $output)
     {
+        /** @type DebugFormatterHelper $debugFormatter */
+        $debugFormatter = $this->getHelperSet()->get('debug_formatter');
+
         $arguments = $this->resolveProcessArgs();
 
         $builder = new ProcessBuilder($arguments);
@@ -98,14 +104,40 @@ class ExecuteTask extends AbstractTask
             $output = new StreamOutput($stream, StreamOutput::VERBOSITY_NORMAL, true);
         }
 
-        $process->start(
-            function ($type, $buffer) use ($output) {
-                $output->write("\r        ".str_replace("\n", "\n        ", $buffer));
+        $output->writeln("<fg=blue>==============================\n</fg=blue>");
+        $output->writeln(
+            $debugFormatter->start(
+                spl_object_hash($process),
+                $process->getCommandLine()
+            )
+        );
+
+        $process->run(
+            function ($type, $buffer) use ($output, $debugFormatter, $process) {
+                if ($this->getParameter('raw')) {
+                    $output->write($buffer, false, OutputInterface::OUTPUT_RAW);
+
+                    return;
+                }
+
+                $output->write(
+                    $debugFormatter->progress(
+                        spl_object_hash($process),
+                        $buffer,
+                        Process::ERR === $type
+                    )
+                );
             }
         );
 
-        while ($process->isRunning()) {
-        }
+        $output->writeln(
+            $debugFormatter->stop(
+                spl_object_hash($process),
+                $process->getCommandLine(),
+                $process->isSuccessful()
+            )
+        );
+        $output->writeln("<fg=blue>==============================</fg=blue>");
 
         if (null !== $dispatcher) {
             $event = new PostExecuteEvent($this, $process);
