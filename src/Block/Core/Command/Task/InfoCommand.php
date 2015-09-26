@@ -13,7 +13,9 @@ namespace Bldr\Block\Core\Command\Task;
 
 use Bldr\Block\Core\Task\AbstractTask;
 use Bldr\Command\AbstractCommand;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableHelper;
+use Symfony\Component\Console\Helper\TableStyle;
 use Symfony\Component\Console\Input\InputArgument;
 
 /**
@@ -59,12 +61,15 @@ EOF
 
         if ($service instanceof AbstractTask) {
             $this->output->writeln(['', '<fg=green>Options:</fg=green>']);
-            /** @var TableHelper $tableHelper */
-            $tableHelper = $this->getHelperSet()->get('table');
+            $tableHelper = new Table($this->output);
+
+            $style = new TableStyle();
+            $style->setCellHeaderFormat('<fg=red>%s</fg=red>');
+            $style->setCellRowFormat('<fg=blue>%s</fg=blue>');
+            $style->setBorderFormat('<fg=yellow>%s</fg=yellow>');
+            $tableHelper->setStyle($style);
+
             $tableHelper->setHeaders(['Option', 'Description', 'Required', "Default"]);
-            $tableHelper->setCellHeaderFormat('<fg=red>%s</fg=red>');
-            $tableHelper->setCellRowFormat('<fg=blue>%s</fg=blue>');
-            $tableHelper->setBorderFormat('<fg=yellow>%s</fg=yellow>');
             foreach ($service->getParameterDefinition() as $option) {
                 $tableHelper->addRow(
                     [
@@ -75,7 +80,7 @@ EOF
                     ]
                 );
             }
-            $tableHelper->render($this->output);
+            $tableHelper->render();
         }
     }
 }
