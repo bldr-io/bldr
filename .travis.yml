@@ -10,10 +10,6 @@ php:
 matrix:
     allow_failures:
         - php: hhvm
-        - php: 7.0
-    include:
-        - php: 5.4
-          env: DEPENDENCIES=low
     include:
         - php: 5.5
           env: DEPENDENCIES=low
