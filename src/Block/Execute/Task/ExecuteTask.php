@@ -57,9 +57,10 @@ class ExecuteTask extends AbstractTask
         $arguments = $this->resolveProcessArgs();
 
         $builder = new ProcessBuilder($arguments);
+        $process = $builder->getProcess();
 
         if (null !== $dispatcher = $this->getEventDispatcher()) {
-            $event = new PreExecuteEvent($this, $builder);
+            $event = new PreExecuteEvent($this, $process);
             $dispatcher->dispatch(Event::PRE_EXECUTE, $event);
 
             if ($event->isPropagationStopped()) {
@@ -76,13 +77,12 @@ class ExecuteTask extends AbstractTask
             );
         }
 
-        $builder->setTimeout($this->getParameter('timeout') !== 0 ? $this->getParameter('timeout') : null);
+        $process->setTimeout($this->getParameter('timeout') !== 0 ? $this->getParameter('timeout') : null);
 
         if ($this->hasParameter('cwd')) {
-            $builder->setWorkingDirectory($this->getParameter('cwd'));
+            $process->setWorkingDirectory($this->getParameter('cwd'));
         }
 
-        $process = $builder->getProcess();
 
         if (get_class($this) === 'Bldr\Block\Execute\Task\ExecuteTask') {
             $output->writeln(
