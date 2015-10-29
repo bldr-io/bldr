@@ -20,9 +20,9 @@ class PreExecuteEventTest extends \PHPUnit_Framework_TestCase
     public static function createPreExecuteEvent()
     {
         $task    = \Mockery::mock('Bldr\Task\TaskInterface');
-        $builder = \Mockery::mock('Symfony\Component\Process\ProcessBuilder');
+        $process = \Mockery::mock('Symfony\Component\Process\Process');
 
-        return new PreExecuteEvent($task, $builder, false);
+        return new PreExecuteEvent($task, $process, false);
     }
 
     /**
@@ -63,8 +63,8 @@ class PreExecuteEventTest extends \PHPUnit_Framework_TestCase
         $postExecuteEvent = self::createPreExecuteEvent();
 
         $this->assertInstanceOf(
-            'Symfony\Component\Process\ProcessBuilder',
-            $postExecuteEvent->getProcessBuilder()
+            'Symfony\Component\Process\Process',
+            $postExecuteEvent->getProcess()
         );
     }
 }
