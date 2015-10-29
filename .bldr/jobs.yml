@@ -143,3 +143,11 @@ bldr:
                 -
                     type: notify
                     message: Tagged and Released
+        parallel:
+            description: Runs some test commands in parallel
+            tasks:
+                -
+                    type: parallel
+                    commands:
+                        - echo "Test"
+                        - echo "Cheese"

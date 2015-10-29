@@ -40,10 +40,10 @@ class EnvironmentVariableSubscriber implements EventSubscriberInterface
      */
     public function onPreExecute(PreExecuteEvent $event)
     {
-        $builder = $event->getProcessBuilder();
+        $process = $event->getProcess();
         foreach ($this->environmentVariableRepository->getEnvironmentVariables() as $row) {
             list ($key, $value) = explode('=', $row);
-            $builder->setEnv($key, $value);
+            $process->setEnv([$key => $value]);
         }
     }
 

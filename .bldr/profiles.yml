@@ -34,3 +34,7 @@ bldr:
             jobs:
                 - fsTest
                 - lint
+        parallelTest:
+            description: Tests the usage of the parallels command
+            jobs:
+                - parallel

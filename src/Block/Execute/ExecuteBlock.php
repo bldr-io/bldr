@@ -26,6 +26,7 @@ class ExecuteBlock extends AbstractBlock
     public function assemble(array $config, ContainerBuilder $container)
     {
         $this->addTask('bldr_execute.execute', 'Bldr\Block\Execute\Task\ExecuteTask');
+        $this->addTask('bldr_execute.parallel', 'Bldr\Block\Execute\Task\ParallelTask');
         $this->addTask('bldr_execute.apply', 'Bldr\Block\Execute\Task\ApplyTask');
 
         $this->addService('bldr_execute.service.background', 'Bldr\Block\Execute\Service\BackgroundService')

@@ -12,7 +12,7 @@
 namespace Bldr\Event;
 
 use Bldr\Task\TaskInterface;
-use Symfony\Component\Process\ProcessBuilder;
+use Symfony\Component\Process\Process;
 
 /**
  * @author Mauricio Walters <nvitius@gmail.com>
@@ -26,18 +26,18 @@ class PreExecuteEvent extends AbstractEvent
     private $task;
 
     /**
-     * @var ProcessBuilder
+     * @var Process
      */
-    private $builder;
+    private $process;
 
     /**
-     * @param TaskInterface  $task
-     * @param ProcessBuilder $builder
+     * @param TaskInterface $task
+     * @param Process       $process
      */
-    public function __construct(TaskInterface $task, ProcessBuilder $builder)
+    public function __construct(TaskInterface $task, Process $process)
     {
         $this->task    = $task;
-        $this->builder = $builder;
+        $this->process = $process;
     }
 
     /**
@@ -49,10 +49,10 @@ class PreExecuteEvent extends AbstractEvent
     }
 
     /**
-     * @return ProcessBuilder
+     * @return Process
      */
-    public function getProcessBuilder()
+    public function getProcess()
     {
-        return $this->builder;
+        return $this->process;
     }
 }
