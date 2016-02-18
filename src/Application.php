@@ -114,9 +114,9 @@ EOF;
     public function getCommands()
     {
         return [
-            new ComposerCmd\DumpAutoloadCommand(''),
-            new ComposerCmd\InstallCommand(''),
-            new ComposerCmd\UpdateCommand('')
+            new ComposerCmd\DumpAutoloadCommand('blocks-'),
+            new ComposerCmd\InstallCommand('blocks-'),
+            new ComposerCmd\UpdateCommand('blocks-')
         ];
     }
 
