@@ -21,6 +21,7 @@ class PreExecuteEventTest extends \PHPUnit_Framework_TestCase
     {
         $task    = \Mockery::mock('Bldr\Task\TaskInterface');
         $process = \Mockery::mock('Symfony\Component\Process\Process');
+        $process->shouldReceive('stop');
 
         return new PreExecuteEvent($task, $process, false);
     }
