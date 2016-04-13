@@ -84,7 +84,6 @@ class ParallelTask extends AbstractTask
                         $process->isSuccessful()
                     )
                 ]
-
             );
 
             if (null !== $dispatcher = $this->getEventDispatcher()) {
