@@ -123,7 +123,7 @@ EOF
     {
         if (!empty($profile['uses']) && !empty($profile['uses']['before'])) {
             foreach ($profile['uses']['before'] as $name) {
-                $this->buildJobs($this->getProfile($name)['jobs']);
+                $this->fetchJobs($this->getProfile($name));
             }
         }
 
@@ -131,7 +131,7 @@ EOF
 
         if (!empty($profile['uses']) && !empty($profile['uses']['after'])) {
             foreach ($profile['uses']['after'] as $name) {
-                $this->buildJobs($this->getProfile($name)['jobs']);
+                $this->fetchJobs($this->getProfile($name));
             }
         }
     }
